@@ -16,7 +16,7 @@ async function auth() {
 
 async function scrape(username: string, password: string, id: string) {
 	try {
-		const browser = await puppeteer.launch({headless: true});
+		const browser = await puppeteer.launch({headless: false});
 		const page = await browser.newPage();
 		await page.setUserAgent(userAgent);
 		await page.goto('https://www.instagram.com/accounts/login/');
