@@ -5,5 +5,5 @@ Instagram web scarper for post file downloads.
 - Node.js
 - Node Package Manager (NPM)
 - TypeScript
-#Launching the program:
+# Launching the program:
 `$ npm start`
