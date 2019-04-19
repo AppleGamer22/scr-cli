@@ -2,7 +2,7 @@
 	"name": "instagram-file-scraper",
 	"version": "1.0.0-alpha.1",
 	"description": "",
-	"main": "index.js",
+	"main": "index.ts",
 	"author": "AppleGamer22",
 	"license": "MIT",
 	"scripts": {
@@ -10,13 +10,11 @@
 	},
 	"dependencies": {
 		"inquirer": "^6.3.1",
-		"puppeteer": "^1.14.0",
-		"uuid": "^3.3.2"
+		"puppeteer": "^1.14.0"
 	},
 	"devDependencies": {
 		"@types/inquirer": "^6.0.0",
 		"@types/puppeteer": "^1.12.3",
-		"@types/uuid": "^3.4.4",
 		"ts-node": "^8.1.0",
 		"typescript": "^3.4.3"
 	}
