@@ -9,7 +9,8 @@
             "request": "launch",
             "console": "integratedTerminal",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/index.js"
+            "preLaunchTask": "start"
+            // "program": "${workspaceFolder}/index.js"
         }
     ]
 }
