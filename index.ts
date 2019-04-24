@@ -2,7 +2,6 @@ import {Browser, Page, launch} from "puppeteer";
 import {get} from "https";
 import {createWriteStream, unlink} from "fs";
 import {Answers, prompt} from "inquirer";
-import { async } from "rxjs/internal/scheduler/async";
 
 var srcs: string[] = [];
 const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
