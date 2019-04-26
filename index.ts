@@ -15,10 +15,10 @@ async function init() {
 
 async function beginScrape(username: string, password: string, id: string) {
 	try {
-		const browser = await launch({headless: false, devtools: true, defaultViewport: null});
+		const browser = await launch({headless: true, devtools: true, defaultViewport: null});
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent);
-		await page.goto('https://www.instagram.com/accounts/login/');
+		await page.goto("https://www.instagram.com/accounts/login/");
 		await page.waitForSelector('input[name="username"]');
 		await page.type('input[name="username"]', username);
 		await page.type('input[name="password"]', password);
@@ -26,7 +26,7 @@ async function beginScrape(username: string, password: string, id: string) {
 		await page.waitFor(2500);
 		const isError = await page.$("p#slfErrorAlert");
 		if (isError !== null) {
-			console.error("Wrong Instagram creditials were entered.");
+			console.error("Wrong Instagram credentials were entered.");
 			await browser.close();
 		}
 		await page.waitForSelector("img._6q-tv");
@@ -39,19 +39,17 @@ async function detectFiles(browser: Browser, page: Page, id: string) {
 	try {
 		var nextButtons = await page.$("div.coreSpriteRightChevron");
 		do {
-			const videosDuplicates = await page.$$eval('video[src].tWeCl', videos => videos.map(video => video.getAttribute('src')));
-			const imagesDuplicates = await page.$$eval('img[src].FFVAD', images => images.map(image => image.getAttribute('src')));
+			const videosDuplicates = await page.$$eval("video[src].tWeCl", videos => videos.map(video => video.getAttribute('src')));
+			const imagesDuplicates = await page.$$eval("img[src].FFVAD", images => images.map(image => image.getAttribute('src')));
 			imagesDuplicates.forEach(duplicate => srcs.push(duplicate));
 			videosDuplicates.forEach(duplicate => srcs.push(duplicate));
 			await page.click("div.coreSpriteRightChevron");
 			nextButtons = await page.$("div.coreSpriteRightChevron");
 		} while (nextButtons !== null);
 		organiseFiles(browser, id);
-		return;
 	} catch (error) {
 		console.error(error.message);
 		organiseFiles(browser, id);
-		return;
 	}
 }
 function organiseFiles(browser: Browser, id: string) {
@@ -60,7 +58,6 @@ function organiseFiles(browser: Browser, id: string) {
 	count = URLs.length;
 	for (let i = 0; i < URLs.length; i++) {
 		const url = URLs[i];
-		console.log(url);
 		if (url.includes(".mp4")) downloadFile(browser, url, id, `${process.cwd()}/${I}-${id}.mp4`);
 		if (url.includes(".jpg")) downloadFile(browser, url, id, `${process.cwd()}/${I}-${id}.jpg`);
 	}
@@ -69,9 +66,11 @@ function organiseFiles(browser: Browser, id: string) {
 
 async function downloadFile(browser: Browser, URL: string, id: string, path: string) {
 	try {
+		console.log(URL);
+		console.log("Download began.");
 		var file = createWriteStream(path);
-		const request = get(URL, (response) => {
-			if (response.statusCode !== 200) return console.error("Download failed.");
+		const request = get(URL, response => {
+			if (response.statusCode !== 200) throw console.error("Download failed.");
 			response.on("end", () => console.log("Download ended.")).pipe(file);
 			// const length = parseInt(response.headers['content-length'], 10);
 			// var current = 0;
@@ -87,7 +86,6 @@ async function downloadFile(browser: Browser, URL: string, id: string, path: str
 		});
 		I += 1;
 		if (I === count) await browser.close();
-		return;
 	} catch (error) { console.error(error.message) }
 }
 init();

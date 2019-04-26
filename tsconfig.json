@@ -8,9 +8,9 @@
 		"sourceMap": true,
 		// "downlevelIteration": true,
 		"baseUrl": ".",
-		"types": ["node_modules/@types/"],
+		"typeRoots": ["node_modules/@types"],
 		"paths": {
 			"*": ["node_modules/"]
 		}
-	},
+	}
 }

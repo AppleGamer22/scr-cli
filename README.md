@@ -15,3 +15,6 @@ Instagram web scarper for post file downloads.
 5. Puppeteer loads all available files and their URLs.
 6. The program downloads the files to the current codebase directory.
 7. The bot browser is closed.
+# Please Make Sure That:
+- The correct Instagram credentials are entered.
+- The network is not too crowded.
