@@ -15,7 +15,7 @@ async function init() {
 
 async function beginScrape(username: string, password: string, id: string) {
 	try {
-		const browser = await launch({headless: false, devtools: true});
+		const browser = await launch({headless: false, devtools: true, defaultViewport: null});
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent);
 		await page.goto('https://www.instagram.com/accounts/login/');
@@ -23,7 +23,12 @@ async function beginScrape(username: string, password: string, id: string) {
 		await page.type('input[name="username"]', username);
 		await page.type('input[name="password"]', password);
 		await page.click('button[type="submit"]');
-		await page.waitFor(2000);
+		await page.waitFor(2500);
+		const isError = await page.$("p#slfErrorAlert");
+		if (isError !== null) {
+			console.error("Wrong Instagram creditials were entered.");
+			await browser.close();
+		}
 		await page.waitForSelector("img._6q-tv");
 		await page.goto(`https://www.instagram.com/p/${id}`);
 		await page.waitForSelector('div.ZyFrc', {visible: true});
@@ -67,14 +72,13 @@ async function downloadFile(browser: Browser, URL: string, id: string, path: str
 		var file = createWriteStream(path);
 		const request = get(URL, (response) => {
 			if (response.statusCode !== 200) return console.error("Download failed.");
-			const length = parseInt(response.headers['content-length'], 10);
-			var current = 0;
 			response.on("end", () => console.log("Download ended.")).pipe(file);
-			response.on("data", chunk => {
-				current += chunk.length;
-				console.log(`Downloaded %${(100 * current / length).toFixed(2)}`);
-			});
-			// response.pipe(file);
+			// const length = parseInt(response.headers['content-length'], 10);
+			// var current = 0;
+			// response.on("data", chunk => {
+			// 	current += chunk.length;
+			// 	console.log(`Downloaded %${(100 * current / length).toFixed(2)}`);
+			// });
 		});
 		file.on("finish", () => file.close());
 		request.on("error", error => {
