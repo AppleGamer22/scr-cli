@@ -1,7 +1,9 @@
 import {Browser, Page, launch} from "puppeteer";
 import {get} from "https";
 import {createWriteStream, unlink} from "fs";
+import {basename} from "path";
 import {Answers, prompt} from "inquirer";
+import { url } from "inspector";
 
 var srcs: string[] = [];
 const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
@@ -15,7 +17,7 @@ async function init() {
 
 async function beginScrape(username: string, password: string, id: string) {
 	try {
-		const browser = await launch({headless: true, devtools: true, defaultViewport: null});
+		const browser = await launch({headless: false, devtools: true, defaultViewport: null});
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent);
 		await page.goto("https://www.instagram.com/accounts/login/");
@@ -58,13 +60,13 @@ function organiseFiles(browser: Browser, id: string) {
 	count = URLs.length;
 	for (let i = 0; i < URLs.length; i++) {
 		const url = URLs[i];
-		if (url.includes(".mp4")) downloadFile(browser, url, id, `${process.cwd()}/${I}-${id}.mp4`);
-		if (url.includes(".jpg")) downloadFile(browser, url, id, `${process.cwd()}/${I}-${id}.jpg`);
+		if (url.includes(".jpg") || url.includes(".mp4")) downloadFile(browser, url);
 	}
 	return;
 }
 
-async function downloadFile(browser: Browser, URL: string, id: string, path: string) {
+async function downloadFile(browser: Browser, URL: string) {
+	const path = `${process.cwd()}/${basename(URL).split("?")[0]}`
 	try {
 		console.log(URL);
 		console.log("Download began.");

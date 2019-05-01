@@ -2,11 +2,11 @@
 	"name": "instagram-file-scraper",
 	"version": "1.0.0-alpha.2",
 	"description": "",
-	"main": "index.ts",
+	"main": "main.ts",
 	"author": "AppleGamer22",
 	"license": "MIT",
 	"scripts": {
-		"start": "ts-node index.ts"
+		"start": "ts-node main.ts"
 	},
 	"dependencies": {
 		"inquirer": "^6.3.1",

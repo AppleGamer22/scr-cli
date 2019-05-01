@@ -18,3 +18,4 @@ Instagram web scarper for post file downloads.
 # Please Make Sure That:
 - The correct Instagram credentials are entered.
 - The network is not too crowded.
+- 2FA is turned off
