@@ -5,8 +5,13 @@ Instagram web scarper for post file downloads.
 - Node.js
 - Node Package Manager (NPM)
 - TypeScript
-# Launching the program:
-`$ npm start`
+# Using the program:
+1. Run `$ npm start` in you command line.
+2. Enter Instagram username in `? username: `.
+3. Enter Instagram password in `? password: `.
+4. Enter Instagram post ID from [https://www.instagram.com/p/id]() in `? id: `.
+5. Wait until the program says:
+>Download ended.
 # How Does It Work?
 1. The user puts his/her Instagram creditials and the desired post ID.
 2. A bot Chromium browser is opened.
@@ -19,3 +24,4 @@ Instagram web scarper for post file downloads.
 - The correct Instagram credentials are entered.
 - The network is not too crowded.
 - 2FA is turned off
+ 

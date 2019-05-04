@@ -10,14 +10,34 @@ const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/5
 var count = 0;
 var I = 0;
 
-async function init() {
-	const answers: Answers = await prompt([{type: "input", name: "username"}, {type: "password", name: "password"}, {type: "input", name: "id"}]);
-	beginScrape(answers.username, answers.password, answers.id);
+async function init() { 
+	console.log("Please make sure that you enter the correct Instagram creditentials and post ID...");
+	const answers: Answers = await prompt([
+		{
+			type: "input",
+			name: "username",
+			message: "Your Instagram username:"
+		},{
+			type: "password",
+			name: "password",
+			message: "Your Instagram password:"
+		},{
+			type: "input",
+			name: "id",
+			message: "Wanted Instagram post ID (https://www.instagram.com/p/:ID):"
+		},{
+			type: "confirm",
+			name: "background",
+			message: "Do you want to see the browser?"
+		}
+	]);
+	await beginScrape(answers.username, answers.password, answers.id, !answers.background);
 }
 
-async function beginScrape(username: string, password: string, id: string) {
+async function beginScrape(username: string, password: string, id: string, background: boolean) {
+	console.log("Opening Puppeteer...");
 	try {
-		const browser = await launch({headless: false, devtools: true, defaultViewport: null});
+		const browser = await launch({headless: background, devtools: true, defaultViewport: null});
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent);
 		await page.goto("https://www.instagram.com/accounts/login/");
@@ -30,12 +50,15 @@ async function beginScrape(username: string, password: string, id: string) {
 		if (isError !== null) {
 			console.error("Wrong Instagram credentials were entered.");
 			await browser.close();
-		}
+		} else console.log("Signed-in...");
 		await page.waitForSelector("img._6q-tv");
 		await page.goto(`https://www.instagram.com/p/${id}`);
 		await page.waitForSelector('div.ZyFrc', {visible: true});
-		detectFiles(browser, page, id);
-	} catch (error) { console.error(error.message) }
+		await detectFiles(browser, page, id);
+	} catch (error) {
+		console.error(error.message);
+		process.exit();
+	}
 }
 async function detectFiles(browser: Browser, page: Page, id: string) {
 	try {
@@ -51,18 +74,20 @@ async function detectFiles(browser: Browser, page: Page, id: string) {
 		organiseFiles(browser, id);
 	} catch (error) {
 		console.error(error.message);
-		organiseFiles(browser, id);
+		await organiseFiles(browser, id);
 	}
 }
-function organiseFiles(browser: Browser, id: string) {
+async function organiseFiles(browser: Browser, id: string) {
 	console.log("Found files.");
-	const URLs = Array.from(new Set(srcs));
-	count = URLs.length;
-	for (let i = 0; i < URLs.length; i++) {
-		const url = URLs[i];
-		if (url.includes(".jpg") || url.includes(".mp4")) downloadFile(browser, url);
-	}
-	return;
+	try {
+		const URLs = Array.from(new Set(srcs));
+		count = URLs.length;
+		for (let i = 0; i < URLs.length; i++) {
+			const url = URLs[i];
+			if (url.includes(".jpg") || url.includes(".mp4")) await downloadFile(browser, url);
+		}
+		return;
+	} catch (error) { console.error(error.message) }
 }
 
 async function downloadFile(browser: Browser, URL: string) {
