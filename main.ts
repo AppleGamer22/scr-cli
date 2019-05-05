@@ -3,7 +3,6 @@ import {get} from "https";
 import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import {Answers, prompt} from "inquirer";
-import { url } from "inspector";
 
 var srcs: string[] = [];
 const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
@@ -53,6 +52,10 @@ async function beginScrape(username: string, password: string, id: string, backg
 		} else console.log("Signed-in...");
 		await page.waitForSelector("img._6q-tv");
 		await page.goto(`https://www.instagram.com/p/${id}`);
+		if ((await page.$("div.error-container")) !== null) {
+			console.error(`Failed to find post ${id}`);
+			return;
+		}
 		await page.waitForSelector('div.ZyFrc', {visible: true});
 		await detectFiles(browser, page, id);
 	} catch (error) {
@@ -87,7 +90,7 @@ async function organiseFiles(browser: Browser, id: string) {
 			if (url.includes(".jpg") || url.includes(".mp4")) await downloadFile(browser, url);
 		}
 		return;
-	} catch (error) { console.error(error.message) }
+	} catch (error) {console.error(error.message)}
 }
 
 async function downloadFile(browser: Browser, URL: string) {
@@ -113,6 +116,11 @@ async function downloadFile(browser: Browser, URL: string) {
 		});
 		I += 1;
 		if (I === count) await browser.close();
-	} catch (error) { console.error(error.message) }
+	} catch (error) {console.error(error.message)}
 }
 init();
+// (async () => {
+// 	console.time("scarpe");
+// 	await init();
+// 	console.timeEnd("scarpe");
+// })();
