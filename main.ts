@@ -3,34 +3,53 @@ import {get} from "https";
 import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import {Answers, prompt} from "inquirer";
+import {config, load} from "dotenv";
 
+config({path: `${__dirname}/.env`});
 var srcs: string[] = [];
 const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 var count = 0;
 var I = 0;
 
 async function init() { 
-	console.log("Please make sure that you enter the correct Instagram creditentials and post ID...");
-	const answers: Answers = await prompt([
-		{
-			type: "input",
-			name: "username",
-			message: "Your Instagram username:"
-		},{
-			type: "password",
-			name: "password",
-			message: "Your Instagram password:"
-		},{
-			type: "input",
-			name: "id",
-			message: "Wanted Instagram post ID (https://www.instagram.com/p/:ID):"
-		},{
-			type: "confirm",
-			name: "background",
-			message: "Do you want to see the browser?"
-		}
-	]);
-	await beginScrape(answers.username, answers.password, answers.id, !answers.background);
+	const {USERNAME, PASSWORD} = process.env;
+	if (USERNAME === undefined || PASSWORD === undefined) {
+		console.log("Please make sure that you enter the correct Instagram creditentials and post ID...");
+		const answers: Answers = await prompt([
+			{
+				type: "input",
+				name: "username",
+				message: "Your Instagram username:"
+			},{
+				type: "password",
+				name: "password",
+				message: "Your Instagram password:"
+			},{
+				type: "input",
+				name: "id",
+				message: "Wanted Instagram post ID (https://www.instagram.com/p/:ID):"
+			},{
+				type: "confirm",
+				name: "background",
+				message: "Do you want to see the browser?"
+			}
+		]);
+		await beginScrape(answers.username, answers.password, answers.id, !answers.background);
+	} else if (USERNAME !== undefined || PASSWORD !== undefined) {
+		const answers: Answers = await prompt([
+			{
+				type: "input",
+				name: "id",
+				message: "Wanted Instagram post ID (https://www.instagram.com/p/:ID):"
+			},{
+				type: "confirm",
+				name: "background",
+				message: "Do you want to see the browser?"
+			}
+		]);
+		await beginScrape(USERNAME, PASSWORD, answers.id, !answers.background);
+	}
+	
 }
 
 async function beginScrape(username: string, password: string, id: string, background: boolean) {
@@ -118,9 +137,8 @@ async function downloadFile(browser: Browser, URL: string) {
 		if (I === count) await browser.close();
 	} catch (error) {console.error(error.message)}
 }
-init();
-// (async () => {
-// 	console.time("scarpe");
-// 	await init();
-// 	console.timeEnd("scarpe");
-// })();
+(async () => {
+	console.time("scarpe");
+	await init();
+	console.timeEnd("scarpe");
+})();

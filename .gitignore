@@ -3,3 +3,4 @@ index.js
 *.jpg
 *.mp4
 .DS_Store
+.env

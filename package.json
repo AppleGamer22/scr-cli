@@ -9,10 +9,12 @@
 		"start": "ts-node main.ts"
 	},
 	"dependencies": {
+		"dotenv": "^8.0.0",
 		"inquirer": "^6.3.1",
 		"puppeteer": "^1.14.0"
 	},
 	"devDependencies": {
+		"@types/dotenv": "^6.1.1",
 		"@types/inquirer": "^6.0.0",
 		"@types/puppeteer": "^1.12.3",
 		"ts-node": "^8.1.0",
