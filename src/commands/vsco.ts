@@ -62,16 +62,18 @@ export default class Vsco extends Command {
 			await page.type("input#login", username);
 			await page.type("input#password", password);
 			await page.click("button#loginButton");
-			await page.waitFor(2500);
-			const isError = await page.$("#errorBar");
-			if (isError !== null) {
-				console.error("Wrong VSCO credentials were entered.");
-				await browser.close();
-			} else {
-				console.log("Signed-in...");
-				await page.waitForSelector("#root > div > main > header > nav > div.Nav-loggedInOptions");
-				await this.detectFiles(browser, page, id);
-			}
+			await page.waitForSelector("#root > div > main > header > nav > div.Nav-loggedInOptions");
+			await this.detectFiles(browser, page, id);
+			// await page.waitFor(2500);
+			// const isError = await page.$("#errorBar");
+			// if (isError !== null) {
+			// 	console.error("Wrong VSCO credentials were entered.");
+			// 	await browser.close();
+			// } else if (isError === null) {
+			// 	console.log("Signed-in...");
+			// 	await page.waitForSelector("#root > div > main > header > nav > div.Nav-loggedInOptions");
+			// 	await this.detectFiles(browser, page, id);
+			// }
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -93,7 +95,7 @@ export default class Vsco extends Command {
 	}
 
 	async downloadFile(browser: Browser, URL: string, id: string) {
-		const path = `${process.cwd()}/${id}${basename(URL)}`
+		const path = `${process.cwd()}/${id}${basename(URL)}`;
 		try {
 			console.log("Download began.");
 			var file = createWriteStream(path);

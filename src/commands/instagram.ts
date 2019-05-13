@@ -71,16 +71,18 @@ export default class Instagram extends Command {
 			await page.type(`input[name="username"]`, username);
 			await page.type(`input[name="password"]`, password);
 			await page.click(`button[type="submit"]`);
-			await page.waitFor(2500);
-			const isError = await page.$("p#slfErrorAlert");
-			if (isError !== null) {
-				console.error("Wrong Instagram credentials were entered...");
-				await browser.close();
-			} else {
-				console.log("Signed-in...");
-				await page.waitForNavigation();
-				await this.detectFiles(browser, page, id);
-			}
+			await page.waitForNavigation();
+			await this.detectFiles(browser, page, id);
+			// await page.waitFor(2500);
+			// const isError = await page.$("p#slfErrorAlert");
+			// if (isError !== null) {
+			// 	console.error("Wrong Instagram credentials were entered...");
+			// 	await browser.close();
+			// } else {
+			// 	console.log("Signed-in...");
+			// 	await page.waitForNavigation();
+			// 	await this.detectFiles(browser, page, id);
+			// }
 		} catch (error) {
 			console.error(error.message);
 			// process.exit();
