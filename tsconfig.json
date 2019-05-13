@@ -1,16 +1,16 @@
 {
 	"compilerOptions": {
+		"declaration": true,
+		"importHelpers": true,
 		"module": "commonjs",
-		"esModuleInterop": false,
-		"target": "es6",
-		"noImplicitAny": true,
-		"moduleResolution": "node",
-		"sourceMap": true,
-		// "downlevelIteration": true,
-		"baseUrl": ".",
-		"typeRoots": ["node_modules/@types"],
-		"paths": {
-			"*": ["node_modules/"]
-		}
-	}
+		"outDir": "lib",
+		"rootDir": "src",
+		"strict": true,
+		"target": "es2017",
+		// "typeRoots": ["node_modules/@types"],
+		"composite": true
+	},
+	"include": [
+		"src/**/*"
+	]
 }
