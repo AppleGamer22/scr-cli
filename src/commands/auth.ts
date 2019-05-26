@@ -3,6 +3,7 @@ import { Command, flags } from "@oclif/command";
 import {writeFile} from "fs";
 import {config} from "dotenv";
 import cli from "cli-ux";
+import { userDataDirs } from "../shared";
 
 export default class Auth extends Command {
 	static description = "describe the command here";
@@ -25,7 +26,7 @@ export default class Auth extends Command {
 		console.log("Sign-in to you Instagram account.")
 		const {flags} = this.parse(Auth);
 		try {
-			const browser = await launch({headless: flags.headless, userDataDir: "~/Library/Application Support/Google/Chrome"});
+			const browser = await launch({headless: flags.headless, userDataDir: userDataDirs()});
 		const page = (await browser.pages())[0];
 		await page.goto("https://www.instagram.com/accounts/login/");
 		page.on("framenavigated", async frame => {

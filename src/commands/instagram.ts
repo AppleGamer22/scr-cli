@@ -5,6 +5,7 @@ import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
+import { userDataDirs } from "../shared";
 
 export default class Instagram extends Command {
 	static args = [{name: "post"}];
@@ -38,8 +39,7 @@ export default class Instagram extends Command {
 		try {
 			const browser = await launch({
 				headless: background,
-				userDataDir: "~/Library/Application Support/Google/Chrome",
-				//https://chromium.googlesource.com/chromium/src/+/master/docs/user_data_dir.md
+				userDataDir: userDataDirs(),
 				devtools: !background,
 				defaultViewport: null,
 			});
