@@ -1,10 +1,9 @@
 {
 	"name": "scrape",
 	"description": "Social media web scarper for post file downloads.",
-	"version": "1.0.0-alpha.2",
+	"version": "1.0.0-alpha.1",
 	"author": "AppleGamer22",
 	"license": "MIT",
-	"main": "lib/index.js",
 	"repository": {
 		"url": "https://github.com/AppleGamer22/Social-Scraper",
 		"type": "git"
@@ -21,9 +20,9 @@
 		"@oclif/command": "^1.5.13",
 		"@oclif/config": "^1.13.0",
 		"@oclif/plugin-help": "^2.1.6",
+		"cli-ux": "^5.2.1",
 		"dotenv": "^8.0.0",
-		"inquirer": "^6.3.1",
-		"puppeteer": "^1.15.0",
+		"puppeteer": "^1.17.0",
 		"tslib": "^1.9.3"
 	},
 	"devDependencies": {
@@ -32,7 +31,6 @@
 		"@oclif/tslint": "^3.1.1",
 		"@types/chai": "^4.1.7",
 		"@types/dotenv": "^6.1.1",
-		"@types/inquirer": "^6.0.1",
 		"@types/mocha": "^5.2.6",
 		"@types/node": "^12.0.0",
 		"@types/puppeteer": "^1.12.4",

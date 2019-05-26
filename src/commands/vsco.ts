@@ -3,10 +3,10 @@ import {Browser, Page, launch} from "puppeteer";
 import {get} from "https";
 import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
-import {Answers, prompt} from "inquirer";
+import cli from "cli-ux";
 import {config} from "dotenv";
 
-export default class Vsco extends Command {
+export default class VSCO extends Command {
 	static description = "describe the command here";
 	readonly userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 
@@ -15,39 +15,15 @@ export default class Vsco extends Command {
 		const {VSCO_USERNAME, VSCO_PASSWORD} = process.env;
 		if (VSCO_USERNAME === undefined || VSCO_PASSWORD === undefined) {
 			console.log("Please make sure that you enter the correct Instagram creditentials and post ID...");
-			const answers: Answers = await prompt([
-				{
-					type: "input",
-					name: "username",
-					message: "Your VSCO username:"
-				},{
-					type: "password",
-					name: "password",
-					message: "Your VSCO password:"
-				},{
-					type: "input",
-					name: "id",
-					message: "Wanted VSCO post ID (after https://vsco.co/):"
-				},{
-					type: "confirm",
-					name: "background",
-					message: "Do you want to see the browser?"
-				}
-			]);
-			await this.beginScrape(answers.username, answers.password, answers.id, !answers.background);
+			const username: string = await cli.prompt("username", {type: "normal", prompt: "Your VSCO username: "});
+			const password: string = await cli.prompt("password", {type: "hide", prompt: "Your VSCO password: "});
+			const id: string = await cli.prompt("id", {type: "normal", prompt: "VSCO post ID (after https://vsco.co/): "});
+			const background: boolean = await cli.confirm("Do you want to see the browser?");
+			await this.beginScrape(username, password, id, !background);
 		} else if (VSCO_USERNAME !== undefined && VSCO_PASSWORD !== undefined) {
-			const answers: Answers = await prompt([
-				{
-					type: "input",
-					name: "id",
-					message: "Wanted VSCO post ID (after https://vsco.co/):"
-				},{
-					type: "confirm",
-					name: "background",
-					message: "Do you want to see the browser?"
-				}
-			]);
-			await this.beginScrape(VSCO_USERNAME, VSCO_PASSWORD, answers.id, !answers.background);
+			const id: string = await cli.prompt("id", {type: "normal", prompt: "VSCO post ID (after https://vsco.co/): "});
+			const background: boolean = await cli.confirm("Do you want to see the browser?");
+			await this.beginScrape(VSCO_USERNAME, VSCO_PASSWORD, id, !background);
 		}
 	}
 

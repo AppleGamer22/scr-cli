@@ -11,3 +11,4 @@ index.js
 *.mp4
 .DS_Store
 .env
+~/Library/Application Support/Google/*

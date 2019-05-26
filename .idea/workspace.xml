@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2a33f4b8-88d7-4040-9f5a-39ae0fd9b65e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/commands/instagram.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/commands/instagram.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/commands/vsco.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/commands/vsco.ts" afterDir="false" />
-    </list>
+    <list default="true" id="2a33f4b8-88d7-4040-9f5a-39ae0fd9b65e" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -22,7 +16,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/commands/vsco.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
+            <state relative-caret-position="1050">
               <caret line="74" column="16" selection-start-line="74" selection-start-column="16" selection-end-line="74" selection-end-column="16" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
@@ -153,7 +147,7 @@
       <workItem from="1557629039471" duration="788000" />
       <workItem from="1557706821644" duration="59000" />
       <workItem from="1557745515711" duration="4535000" />
-      <workItem from="1557751312747" duration="649000" />
+      <workItem from="1557751312747" duration="938000" />
     </task>
     <task id="LOCAL-00001" summary="use of oclif, better auth flow for instagram and vsco">
       <created>1557748979883</created>
@@ -162,11 +156,18 @@
       <option name="project" value="LOCAL" />
       <updated>1557748979883</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="npm update, no auth check">
+      <created>1557752049715</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1557752049715</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6031000" />
+    <option name="totallyTimeSpent" value="6320000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -196,7 +197,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="use of oclif, better auth flow for instagram and vsco" />
-    <option name="LAST_COMMIT_MESSAGE" value="use of oclif, better auth flow for instagram and vsco" />
+    <MESSAGE value="npm update, no auth check" />
+    <option name="LAST_COMMIT_MESSAGE" value="npm update, no auth check" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/node_modules/@types/puppeteer/index.d.ts">
@@ -276,7 +278,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/commands/vsco.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
+        <state relative-caret-position="1050">
           <caret line="74" column="16" selection-start-line="74" selection-start-column="16" selection-end-line="74" selection-end-column="16" />
           <folding>
             <element signature="e#0#48#0" expanded="true" />
