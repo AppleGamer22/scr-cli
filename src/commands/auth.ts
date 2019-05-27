@@ -26,12 +26,15 @@ export default class Auth extends Command {
 		console.log("Sign-in to you Instagram account.")
 		const {flags} = this.parse(Auth);
 		try {
-			const browser = await launch({headless: flags.headless, userDataDir: userDataDirs()});
-		const page = (await browser.pages())[0];
-		await page.goto("https://www.instagram.com/accounts/login/");
-		page.on("framenavigated", async frame => {
-			if (frame.url() === "https://www.facebook.com/instagram/login_sync/") await browser.close();
-		});
+			const browser = await launch({
+				headless: false,
+				userDataDir: `${__dirname}/../../Chrome`
+			});
+			const page = (await browser.pages())[0];
+			await page.goto("https://www.instagram.com/accounts/login/");
+			page.on("framenavigated", async frame => {
+				if (frame.url() === "https://www.facebook.com/instagram/login_sync/") await browser.close();
+			});
 		} catch (error) { console.error(error.message); }
 	}
 	async vsco() {

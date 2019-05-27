@@ -39,7 +39,7 @@ export default class Instagram extends Command {
 		try {
 			const browser = await launch({
 				headless: background,
-				userDataDir: userDataDirs(),
+				userDataDir: `${__dirname}/../../Chrome`,
 				devtools: !background,
 				defaultViewport: null,
 			});
