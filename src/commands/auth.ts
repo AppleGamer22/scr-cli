@@ -1,9 +1,8 @@
-import {Browser, Page, launch} from "puppeteer";
+import {launch} from "puppeteer";
 import { Command, flags } from "@oclif/command";
 import {writeFile} from "fs";
 import {config} from "dotenv";
 import cli from "cli-ux";
-import { userDataDirs } from "../shared";
 
 export default class Auth extends Command {
 	static description = "describe the command here";
@@ -24,7 +23,6 @@ export default class Auth extends Command {
 
 	async instagram() {
 		console.log("Sign-in to you Instagram account.")
-		const {flags} = this.parse(Auth);
 		try {
 			const browser = await launch({
 				headless: false,
@@ -33,7 +31,21 @@ export default class Auth extends Command {
 			const page = (await browser.pages())[0];
 			await page.goto("https://www.instagram.com/accounts/login/");
 			page.on("framenavigated", async frame => {
-				if (frame.url() === "https://www.facebook.com/instagram/login_sync/") await browser.close();
+				if (frame.url() === "https://www.facebook.com/instagram/login_sync/") {
+					var environmentFileData: string;
+					const INSTAGRAM = process.env.INSTAGRAM;
+					const VSCO = process.env.VSCO;
+					if (VSCO !== undefined) {
+						environmentFileData = `INSTAGRAM=${true}
+INSTAGRAM_PASSWORD=${VSCO}`;
+						this.writeEnviornmentVariables(environmentFileData);
+						await browser.close();
+					} else if (VSCO === undefined) {
+						environmentFileData = `INSTAGRAM=${true}`;
+						this.writeEnviornmentVariables(environmentFileData);
+						await browser.close();
+					}
+				}
 			});
 		} catch (error) { console.error(error.message); }
 	}
@@ -56,5 +68,10 @@ VSCO_PASSWORD="${await cli.prompt("password", {type: "hide", prompt: "Your VSCO 
 				if (error) return console.error(error.message);
 			});
 		}
+	}
+	writeEnviornmentVariables(env: string) {
+		writeFile(`${__dirname}/../../.env`, env, error => {
+			if (error) return console.error(error.message);
+		});
 	}
 }

@@ -5,32 +5,30 @@ import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
-import { userDataDirs } from "../shared";
 
 export default class Instagram extends Command {
 	static args = [{name: "post"}];
 	static flags = {headless: flags.boolean({char: "h"})};
 	srcs: string[] = [];
-	count = 0;
-	I = 0;
+	startScarpingTime = 0;
+	fileCount = 0;
+	currentFileIndex = 0;
 	static description = "describe the command here";
 	readonly userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 
 	async run() {
 		config({path: `${__dirname}/../../.env`});
-		const {INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD} = process.env;
-		if (INSTAGRAM_USERNAME === undefined || INSTAGRAM_PASSWORD === undefined) {
+		const {INSTAGRAM} = process.env;
+		if (!JSON.parse(INSTAGRAM!)) {
 			console.log("Please make sure that you enter the correct Instagram creditentials and post ID...");
 			const username: string = await cli.prompt("username", {type: "normal", prompt: "Your Instagram username: "});
 			const password: string = await cli.prompt("password", {type: "hide", prompt: "Your Instagram password: "});
 			const id: string = await cli.prompt("id", {type: "normal", prompt: "Instagram post ID (after https://www.instagram.com/p/): "});
 			const background: boolean = await cli.confirm("Do you want to see the browser?");
 			await this.beginScrape(id, !background);
-		} else if (INSTAGRAM_USERNAME !== undefined && INSTAGRAM_PASSWORD !== undefined) {
+		} else if (JSON.parse(INSTAGRAM!)) {
 			const {args, flags} = this.parse(Instagram);
-			const startScarpingTime = Date.now();
 			await this.beginScrape(args.post, flags.headless);
-			console.log(`Scrape time: ${(Date.now() - startScarpingTime)/1000}s`);
 		}
 	}
 
@@ -41,27 +39,24 @@ export default class Instagram extends Command {
 				headless: background,
 				userDataDir: `${__dirname}/../../Chrome`,
 				devtools: !background,
-				defaultViewport: null,
+				defaultViewport: null
 			});
+			this.startScarpingTime = Date.now();
 			cli.action.stop();
-			cli.action.start("Signing-in...");
 			await browser.browserContexts()[0].overridePermissions("https://www.instagram.com", ["notifications"]);
 			const page = (await browser.pages())[0];
 			await page.setUserAgent(this.userAgent);
-			await page.goto("https://www.instagram.com/");
-			cli.action.stop();
 			cli.action.start("Searching for files...");
 			await this.detectFiles(browser, page, id);
-		} catch (error) {
-			console.error(error.message);
-			// process.exit();
-		}
+		} catch (error) { console.error(error.message); }
 	}
 	async detectFiles(browser: Browser, page: Page, id: string) {
 		try {
-			await page.goto(`https://www.instagram.com/p/${id}`);
+			await page.goto(`https://www.instagram.com/p/${id}`, {waitUntil: "domcontentloaded"});
+			const errorLabelSelector = "body > div > div.page.-cx-PRIVATE-Page__body.-cx-PRIVATE-Page__body__ > div > div";
 			if ((await page.$("div.error-container")) !== null) {
 				console.error(`Failed to find post ${id}`);
+				await browser.close();
 				return;
 			}
 			await page.waitForSelector("div.ZyFrc", {visible: true});
@@ -84,7 +79,7 @@ export default class Instagram extends Command {
 		cli.action.stop();
 		try {
 			const URLs = Array.from(new Set(this.srcs));
-			this.count = URLs.length;
+			this.fileCount = URLs.length;
 			for (const url of URLs) if (url.includes(".jpg") || url.includes(".mp4")) await this.downloadFile(browser, url);
 			return;
 		} catch (error) {console.error(error.message)}
@@ -111,8 +106,11 @@ export default class Instagram extends Command {
 				unlink(path, null!);
 				console.error(error.message);
 			});
-			this.I += 1;
-			if (this.I === this.count) await browser.close();
+			this.currentFileIndex += 1;
+			if (this.currentFileIndex === this.fileCount && this.startScarpingTime !== 0) {
+				await browser.close();
+				console.log(`Scrape time: ${(Date.now() - this.startScarpingTime)/1000}s`);
+			}
 		} catch (error) {
 			console.error(error.message);
 		}
