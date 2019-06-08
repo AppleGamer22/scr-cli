@@ -62,8 +62,8 @@ export default class Instagram extends Command {
 			await page.waitForSelector("div.ZyFrc", {visible: true});
 			var nextButtons = await page.$("div.coreSpriteRightChevron");
 			do {
-				const videosDuplicates = await page.$$eval("video[src].tWeCl", videos => videos.map(video => video.getAttribute("src")));
-				const imagesDuplicates = await page.$$eval("img[src].FFVAD", images => images.map(image => image.getAttribute("src")));
+				const videosDuplicates = await page.$$eval("video.tWeCl", videos => videos.map(video => video.getAttribute("src")));
+				const imagesDuplicates = await page.$$eval("img.FFVAD", images => images.map(image => image.getAttribute("src")));
 				imagesDuplicates.forEach(duplicate => this.srcs.push(duplicate!));
 				videosDuplicates.forEach(duplicate => this.srcs.push(duplicate!));
 				await page.click("div.coreSpriteRightChevron");
@@ -81,7 +81,6 @@ export default class Instagram extends Command {
 			const URLs = Array.from(new Set(this.srcs));
 			this.fileCount = URLs.length;
 			for (const url of URLs) if (url.includes(".jpg") || url.includes(".mp4")) await this.downloadFile(browser, url);
-			return;
 		} catch (error) {console.error(error.message)}
 	}
 
@@ -111,8 +110,6 @@ export default class Instagram extends Command {
 				await browser.close();
 				console.log(`Scrape time: ${(Date.now() - this.startScarpingTime)/1000}s`);
 			}
-		} catch (error) {
-			console.error(error.message);
-		}
+		} catch (error) { console.error(error.message); }
 	}
 }
