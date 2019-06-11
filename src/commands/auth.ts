@@ -22,6 +22,7 @@ export default class Auth extends Command {
 	}
 
 	async instagram() {
+		if (JSON.parse(process.env.INSTAGRAM!)) return console.log("You are already signed-in.");
 		console.log("Sign-in to you Instagram account.")
 		try {
 			const browser = await launch({
@@ -33,8 +34,7 @@ export default class Auth extends Command {
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://www.facebook.com/instagram/login_sync/") {
 					var environmentFileData: string;
-					const INSTAGRAM = process.env.INSTAGRAM;
-					const VSCO = process.env.VSCO;
+					const {VSCO} = process.env;
 					if (VSCO !== undefined) {
 						environmentFileData = `INSTAGRAM=${true}
 INSTAGRAM_PASSWORD=${VSCO}`;
@@ -50,24 +50,29 @@ INSTAGRAM_PASSWORD=${VSCO}`;
 		} catch (error) { console.error(error.message); }
 	}
 	async vsco() {
-		var environmentFileData: string;
-		const INSTAGRAM_USERNAME = process.env.INSTAGRAM_USERNAME;
-		const INSTAGRAM_PASSWORD = process.env.INSTAGRAM_PASSWORD;
-		if (INSTAGRAM_USERNAME !== undefined && INSTAGRAM_PASSWORD !== undefined) {
-			environmentFileData = `INSTAGRAM_USERNAME="${process.env.INSTAGRAM_USERNAME}"
-INSTAGRAM_PASSWORD="${process.env.INSTAGRAM_PASSWORD}"
-VSCO_USERNAME="${await cli.prompt("username", {type: "normal", prompt: "Your VSCO username: "})}"
-VSCO_PASSWORD="${await cli.prompt("password", {type: "hide", prompt: "Your VSCO password: "})}"`;
-			writeFile(`${__dirname}/../../.env`, environmentFileData, error => {
-				if (error) return console.error(error.message);
+		if (JSON.parse(process.env.VSCO!)) return console.log("You are already signed-in.");
+		console.log("Sign-in to you VSCO account.")
+		try {
+			const browser = await launch({headless: false, userDataDir: `${__dirname}/../../Chrome`, defaultViewport: null});
+			const page = (await browser.pages())[0];
+			await page.goto("https://vsco.co/user/login");
+			page.on("framenavigated", async frame => {
+				if (frame.url() === "https://vsco.co/") {
+					var environmentFileData: string;
+					const {INSTAGRAM} = process.env;
+					if (INSTAGRAM !== undefined) {
+						environmentFileData = `VSCO=${true}
+INSTAGRAM=${INSTAGRAM}`;
+						this.writeEnviornmentVariables(environmentFileData);
+						await browser.close();
+					} else if (INSTAGRAM === undefined) {
+						environmentFileData = `VSCO=${true}`;
+						this.writeEnviornmentVariables(environmentFileData);
+						await browser.close();
+					}
+				}
 			});
-		} else if (INSTAGRAM_USERNAME === undefined && INSTAGRAM_PASSWORD === undefined) {
-			environmentFileData = `VSCO_USERNAME="${await cli.prompt("username", {type: "normal", prompt: "Your VSCO username: "})}"
-VSCO_PASSWORD="${await cli.prompt("password", {type: "hide", prompt: "Your VSCO password: "})}"`;
-			writeFile(`${__dirname}/../../.env`, environmentFileData, error => {
-				if (error) return console.error(error.message);
-			});
-		}
+		} catch (error) { console.error(error.message); }
 	}
 	writeEnviornmentVariables(env: string) {
 		writeFile(`${__dirname}/../../.env`, env, error => {
