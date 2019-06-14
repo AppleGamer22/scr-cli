@@ -77,6 +77,7 @@ INSTAGRAM=${INSTAGRAM}`;
 	writeEnviornmentVariables(env: string) {
 		writeFile(`${__dirname}/../../.env`, env, error => {
 			if (error) return console.error(error.message);
+			return console.log("Sign-in sucessful.");
 		});
 	}
 }
