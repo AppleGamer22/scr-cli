@@ -5,7 +5,7 @@ Instagram web scarper for post file downloads.
 - Node.js
 - Node Package Manager (NPM)
 - TypeScript
-#Before Using The CLI:
+# Before Using The CLI:
 1. run `./path/to/cli/source auth instagram`.
 2. A Chromium broswer will be opened at [https://www.instagram.com/accounts/login/](https://www.instagram.com/accounts/login/).
 3. Sign-in to your Instagram account.
