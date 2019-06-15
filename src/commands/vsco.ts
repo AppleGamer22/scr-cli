@@ -33,7 +33,11 @@ export default class Vsco extends Command {
 	async beginScrape(id: string, background: boolean) {
 		cli.action.start("Opening Puppeteer...");
 		try {
-			const browser = await launch({headless: background, defaultViewport: null});
+			const browser = await launch({
+				headless: background,
+				devtools: !background,
+				defaultViewport: null
+			});
 			cli.action.stop();
 			this.startScarpingTime = Date.now();
 			const page = (await browser.pages())[0];
