@@ -80,11 +80,16 @@ export default class Instagram extends Command {
 		try {
 			const URLs = Array.from(new Set(this.srcs));
 			this.fileCount = URLs.length;
-			for (const url of URLs) if (url.includes(".jpg") || url.includes(".mp4")) await this.downloadFile(browser, url);
+			// console.log(URLs);
+			for (const url of URLs) {
+				if (url.includes(".jpg") || url.includes(".mp4")) {
+					await this.downloadFiles(browser, url);
+				}
+			}
 		} catch (error) {console.error(error.message)}
 	}
 
-	async downloadFile(browser: Browser, URL: string) {
+	async downloadFiles(browser: Browser, URL: string) {
 		const path = `${process.cwd()}/${basename(URL).split("?")[0]}`
 		try {
 			console.log(URL);
