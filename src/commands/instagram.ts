@@ -71,8 +71,7 @@ export default class Instagram extends Command {
 			} while (nextButtons !== null);
 			this.organiseFiles(browser, id);
 		} catch (error) {
-			console.error(error.message);
-			await this.organiseFiles(browser, id);
+			if (error.message === "No node found for selector: div.coreSpriteRightChevron") await this.organiseFiles(browser, id);
 		}
 	}
 	async organiseFiles(browser: Browser, id: string) {
@@ -92,7 +91,7 @@ export default class Instagram extends Command {
 	async downloadFile(browser: Browser, URL: string) {
 		const path = `${process.cwd()}/${basename(URL).split("?")[0]}`
 		try {
-			console.log(URL);
+			console.log(`${this.currentFileIndex + 1}\n${URL}`);
 			cli.action.start("Download began.");
 			var file = createWriteStream(path);
 			const request = get(URL, response => {
