@@ -7,13 +7,13 @@ import cli from "cli-ux";
 import {config} from "dotenv";
 
 export default class Instagram extends Command {
+	static description = "Command for scarping Instagram post files.";
 	static args = [{name: "post"}];
-	static flags = {headless: flags.boolean({char: "h"})};
+	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 	srcs: string[] = [];
 	startScarpingTime = 0;
 	fileCount = 0;
 	currentFileIndex = 0;
-	static description = "describe the command here";
 	readonly userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 
 	async run() {

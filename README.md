@@ -1,4 +1,4 @@
-# Instagram-File-Scraper
+# Social-Scraper
 Instagram web scarper for post file downloads.
 #Running/Development Requirements/Recommendations:
 - Unix-style terminal/npm capable terminal

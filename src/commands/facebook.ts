@@ -4,9 +4,9 @@ import cli from "cli-ux";
 import {Browser, Page, launch} from "puppeteer";
 
 export default class Facebook extends Command {
-	static description = "describe the command here";
+	static description = "Command for scarping Facebook post files.";
 	startScarpingTime = 0;
-	static flags = {headless: flags.boolean({char: "h"})};
+	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 	static args = [{name: "post"}];
 	readonly userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 

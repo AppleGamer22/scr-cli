@@ -7,10 +7,10 @@ import cli from "cli-ux";
 import {config} from "dotenv";
 
 export default class Vsco extends Command {
+	static description = "Command for scarping VSCO post files.";
 	startScarpingTime = 0;
 	static args = [{name: "post"}];
-	static flags = {headless: flags.boolean({char: "h"})};
-	static description = "describe the command here";
+	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 	readonly userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 
 	async run() {
