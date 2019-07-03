@@ -64,8 +64,8 @@ export default class Instagram extends Command {
 			do {
 				const videosDuplicates = await page.$$eval("video.tWeCl", videos => videos.map(video => video.getAttribute("src")));
 				const imagesDuplicates = await page.$$eval("img.FFVAD", images => images.map(image => image.getAttribute("src")));
-				imagesDuplicates.forEach(duplicate => this.srcs.push(duplicate!));
-				videosDuplicates.forEach(duplicate => this.srcs.push(duplicate!));
+				imagesDuplicates.forEach(duplicate => { if (duplicate) this.srcs.push(duplicate) });
+				videosDuplicates.forEach(duplicate => { if (duplicate) this.srcs.push(duplicate) });
 				await page.click("div.coreSpriteRightChevron");
 				nextButtons = await page.$("div.coreSpriteRightChevron");
 			} while (nextButtons !== null);
@@ -77,21 +77,21 @@ export default class Instagram extends Command {
 	async organiseFiles(browser: Browser, id: string) {
 		cli.action.stop();
 		try {
-			const URLs = Array.from(new Set(this.srcs));
+			const URLs = [...(new Set<string>(this.srcs))];
 			this.fileCount = URLs.length;
-			// console.log(URLs);
 			for (const url of URLs) {
-				if (url.includes(".jpg") || url.includes(".mp4")) {
-					await this.downloadFile(browser, url);
-				}
+				if (url.includes(".jpg")) await this.downloadFile(browser, url, ".jpg");
+				if (url.includes(".mp4")) await this.downloadFile(browser, url, ".mp4");
 			}
-		} catch (error) {console.error(error.message)}
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
-	async downloadFile(browser: Browser, URL: string) {
+	async downloadFile(browser: Browser, URL: string, fileType: string) {
 		const path = `${process.cwd()}/${basename(URL).split("?")[0]}`
 		try {
-			console.log(`${this.currentFileIndex + 1}\n${URL}`);
+			console.log(`${fileType} ${this.currentFileIndex + 1}\n${URL}`);
 			cli.action.start("Download began.");
 			var file = createWriteStream(path);
 			const request = get(URL, response => {
