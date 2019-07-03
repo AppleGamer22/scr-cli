@@ -64,8 +64,8 @@ export default class Instagram extends Command {
 			do {
 				const videosDuplicates = await page.$$eval("video.tWeCl", videos => videos.map(video => video.getAttribute("src")));
 				const imagesDuplicates = await page.$$eval("img.FFVAD", images => images.map(image => image.getAttribute("src")));
-				imagesDuplicates.forEach(duplicate => { if (duplicate) this.srcs.push(duplicate) });
-				videosDuplicates.forEach(duplicate => { if (duplicate) this.srcs.push(duplicate) });
+				imagesDuplicates.forEach(duplicate => { if (duplicate) this.srcs.push(duplicate); });
+				videosDuplicates.forEach(duplicate => { if (duplicate) this.srcs.push(duplicate); });
 				await page.click("div.coreSpriteRightChevron");
 				nextButtons = await page.$("div.coreSpriteRightChevron");
 			} while (nextButtons !== null);
@@ -83,9 +83,7 @@ export default class Instagram extends Command {
 				if (url.includes(".jpg")) await this.downloadFile(browser, url, ".jpg");
 				if (url.includes(".mp4")) await this.downloadFile(browser, url, ".mp4");
 			}
-		} catch (error) {
-			console.error(error)
-		}
+		} catch (error) { console.error(error); }
 	}
 
 	async downloadFile(browser: Browser, URL: string, fileType: string) {
