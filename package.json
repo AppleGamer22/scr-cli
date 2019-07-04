@@ -1,8 +1,9 @@
 {
-	"name": "social-scraper",
+	"name": "@applegamer22/social-scraper",
 	"description": "Social media web scarper for post file downloads.",
 	"version": "1.0.0-alpha.3",
-	"author": "AppleGamer22",
+	"author": "Omri Bornstein",
+	"publisher": "AppleGamer22",
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/AppleGamer22/Social-Scraper",
