@@ -5,12 +5,12 @@ import {config} from "dotenv";
 import cli from "cli-ux";
 
 export default class Auth extends Command {
-	static description = "describe the command here";
+	static description = "Command for supported social network(s) authentication.";
 	static flags = {
 		help: flags.help({char: "h"}),
 		headless: flags.boolean({char: "h"}),
-		vsco: flags.boolean({char: "v", description: "Provide VSCO credentials."}),
-		instagram: flags.boolean({char: "i", description: "Provide Instagram credentials."})
+		vsco: flags.boolean({char: "v", description: "Toggle for providing VSCO credentials."}),
+		instagram: flags.boolean({char: "i", description: "Toggle for providing Instagram credentials."})
 	};
 
 	async run() {
