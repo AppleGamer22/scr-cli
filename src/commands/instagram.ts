@@ -9,7 +9,9 @@ import {config} from "dotenv";
 export default class Instagram extends Command {
 	static description = "Command for scarping Instagram post files.";
 	static args = [{name: "post"}];
-	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
+	static flags = {
+		headless: flags.boolean({char: "h", description: "Toggle for background scraping."})
+	};
 	srcs: string[] = [];
 	startScarpingTime = 0;
 	fileCount = 0;
