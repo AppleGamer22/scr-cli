@@ -13,3 +13,7 @@ index.js
 .DS_Store
 .env
 Chrome/*
+.idea/*
+.vscode/*
+.git/*
+.nyc-output/*
