@@ -25,17 +25,20 @@ export default class Instagram extends Command {
 		} else if (JSON.parse(INSTAGRAM!)) {
 			try {
 				const {args, flags} = this.parse(Instagram);
+				const now = Date.now();
 				const {browser, page} = (await beginScrape(userAgent, flags.headless))!
 				const urls = [...(new Set<string>(await detectFiles(browser, page, args.post)))];
 				for (const url of urls) {
-					if (url.includes(".jpg")) await this.downloadFile(browser, url, ".jpg");
-					if (url.includes(".mp4")) await this.downloadFile(browser, url, ".mp4");
+					if (url.includes(".jpg")) await this.downloadFile(url, ".jpg");
+					if (url.includes(".mp4")) await this.downloadFile(url, ".mp4");
 				}
+				await browser.close();
+				console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
 			} catch (error) { console.error(error.message); }
 		}
 	}
 
-	downloadFile(browser: Browser, URL: string, fileType: ".jpg" | ".mp4") {
+	downloadFile(URL: string, fileType: ".jpg" | ".mp4") {
 		const path = `${process.cwd()}/${basename(URL).split("?")[0]}`
 		return new Promise(async (resolve, reject) => {
 			console.log(`${fileType} ${this.currentFileIndex + 1}\n${URL}`);
@@ -55,11 +58,6 @@ export default class Instagram extends Command {
 				console.error(error.message);
 				reject();
 			});
-			this.currentFileIndex += 1;
-			if (this.currentFileIndex === this.fileCount && this.startScarpingTime !== 0) {
-				await browser.close();
-				console.log(`Scrape time: ${(Date.now() - this.startScarpingTime)/1000}s`);
-			}
 		});
 	}
 }
@@ -107,6 +105,5 @@ export async function detectFiles(browser: Browser, page: Page, id: string): Pro
 	} catch (error) {
 		return [...(new Set<string>(srcs))!];
 	}
-	await browser.close();
 	return [...(new Set<string>(srcs))!];
 }
