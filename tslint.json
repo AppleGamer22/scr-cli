@@ -29,7 +29,8 @@
 		"eofline": [false],
 		"no-var-requires": false,
 		"no-bitwise": false,
-		"no-shadowed-variable": false
+		"no-shadowed-variable": false,
+		"one-variable-per-declaration": false
 	},
 	"rulesDirectory": []
 }
