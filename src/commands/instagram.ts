@@ -26,24 +26,30 @@ export default class Instagram extends Command {
 			try {
 				const {args, flags} = this.parse(Instagram);
 				const now = Date.now();
-				const {browser, page} = (await beginScrape(userAgent, flags.headless))!
+				cli.action.start("Opening Puppeteer...");
+				const {browser, page} = (await beginScrape(userAgent, flags.headless))!;
+				cli.action.stop();
+				cli.action.start("Searching for files...");
 				const urls = [...(new Set<string>(await detectFiles(browser, page, args.post)))];
-				for (const url of urls) {
-					if (url.includes(".jpg")) await this.downloadFile(url, ".jpg");
-					if (url.includes(".mp4")) await this.downloadFile(url, ".mp4");
-				}
-				await browser.close();
+				cli.action.stop();
 				console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
+				cli.action.start("Downloading...");
+				for (var i = 0; i < urls.length; i += 1) {
+					const url = urls[i];
+					if (url.includes(".jpg")) await this.downloadFile(url, ".jpg", i +1);
+					if (url.includes(".mp4")) await this.downloadFile(url, ".mp4", i +1);
+				}
+				cli.action.stop();
+				await browser.close();
 			} catch (error) { console.error(error.message); }
 		}
 	}
 
-	downloadFile(URL: string, fileType: ".jpg" | ".mp4") {
+	downloadFile(URL: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 		const path = `${process.cwd()}/${basename(URL).split("?")[0]}`
 		return new Promise(async (resolve, reject) => {
-			console.log(`${fileType} ${this.currentFileIndex + 1}\n${URL}`);
+			console.log(`${fileType} ${fileNumber}\n${URL}`);
 			var file = createWriteStream(path);
-			cli.action.start("Download began.");
 			const request = get(URL, response => {
 				if (response.statusCode !== 200) throw console.error("Download failed.");
 				response.on("end", () => cli.action.stop()).pipe(file);
@@ -65,24 +71,20 @@ export default class Instagram extends Command {
 export const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 
 export async function beginScrape(userAgent: string, background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
-	cli.action.start("Opening Puppeteer...");
 	try {
 		const browser = await launch({
 			headless: background,
 			userDataDir: `${__dirname}/../../Chrome`,
 			devtools: !background,
 			defaultViewport: null
-		});
-		cli.action.stop();
+		})
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent);
-		cli.action.start("Searching for files...");
 		return {browser, page};
 	} catch (error) { console.error(error.message); }
 }
 
 export async function detectFiles(browser: Browser, page: Page, id: string): Promise<string[]> {
-	cli.action.start("Searching for files...");
 	var srcs: string[] = [];
 	try {
 		await page.goto(`https://www.instagram.com/p/${id}`, {waitUntil: "domcontentloaded"});
@@ -101,7 +103,6 @@ export async function detectFiles(browser: Browser, page: Page, id: string): Pro
 			await page.click("div.coreSpriteRightChevron");
 			nextButtons = await page.$("div.coreSpriteRightChevron");
 		} while (nextButtons !== null);
-		cli.action.stop();
 	} catch (error) {
 		return [...(new Set<string>(srcs))!];
 	}
