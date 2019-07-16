@@ -2,7 +2,6 @@ import {launch} from "puppeteer";
 import { Command, flags } from "@oclif/command";
 import {writeFile} from "fs";
 import {config} from "dotenv";
-import cli from "cli-ux";
 
 export default class Auth extends Command {
 	static description = "Command for supported social network(s) authentication.";
@@ -22,8 +21,8 @@ export default class Auth extends Command {
 	}
 
 	async instagram() {
-		if (JSON.parse(process.env.INSTAGRAM!)) return console.log("You are already signed-in.");
-		console.log("Sign-in to you Instagram account.")
+		// if (JSON.parse(process.env.INSTAGRAM!)) return console.log("You are already signed-in.");
+		// console.log("Sign-in to you Instagram account.");
 		try {
 			const browser = await launch({
 				headless: false,
@@ -50,8 +49,8 @@ INSTAGRAM_PASSWORD=${VSCO}`;
 		} catch (error) { console.error(error.message); }
 	}
 	async vsco() {
-		if (JSON.parse(process.env.VSCO!)) return console.log("You are already signed-in.");
-		console.log("Sign-in to you VSCO account.")
+		// if (JSON.parse(process.env.VSCO!)) return console.log("You are already signed-in.");
+		// console.log("Sign-in to you VSCO account.");
 		try {
 			const browser = await launch({headless: false, userDataDir: `${__dirname}/../../Chrome`, defaultViewport: null});
 			const page = (await browser.pages())[0];

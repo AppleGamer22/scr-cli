@@ -6,10 +6,10 @@
 /tmp
 /yarn.lock
 node_modules
-index.js
 *.jpg
 *.png
 *.mp4
 .DS_Store
 .env
-Chrome/*
+Chrome
+.nyc-output

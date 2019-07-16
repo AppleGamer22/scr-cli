@@ -5,6 +5,7 @@
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
+	"private": false,
 	"repository": {
 		"url": "https://github.com/AppleGamer22/Social-Scraper",
 		"type": "git"

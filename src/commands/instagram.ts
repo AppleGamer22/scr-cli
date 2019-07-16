@@ -5,6 +5,7 @@ import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
+// import {chromeExecutablePath} from "../shared";
 
 export default class Instagram extends Command {
 	static description = "Command for scarping Instagram post files.";
@@ -69,9 +70,10 @@ export async function beginScrape(userAgent: string, background: boolean): Promi
 		const browser = await launch({
 			headless: background,
 			userDataDir: `${__dirname}/../../Chrome`,
+			// executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 			devtools: !background,
 			defaultViewport: null
-		})
+		});
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent);
 		return {browser, page};
