@@ -18,7 +18,7 @@
 	},
 	"types": "lib/index.d.ts",
 	"dependencies": {
-		"@oclif/command": "^1.5.16",
+		"@oclif/command": "^1.5.17",
 		"@oclif/config": "^1.13.2",
 		"@oclif/plugin-commands": "^1.2.2",
 		"@oclif/plugin-help": "^2.2.0",
@@ -47,7 +47,7 @@
 		"prettier": "^1.18.2",
 		"ts-node": "^8.3.0",
 		"tslint": "^5.18.0",
-		"typescript": "^3.5.2"
+		"typescript": "^3.5.3"
 	},
 	"bin": {
 		"social-scraper": "./bin/run"

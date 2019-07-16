@@ -8,7 +8,6 @@ import {config} from "dotenv";
 
 export default class Vsco extends Command {
 	static description = "Command for scarping VSCO post files.";
-	startScarpingTime = 0;
 	static args = [{name: "post"}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
