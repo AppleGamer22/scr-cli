@@ -1,5 +1,5 @@
 import {expect, test} from "@oclif/test";
-import {Browser, Page} from "puppeteer";
+import {Browser, Page} from "puppeteer-core";
 import {beginScrape, detectFiles, userAgent} from "./../../src/commands/instagram";
 
 describe("Instagram", () => {

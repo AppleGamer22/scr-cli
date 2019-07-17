@@ -1,7 +1,7 @@
 import { Command, flags } from "@oclif/command";
 import { config } from "dotenv";
 import cli from "cli-ux";
-import {Browser, Page, launch} from "puppeteer";
+import {Browser, Page, launch} from "puppeteer-core";
 
 export default class Facebook extends Command {
 	static description = "Command for scarping Facebook post files.";

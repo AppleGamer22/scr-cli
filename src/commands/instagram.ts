@@ -1,5 +1,5 @@
 import {Command, flags} from "@oclif/command";
-import {Browser, Page, launch} from "puppeteer";
+import {Browser, Page, launch} from "puppeteer-core";
 import {get} from "https";
 import {createWriteStream, unlink} from "fs";
 import {basename} from "path";

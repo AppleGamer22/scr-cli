@@ -1,7 +1,8 @@
-import {launch} from "puppeteer";
+import {launch} from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import {writeFile} from "fs";
 import {config} from "dotenv";
+import { chromeExecutablePath } from '../shared';
 
 export default class Auth extends Command {
 	static description = "Command for supported social network(s) authentication.";
@@ -26,7 +27,9 @@ export default class Auth extends Command {
 		try {
 			const browser = await launch({
 				headless: false,
-				userDataDir: `${__dirname}/../../Chrome`
+				executablePath: chromeExecutablePath(),
+				userDataDir: `${__dirname}/../../Chrome`,
+				defaultViewport: null
 			});
 			const page = (await browser.pages())[0];
 			await page.goto("https://www.instagram.com/accounts/login/");
@@ -52,7 +55,12 @@ INSTAGRAM_PASSWORD=${VSCO}`;
 		// if (JSON.parse(process.env.VSCO!)) return console.log("You are already signed-in.");
 		// console.log("Sign-in to you VSCO account.");
 		try {
-			const browser = await launch({headless: false, userDataDir: `${__dirname}/../../Chrome`, defaultViewport: null});
+			const browser = await launch({
+				headless: false,
+				executablePath: chromeExecutablePath(),
+				userDataDir: `${__dirname}/../../Chrome`,
+				defaultViewport: null
+			});
 			const page = (await browser.pages())[0];
 			await page.goto("https://vsco.co/user/login");
 			page.on("framenavigated", async frame => {

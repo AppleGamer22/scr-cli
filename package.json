@@ -1,7 +1,7 @@
 {
 	"name": "@applegamer22/social-scraper",
 	"description": "Social media web scarper for post file downloads.",
-	"version": "1.0.0-alpha.4",
+	"version": "1.0.0-alpha.5.8",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
@@ -28,7 +28,7 @@
 		"@oclif/plugin-which": "^1.0.3",
 		"cli-ux": "^5.3.1",
 		"dotenv": "^8.0.0",
-		"puppeteer": "^1.18.1",
+		"puppeteer-core": "^1.18.1",
 		"tslib": "^1.10.0"
 	},
 	"devDependencies": {
@@ -39,7 +39,7 @@
 		"@types/dotenv": "^6.1.1",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^12.6.2",
-		"@types/puppeteer": "^1.12.4",
+		"@types/puppeteer-core": "^1.9.0",
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",
 		"globby": "^10.0.1",
