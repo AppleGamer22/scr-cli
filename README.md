@@ -10,6 +10,11 @@ Instagram web scarper for social post file(s) downloads.
 - Node Package Manager (NPM)
 - TypeScript
 ## Before Using The CLI:
+### General Usage
+Install via NPM by running:
+- `$ sudo npm i @applegamer22/social-scraper -g` (macOS/Linux)
+- `> npm i @applegamer22/social-scraper -g` (Windows)
+### Development
 1. Clone this repository by running `$ git clone https://github.com/AppleGamer22/Social-Scraper.git` in your command-line.
 2. Run `$ npm install` in the root directory of the downloaded copy.
 3. Run `./path/to/cli/source auth instagram`.
