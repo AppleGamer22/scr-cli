@@ -28,13 +28,13 @@ export default class Instagram extends Command {
 				const urls = [...(new Set<string>(await detectFiles(browser, page, args.post)))];
 				cli.action.stop();
 				console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
-				cli.action.start("Downloading...");
 				for (var i = 0; i < urls.length; i += 1) {
 					const url = urls[i];
+					cli.action.start("Downloading...");
 					if (url.includes(".jpg")) await this.downloadFile(url, ".jpg", i +1);
 					if (url.includes(".mp4")) await this.downloadFile(url, ".mp4", i +1);
+					cli.action.stop();
 				}
-				cli.action.stop();
 				await browser.close();
 			} catch (error) { console.error(error.message); }
 		}
