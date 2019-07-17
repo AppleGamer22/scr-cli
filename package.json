@@ -1,7 +1,7 @@
 {
 	"name": "@applegamer22/social-scraper",
 	"description": "Social media web scarper for post file downloads.",
-	"version": "1.0.0-alpha.5.17.1",
+	"version": "1.0.0-alpha.6",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
@@ -10,6 +10,17 @@
 		"url": "https://github.com/AppleGamer22/Social-Scraper",
 		"type": "git"
 	},
+	"keywords": [
+		"nodejs",
+		"typescript",
+		"oclif",
+		"cli",
+		"chrome-headless",
+		"puppeteer-core",
+		"instagram-scraper",
+		"vsco-scraper",
+		"facebook-scraper"
+	],
 	"scripts": {
 		"postpack": "rm -f oclif.manifest.json",
 		"posttest": "tslint -p test -t stylish",
