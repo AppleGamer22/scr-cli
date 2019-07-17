@@ -5,6 +5,7 @@ import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
 
 export default class Vsco extends Command {
 	static description = "Command for scarping VSCO post files.";
@@ -12,7 +13,7 @@ export default class Vsco extends Command {
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
-		config({path: `${__dirname}/../../.env`});
+		config({path: environmentVariablesFile});
 		const {VSCO} = process.env;
 		if (!JSON.parse(VSCO!)) {
 			console.error("You are not authenticated.");
@@ -61,15 +62,15 @@ export default class Vsco extends Command {
 	}
 }
 
-export const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
-
 export async function beginScrape(userAgent: string, background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
 	cli.action.start("Opening Puppeteer...");
 	try {
 		const browser = await launch({
 			headless: background,
 			devtools: !background,
-			defaultViewport: null
+			defaultViewport: null,
+			executablePath: chromeExecutable(),
+			userDataDir: chromeUserDataDirectory
 		});
 		cli.action.stop();
 		const page = (await browser.pages())[0];

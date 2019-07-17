@@ -5,7 +5,7 @@ import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
-// import {chromeExecutablePath} from "../shared";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
 
 export default class Instagram extends Command {
 	static description = "Command for scarping Instagram post files.";
@@ -13,7 +13,7 @@ export default class Instagram extends Command {
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
-		config({path: `${__dirname}/../../.env`});
+		config({path: environmentVariablesFile});
 		const {INSTAGRAM} = process.env;
 		if (!JSON.parse(INSTAGRAM!)) {
 			console.error("You are not authenticated.");
@@ -63,14 +63,12 @@ export default class Instagram extends Command {
 	}
 }
 
-export const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
-
 export async function beginScrape(userAgent: string, background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
 	try {
 		const browser = await launch({
 			headless: background,
-			userDataDir: `${__dirname}/../../Chrome`,
-			// executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+			userDataDir: chromeUserDataDirectory,//`${__dirname}/../../Chrome`,
+			executablePath: chromeExecutable(),
 			devtools: !background,
 			defaultViewport: null
 		});
