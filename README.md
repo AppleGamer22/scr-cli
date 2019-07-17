@@ -4,6 +4,7 @@ Instagram web scarper for social post file(s) downloads.
 1. Separate Git branch to the master branch
 2. Separate fork to this repository
 ## Requirements and/or Recommendations:
+- Google Chrome browser
 - Unix-style terminal and/or npm capable command-line
 - Node.js
 - Node Package Manager (NPM)
