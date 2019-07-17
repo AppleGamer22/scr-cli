@@ -2,7 +2,7 @@ import {launch} from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import {writeFile} from "fs";
 import {config} from "dotenv";
-import { chromeExecutablePath } from '../shared';
+import { chromeExecutablePath } from "../shared";
 
 export default class Auth extends Command {
 	static description = "Command for supported social network(s) authentication.";
