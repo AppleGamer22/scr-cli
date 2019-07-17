@@ -1,93 +1,101 @@
 import { Command, flags } from "@oclif/command";
-import {Browser, Page, launch} from "puppeteer";
+import {Browser, Page, launch} from "puppeteer-core";
 import {get} from "https";
 import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
 
 export default class Vsco extends Command {
 	static description = "Command for scarping VSCO post files.";
-	startScarpingTime = 0;
 	static args = [{name: "post"}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
-	readonly userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
 
 	async run() {
-		config({path: `${__dirname}/../../.env`});
+		config({path: environmentVariablesFile});
 		const {VSCO} = process.env;
 		if (!JSON.parse(VSCO!)) {
-			console.log("Please make sure that you enter the correct Instagram creditentials and post ID...");
-			const username: string = await cli.prompt("username", {type: "normal", prompt: "Your VSCO username: "});
-			const password: string = await cli.prompt("password", {type: "hide", prompt: "Your VSCO password: "});
-			const id: string = await cli.prompt("id", {type: "normal", prompt: "VSCO post ID (after https://vsco.co/): "});
-			const background: boolean = await cli.confirm("Do you want to see the browser?");
-			// await this.beginScrape(username, password, id, !background);
+			console.error("You are not authenticated.");
 		} else if (JSON.parse(VSCO!)) {
-// tslint:disable-next-line: no-shadowed-variable
 			const {args, flags} = this.parse(Vsco);
-			await this.beginScrape(args.post, flags.headless);
-		}
-	}
-
-	async beginScrape(id: string, background: boolean) {
-		cli.action.start("Opening Puppeteer...");
-		try {
-			const browser = await launch({
-				headless: background,
-				devtools: !background,
-				defaultViewport: null
-			});
+			const post: string  = args.post;
+			if (!post.includes("/media/")) return console.error("Please provide a valid post ID.")
+			const now = Date.now();
+			cli.action.start("Opening Puppeteer...");
+			const {browser, page} = (await beginScrape(userAgent, flags.headless))!;
 			cli.action.stop();
-			this.startScarpingTime = Date.now();
-			const page = (await browser.pages())[0];
-			await page.setUserAgent(this.userAgent);
-			await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
 			cli.action.start("Searching for files...");
-			await this.detectFiles(browser, page, id);
-		} catch (error) { console.error(error.message); }
-	}
-
-	async detectFiles(browser: Browser, page: Page, id: string) {
-		try {
-			if ((await page.$("#root > div > main > div > p")) !== null) {
-				console.error(`Failed to find post ${id}`);
-				return;
-			}
-			await page.waitForSelector("img", {visible: true});
-			const imageURL = await page.$eval("img", image => image.getAttribute("src"));
+			const url = await detectFile(browser, page, post);
 			cli.action.stop();
-			await this.downloadFile(browser, `https:${imageURL!.split("?")[0]}`, id.split("/")[2]);
-		} catch (error) {
-			console.error(error.message);
+			console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
+			cli.action.start("Downloading...");
+			await this.downloadFile(`https:${url!.split("?")[0]}`, post.split("/")[2]);
+			cli.action.stop();
+			await browser.close();
 		}
 	}
 
-	async downloadFile(browser: Browser, URL: string, id: string) {
-		const path = `${process.cwd()}/${id}${basename(URL)}`;
-		try {
-			cli.action.start("Download began.");
-			var file = createWriteStream(path, {});
-			const request = get(URL, response1 => {
+	async downloadFile(redirectURL: string, id: string) {
+		const path = `${process.cwd()}/${id}${basename(redirectURL)}`;
+		return new Promise((resolve, reject) => {
+			var file = createWriteStream(path);
+			const request = get(redirectURL, response1 => {
 				const realURL = response1.headers.location!;
-				console.log(realURL);
+				console.log(`.jpg\n${realURL}`);
 				get(realURL, response2 => {
 					response2.headers["last-modified"] = new Date().toUTCString();
 					if (response2.statusCode !== 200) throw console.error("Download failed.");
 					response2.on("end", () => console.log("Download ended.")).pipe(file);
 				});
-				// response1.on("end", () => console.log("Download ended.")).pipe(file);
 			});
-			file.on("finish", () => file.close());
+			file.on("finish", () => {
+				resolve();
+				file.close()
+			});
 			request.on("error", error => {
 				unlink(path, null!);
 				console.error(error.message);
+				reject();
 			});
-			cli.action.stop();
-			if (this.startScarpingTime !== 0) console.log(`Scrape time: ${(Date.now() - this.startScarpingTime)/1000}s`);
-			await browser.close();
-		} catch (error) {
-			console.error(error.message);
-		}
+		});
 	}
+}
+
+export async function beginScrape(userAgent: string, background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
+	cli.action.start("Opening Puppeteer...");
+	try {
+		const browser = await launch({
+			headless: background,
+			devtools: !background,
+			defaultViewport: null,
+			executablePath: chromeExecutable(),
+			userDataDir: chromeUserDataDirectory
+		});
+		cli.action.stop();
+		const page = (await browser.pages())[0];
+		await page.setUserAgent(userAgent);
+		return {browser, page};
+	} catch (error) { console.error(error.message); }
+}
+
+export async function detectFile(browser: Browser, page: Page, id: string): Promise<string | undefined> {
+	try {
+		await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
+		if ((await page.$("#root > div > main > div > p")) !== null) {
+			console.error(`Failed to find post ${id}`);
+			await browser.close();
+		}
+		await page.waitForSelector("img", {visible: true});
+		const imageURL = await page.$eval("img", async image => {
+			const url = image.getAttribute("src");
+			if (url !== null && url !== undefined) {
+				return url!;
+			} else {
+				console.error(`Failed to find post ${id}`);
+				await browser.close();
+			}
+		});
+		return imageURL;
+	} catch (error) { console.error(error.message); }
 }

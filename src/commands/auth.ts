@@ -1,8 +1,8 @@
-import {launch} from "puppeteer";
+import {launch} from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import {writeFile} from "fs";
 import {config} from "dotenv";
-import cli from "cli-ux";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile} from "../shared";
 
 export default class Auth extends Command {
 	static description = "Command for supported social network(s) authentication.";
@@ -14,20 +14,21 @@ export default class Auth extends Command {
 	};
 
 	async run() {
-		config({path: `${__dirname}/../../.env`});
-// tslint:disable-next-line: no-shadowed-variable
+		config({path: environmentVariablesFile});
 		const {flags} = this.parse(Auth);
-		if (flags.instagram) return await this.instagram();
-		if (flags.vsco) return await this.vsco();
+		if (flags.instagram) return await this.instagramSignIn();
+		if (flags.vsco) return await this.vscoSignIn();
 	}
 
-	async instagram() {
-		if (JSON.parse(process.env.INSTAGRAM!)) return console.log("You are already signed-in.");
-		console.log("Sign-in to you Instagram account.")
+	async instagramSignIn() {
+		// if (JSON.parse(process.env.INSTAGRAM!)) return console.log("You are already signed-in.");
+		// console.log("Sign-in to you Instagram account.");
 		try {
 			const browser = await launch({
 				headless: false,
-				userDataDir: `${__dirname}/../../Chrome`
+				executablePath: chromeExecutable(),
+				userDataDir: chromeUserDataDirectory,//`${__dirname}/../../Chrome`,
+				defaultViewport: null
 			});
 			const page = (await browser.pages())[0];
 			await page.goto("https://www.instagram.com/accounts/login/");
@@ -49,33 +50,28 @@ INSTAGRAM_PASSWORD=${VSCO}`;
 			});
 		} catch (error) { console.error(error.message); }
 	}
-	async vsco() {
-		if (JSON.parse(process.env.VSCO!)) return console.log("You are already signed-in.");
-		console.log("Sign-in to you VSCO account.")
+	async vscoSignIn() {
+		// if (JSON.parse(process.env.VSCO!)) return console.log("You are already signed-in.");
+		// console.log("Sign-in to you VSCO account.");
 		try {
-			const browser = await launch({headless: false, userDataDir: `${__dirname}/../../Chrome`, defaultViewport: null});
+			const browser = await launch({
+				headless: false,
+				executablePath: chromeExecutable(),
+				userDataDir: chromeUserDataDirectory,//`${__dirname}/../../Chrome`,
+				defaultViewport: null
+			});
 			const page = (await browser.pages())[0];
 			await page.goto("https://vsco.co/user/login");
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://vsco.co/") {
-					var environmentFileData: string;
-					const {INSTAGRAM} = process.env;
-					if (INSTAGRAM !== undefined) {
-						environmentFileData = `VSCO=${true}
-INSTAGRAM=${INSTAGRAM}`;
-						this.writeEnviornmentVariables(environmentFileData);
-						await browser.close();
-					} else if (INSTAGRAM === undefined) {
-						environmentFileData = `VSCO=${true}`;
-						this.writeEnviornmentVariables(environmentFileData);
-						await browser.close();
-					}
+					await browser.close();
+					console.log("Sign-in sucessful.");
 				}
 			});
 		} catch (error) { console.error(error.message); }
 	}
 	writeEnviornmentVariables(env: string) {
-		writeFile(`${__dirname}/../../.env`, env, error => {
+		writeFile(environmentVariablesFile, env, error => {
 			if (error) return console.error(error.message);
 			return console.log("Sign-in sucessful.");
 		});

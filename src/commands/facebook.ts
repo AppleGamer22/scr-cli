@@ -1,7 +1,8 @@
 import { Command, flags } from "@oclif/command";
 import { config } from "dotenv";
 import cli from "cli-ux";
-import {Browser, Page, launch} from "puppeteer";
+import {Browser, Page, launch} from "puppeteer-core";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile} from "../shared";
 
 export default class Facebook extends Command {
 	static description = "Command for scarping Facebook post files.";
@@ -12,7 +13,7 @@ export default class Facebook extends Command {
 
 	async run() {
 		// const { args, flags } = this.parse(Facebook);
-		config({path: `${__dirname}/../../.env`});
+		config({path: environmentVariablesFile});
 		await this.beginScrape("", false)
 	}
 
@@ -24,7 +25,7 @@ export default class Facebook extends Command {
 			const browser = await launch({
 				headless: false,
 				defaultViewport: null,
-				userDataDir: `${__dirname}/../../Chrome`,
+				userDataDir: chromeUserDataDirectory,
 				// executablePath: "/Applications/Google Chrome.app/"
 			});
 			cli.action.stop();

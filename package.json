@@ -1,24 +1,36 @@
 {
 	"name": "@applegamer22/social-scraper",
 	"description": "Social media web scarper for post file downloads.",
-	"version": "1.0.0-alpha.3",
+	"version": "1.0.0-alpha.6",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
+	"private": false,
 	"repository": {
 		"url": "https://github.com/AppleGamer22/Social-Scraper",
 		"type": "git"
 	},
+	"keywords": [
+		"nodejs",
+		"typescript",
+		"oclif",
+		"cli",
+		"chrome-headless",
+		"puppeteer-core",
+		"instagram-scraper",
+		"vsco-scraper",
+		"facebook-scraper"
+	],
 	"scripts": {
 		"postpack": "rm -f oclif.manifest.json",
 		"posttest": "tslint -p test -t stylish",
-		"prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-		"test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+		"prepack": "tsc && oclif-dev manifest && oclif-dev readme",
+		"test": "mocha --forbid-only \"test/**/*.test.ts\"",
 		"version": "oclif-dev readme && git add README.md"
 	},
 	"types": "lib/index.d.ts",
 	"dependencies": {
-		"@oclif/command": "^1.5.16",
+		"@oclif/command": "^1.5.17",
 		"@oclif/config": "^1.13.2",
 		"@oclif/plugin-commands": "^1.2.2",
 		"@oclif/plugin-help": "^2.2.0",
@@ -27,7 +39,7 @@
 		"@oclif/plugin-which": "^1.0.3",
 		"cli-ux": "^5.3.1",
 		"dotenv": "^8.0.0",
-		"puppeteer": "^1.18.1",
+		"puppeteer-core": "^1.18.1",
 		"tslib": "^1.10.0"
 	},
 	"devDependencies": {
@@ -38,7 +50,7 @@
 		"@types/dotenv": "^6.1.1",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^12.6.2",
-		"@types/puppeteer": "^1.12.4",
+		"@types/puppeteer-core": "^1.9.0",
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",
 		"globby": "^10.0.1",
@@ -47,7 +59,7 @@
 		"prettier": "^1.18.2",
 		"ts-node": "^8.3.0",
 		"tslint": "^5.18.0",
-		"typescript": "^3.5.2"
+		"typescript": "^3.5.3"
 	},
 	"bin": {
 		"social-scraper": "./bin/run"
