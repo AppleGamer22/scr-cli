@@ -22,7 +22,7 @@
 		"facebook-scraper"
 	],
 	"scripts": {
-		"postpack": "rm -f oclif.manifest.json",
+		"postpack": "rm -f oclif.manifest.json && rm -f tsconfig.tsbuildinfo",
 		"posttest": "tslint -p test -t stylish",
 		"prepack": "tsc && oclif-dev manifest && oclif-dev readme",
 		"test": "mocha --forbid-only \"test/**/*.test.ts\"",
