@@ -14,32 +14,31 @@ export default class LogIn extends Command {
 	async run() {
 		config({path: environmentVariablesFile});
 		try {
+			const username = await cli.prompt("Username");
+			const password = await cli.prompt("password", {type: "hide"});
 			cli.action.start("Opening Puppeteer...");
 			const browser = await launch({
-				headless: false,
+				headless: true,
 				executablePath: chromeExecutable(),
 				userDataDir: chromeUserDataDirectory,
 				defaultViewport: null
 			});
 			cli.action.stop();
 			const {flags} = this.parse(LogIn);
-			if (flags.instagram) return await this.instagramSignIn(browser);
-			if (flags.vsco) return await this.vscoSignIn(browser);
+			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
+			if (flags.vsco) return await this.vscoSignIn(browser, username, password);
 		} catch (error) { console.error(error.message); }
 	}
 
-	async instagramSignIn(browser: Browser) {
+	async instagramSignIn(browser: Browser, username: string, password: string) {
 		try {
 			if (process.env.INSTAGRAM! === "true") {
 				await browser.close();
 				return console.log("You are already logged-in.");
 			}
-		console.log("Log-in to you Instagram account.");
 			const page = (await browser.pages())[0];
-			await page.setUserAgent(userAgent);
-			await page.goto("https://www.instagram.com/accounts/login/");
 			page.on("framenavigated", async frame => {
-				if (frame.url() === "https://www.facebook.com/instagram/login_sync/") {
+				if (frame.url() === "https://www.instagram.com/") {
 					var environmentFileData: string;
 					const {VSCO} = process.env;
 					if (VSCO !== undefined) {
@@ -56,15 +55,19 @@ VSCO=${VSCO}`;
 					}
 				}
 			});
+			await page.setUserAgent(userAgent);
+			await page.goto("https://www.instagram.com/accounts/login/");
+			await page.waitForSelector(`input[name="username"]`);
+			await page.type(`input[name="username"]`, username);
+			await page.type(`input[name="password"]`, password);
+			await page.click(`button[type="submit"]`);
 		} catch (error) { console.error(error.message); }
 	}
-	async vscoSignIn(browser: Browser) {
+	async vscoSignIn(browser: Browser, username: string, password: string) {
 		if (process.env.VSCO! === "true") return console.log("You are already loged-in.");
 		console.log("Sign-in to you VSCO account.");
 		try {
 			const page = (await browser.pages())[0];
-			await page.setUserAgent(userAgent);
-			await page.goto("https://vsco.co/user/login");
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://vsco.co/") {
 					var environmentFileData: string;
@@ -84,6 +87,12 @@ INSTAGRAM=${false}`;
 					}
 				}
 			});
+			await page.setUserAgent(userAgent);
+			await page.goto("https://vsco.co/user/login");
+			await page.waitForSelector("input#login");
+			await page.type("input#login", username);
+			await page.type("input#password", password);
+			await page.click("button#loginButton");
 		} catch (error) { console.error(error.message); }
 	}
 }
