@@ -24,12 +24,12 @@ export default class LogOut extends Command {
 			});
 			cli.action.stop();
 			const {flags} = this.parse(LogOut);
-			if (flags.instagram) return await this.instagramSignOut(browser);
-			if (flags.vsco) return await this.vscoSignOut(browser);
+			if (flags.instagram) return await this.instagramLogOut(browser);
+			if (flags.vsco) return await this.vscoLogOut(browser);
 		} catch (error) { console.error(error.message); }
 	}
 
-	async instagramSignOut(browser: Browser) {
+	async instagramLogOut(browser: Browser) {
 		try {
 			if (!JSON.parse(process.env.INSTAGRAM!)) {
 				await browser.close();
@@ -68,11 +68,32 @@ INSTAGRAM=${false}`;
 			await page.click(logOutButton);
 		} catch (error) { console.error(error.message); }
 	}
-	async vscoSignOut(browser: Browser) {
+	async vscoLogOut(browser: Browser) {
 		try {
 			const page = (await browser.pages())[0];
+			page.on("framenavigated", async frame => {
+				if (frame.url() === "https://vsco.co/feed") {
+					var environmentFileData: string;
+					const {INSTAGRAM} = process.env;
+					if (INSTAGRAM !== undefined) {
+						environmentFileData = `VSCO=${false}
+INSTAGRAM=${INSTAGRAM}`;
+						writeEnviornmentVariables(environmentFileData);
+						console.log("Log-out sucessful.");
+						await browser.close();
+					} else if (INSTAGRAM === undefined) {
+						environmentFileData = `VSCO=${false}
+INSTAGRAM=${false}`;
+						writeEnviornmentVariables(environmentFileData);
+						console.log("Log-out sucessful.");
+						await browser.close();
+					}
+				}
+			});
 			await page.setUserAgent(userAgent);
-			await page.goto("https://vsco.co/user/login");
+			await page.goto("https://vsco.co/user/account");
+			await page.waitForSelector("#signout > button");
+			await page.click("#signout > button");
 		} catch (error) { console.error(error.message); }
 	}
 }
