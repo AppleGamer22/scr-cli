@@ -38,7 +38,7 @@ export default class Auth extends Command {
 					const {VSCO} = process.env;
 					if (VSCO !== undefined) {
 						environmentFileData = `INSTAGRAM=${true}
-INSTAGRAM_PASSWORD=${VSCO}`;
+VSCO=${VSCO}`;
 						this.writeEnviornmentVariables(environmentFileData);
 						await browser.close();
 					} else if (VSCO === undefined) {
@@ -64,8 +64,18 @@ INSTAGRAM_PASSWORD=${VSCO}`;
 			await page.goto("https://vsco.co/user/login");
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://vsco.co/") {
-					await browser.close();
-					console.log("Sign-in sucessful.");
+					var environmentFileData: string;
+					const {INSTAGRAM} = process.env;
+					if (INSTAGRAM !== undefined) {
+						environmentFileData = `VSCO=${true}
+INSTAGRAM=${INSTAGRAM}`;
+						this.writeEnviornmentVariables(environmentFileData);
+						await browser.close();
+					} else if (INSTAGRAM === undefined) {
+						environmentFileData = `VSCO=${true}`;
+						this.writeEnviornmentVariables(environmentFileData);
+						await browser.close();
+					}
 				}
 			});
 		} catch (error) { console.error(error.message); }
