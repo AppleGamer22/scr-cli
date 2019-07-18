@@ -14,7 +14,7 @@ export default class LogIn extends Command {
 	async run() {
 		config({path: environmentVariablesFile});
 		try {
-			const username = await cli.prompt("Username");
+			const username = await cli.prompt("username");
 			const password = await cli.prompt("password", {type: "hide"});
 			cli.action.start("Opening Puppeteer...");
 			const browser = await launch({
