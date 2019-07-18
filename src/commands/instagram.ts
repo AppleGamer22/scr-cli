@@ -15,7 +15,7 @@ export default class Instagram extends Command {
 	async run() {
 		config({path: environmentVariablesFile});
 		const {INSTAGRAM} = process.env;
-		if (!JSON.parse(INSTAGRAM!)) {
+		if (INSTAGRAM! !== "true") {
 			console.error("You are not authenticated.");
 		} else if (JSON.parse(INSTAGRAM!)) {
 			try {
