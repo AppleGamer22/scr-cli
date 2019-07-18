@@ -8,14 +8,14 @@ import {config} from "dotenv";
 import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
 
 export default class Vsco extends Command {
-	static description = "Command for scarping VSCO post files.";
+	static description = "Command for scarping VSCO post file.";
 	static args = [{name: "post"}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
 		config({path: environmentVariablesFile});
 		const {VSCO} = process.env;
-		if (!JSON.parse(VSCO!)) {
+		if (VSCO! !== "true") {
 			console.error("You are not authenticated.");
 		} else if (JSON.parse(VSCO!)) {
 			const {args, flags} = this.parse(Vsco);

@@ -1,7 +1,7 @@
 {
 	"name": "@applegamer22/social-scraper",
 	"description": "Social media web scarper for post file downloads.",
-	"version": "1.0.0-alpha.6.3",
+	"version": "1.0.0-alpha.6.4",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
@@ -22,10 +22,11 @@
 		"facebook-scraper"
 	],
 	"scripts": {
+		"test": "mocha --forbid-only \"test/**/*.test.ts\"",
 		"postpack": "rm -f oclif.manifest.json && rm -f tsconfig.tsbuildinfo",
 		"posttest": "tslint -p test -t stylish",
 		"prepack": "tsc && oclif-dev manifest && oclif-dev readme",
-		"test": "mocha --forbid-only \"test/**/*.test.ts\"",
+		"postpublish": "rm -rf lib/ && sudo npm i -g @applegamer22/social-scraper",
 		"version": "oclif-dev readme && git add README.md"
 	},
 	"types": "lib/index.d.ts",
