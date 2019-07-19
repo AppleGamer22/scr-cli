@@ -42,16 +42,14 @@ export default class LogOut extends Command {
 					var environmentFileData: string;
 					const {VSCO} = process.env;
 					if (VSCO !== undefined) {
-						environmentFileData = `VSCO=${VSCO}
-INSTAGRAM=${false}`;
+						environmentFileData = `VSCO=${VSCO}\nINSTAGRAM=${false}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-out sucessful.");
+						console.log("Log-out successful.");
 						await browser.close();
 					} else if (VSCO === undefined) {
-						environmentFileData = `VSCO=${false}
-INSTAGRAM=${false}`;
+						environmentFileData = `VSCO=${false}\nINSTAGRAM=${false}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-out sucessful.");
+						console.log("Log-out successful.");
 						await browser.close();
 					}
 				}
@@ -76,16 +74,14 @@ INSTAGRAM=${false}`;
 					var environmentFileData: string;
 					const {INSTAGRAM} = process.env;
 					if (INSTAGRAM !== undefined) {
-						environmentFileData = `VSCO=${false}
-INSTAGRAM=${INSTAGRAM}`;
+						environmentFileData = `VSCO=${false}\nINSTAGRAM=${INSTAGRAM}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-out sucessful.");
+						console.log("Log-out successful.");
 						await browser.close();
 					} else if (INSTAGRAM === undefined) {
-						environmentFileData = `VSCO=${false}
-INSTAGRAM=${false}`;
+						environmentFileData = `VSCO=${false}\nINSTAGRAM=${false}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-out sucessful.");
+						console.log("Log-out successful.");
 						await browser.close();
 					}
 				}
