@@ -9,7 +9,7 @@ export default class LogOut extends Command {
 	static description = "Command for supported social network log-out.";
 	static flags = {
 		vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-out"}),
-		instagram: flags.boolean({char: "i", description: "Toggle for Instagram logout."})
+		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-out."})
 	};
 
 	async run() {

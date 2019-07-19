@@ -7,8 +7,8 @@ import {chromeExecutable, writeEnviornmentVariables, chromeUserDataDirectory, en
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
 	static flags = {
-		vsco: flags.boolean({char: "v", description: "Toggle for providing VSCO credentials."}),
-		instagram: flags.boolean({char: "i", description: "Toggle for providing Instagram credentials."})
+		vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-in."}),
+		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-in."})
 	};
 
 	async run() {
