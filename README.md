@@ -16,13 +16,13 @@ Install via NPM by running:
 ### Development
 1. Clone this repository by running `$ git clone https://github.com/AppleGamer22/Social-Scraper.git` in your command-line.
 2. Run `$ npm install` in the root directory of the downloaded copy.
-3. Run `$ sc auth --<instagram or vsco>`.
+3. Run `$ scr auth --<instagram or vsco>`.
 4. A Chromium broswer will be opened at [https://www.instagram.com/accounts/login/](https://www.instagram.com/accounts/login/).
 5. Sign-in to your Instagram account.
 6. Your Instagram credentials will be securely saved in the CLI's private Chromium instance.
 7. After a successful Instagram authentication, Chromium will be closed.
 ## Using The CLI:
-1. Run `$ sc <instagram or vsco> post_id` in you command line.
+1. Run `$ scr <instagram or vsco> post_id` in you command line.
 2. Wait until the program says:
 > Download ended.
 ## Please Make Sure That:
