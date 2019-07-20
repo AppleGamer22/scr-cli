@@ -2,7 +2,7 @@ import { Command, flags } from "@oclif/command";
 import { config } from "dotenv";
 import cli from "cli-ux";
 import {Browser, Page, launch} from "puppeteer-core";
-import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile} from "../shared";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
 
 export default class Facebook extends Command {
 	static description = "Command for scarping Facebook post files.";
@@ -31,7 +31,7 @@ export default class Facebook extends Command {
 			cli.action.stop();
 			this.startScarpingTime = Date.now();
 			const page = (await browser.pages())[0];
-			await page.setUserAgent(this.userAgent);
+			await page.setUserAgent(userAgent());
 			await page.goto(`https://www.facebook.com/${args.post}`, {waitUntil: "domcontentloaded"});
 			cli.action.start("Searching for files...");
 			await page.waitForSelector("video");

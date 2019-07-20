@@ -22,7 +22,7 @@ export default class Instagram extends Command {
 				const {args, flags} = this.parse(Instagram);
 				const now = Date.now();
 				cli.action.start("Opening Puppeteer...");
-				const {browser, page} = (await beginScrape(userAgent, flags.headless))!;
+				const {browser, page} = (await beginScrape(flags.headless))!;
 				cli.action.stop();
 				cli.action.start("Searching for files...");
 				const urls = [...(new Set<string>(await detectFiles(browser, page, args.post)))];
@@ -63,7 +63,7 @@ export default class Instagram extends Command {
 	}
 }
 
-export async function beginScrape(userAgent: string, background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
+export async function beginScrape(background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
 	try {
 		const browser = await launch({
 			headless: background,
@@ -73,7 +73,7 @@ export async function beginScrape(userAgent: string, background: boolean): Promi
 			defaultViewport: null
 		});
 		const page = (await browser.pages())[0];
-		await page.setUserAgent(userAgent);
+		await page.setUserAgent(userAgent());
 		return {browser, page};
 	} catch (error) { console.error(error.message); }
 }
