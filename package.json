@@ -1,7 +1,7 @@
 {
 	"name": "@applegamer22/social-scraper",
 	"description": "Social media web scarper for post file downloads.",
-	"version": "1.0.0-alpha.7",
+	"version": "1.0.0-alpha.8.1",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
@@ -63,7 +63,7 @@
 		"typescript": "^3.5.3"
 	},
 	"bin": {
-		"sc": "./bin/run"
+		"scr": "./bin/run"
 	},
 	"files": [
 		"/bin",
@@ -73,7 +73,7 @@
 	],
 	"oclif": {
 		"commands": "./lib/commands",
-		"bin": "sc",
+		"bin": "scr",
 		"plugins": [
 			"@oclif/plugin-commands",
 			"@oclif/plugin-help",

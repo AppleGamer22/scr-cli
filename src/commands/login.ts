@@ -7,8 +7,8 @@ import {chromeExecutable, writeEnviornmentVariables, chromeUserDataDirectory, en
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
 	static flags = {
-		vsco: flags.boolean({char: "v", description: "Toggle for providing VSCO credentials."}),
-		instagram: flags.boolean({char: "i", description: "Toggle for providing Instagram credentials."})
+		vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-in."}),
+		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-in."})
 	};
 
 	async run() {
@@ -42,15 +42,14 @@ export default class LogIn extends Command {
 					var environmentFileData: string;
 					const {VSCO} = process.env;
 					if (VSCO !== undefined) {
-						environmentFileData = `INSTAGRAM=${true}
-VSCO=${VSCO}`;
+						environmentFileData = `INSTAGRAM=${true}\nVSCO=${VSCO}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-in sucessful.");
+						console.log("Log-in successful.");
 						await browser.close();
 					} else if (VSCO === undefined) {
-						environmentFileData = `INSTAGRAM=${true}`;
+						environmentFileData = `INSTAGRAM=${true}\nVSCO=${false}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-in sucessful.");
+						console.log("Log-in successful.");
 						await browser.close();
 					}
 				}
@@ -73,16 +72,14 @@ VSCO=${VSCO}`;
 					var environmentFileData: string;
 					const {INSTAGRAM} = process.env;
 					if (INSTAGRAM !== undefined) {
-						environmentFileData = `VSCO=${true}
-INSTAGRAM=${INSTAGRAM}`;
+						environmentFileData = `VSCO=${true}\nINSTAGRAM=${INSTAGRAM}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-in sucessful.");
+						console.log("Log-in successful.");
 						await browser.close();
 					} else if (INSTAGRAM === undefined) {
-						environmentFileData = `VSCO=${true}
-INSTAGRAM=${false}`;
+						environmentFileData = `VSCO=${true}\nINSTAGRAM=${false}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-in sucessful.");
+						console.log("Log-in successful.");
 						await browser.close();
 					}
 				}
