@@ -35,8 +35,9 @@ export default class LogOut extends Command {
 				await browser.close();
 				return console.log("You are already signed-out.");
 			}
+			cli.action.start("Signing out from your Instagram account...");
 			const page = (await browser.pages())[0];
-			await page.setUserAgent(userAgent);
+			await page.setUserAgent(userAgent());
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://www.instagram.com/") {
 					var environmentFileData: string;
@@ -44,12 +45,12 @@ export default class LogOut extends Command {
 					if (VSCO !== undefined) {
 						environmentFileData = `VSCO=${VSCO}\nINSTAGRAM=${false}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-out successful.");
+						cli.action.stop();
 						await browser.close();
 					} else if (VSCO === undefined) {
 						environmentFileData = `VSCO=${false}\nINSTAGRAM=${false}`;
 						writeEnviornmentVariables(environmentFileData);
-						console.log("Log-out successful.");
+						cli.action.stop();
 						await browser.close();
 					}
 				}
@@ -68,6 +69,11 @@ export default class LogOut extends Command {
 	}
 	async vscoLogOut(browser: Browser) {
 		try {
+			if (!JSON.parse(process.env.VSCO!)) {
+				await browser.close();
+				return console.log("You are already signed-out.");
+			}
+			cli.action.start("Signing out from your VSCO account...");
 			const page = (await browser.pages())[0];
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://vsco.co/feed") {
@@ -86,7 +92,7 @@ export default class LogOut extends Command {
 					}
 				}
 			});
-			await page.setUserAgent(userAgent);
+			await page.setUserAgent(userAgent());
 			await page.goto("https://vsco.co/user/account");
 			await page.waitForSelector("#signout > button");
 			await page.click("#signout > button");

@@ -23,7 +23,7 @@ export default class Vsco extends Command {
 			if (!post.includes("/media/")) return console.error("Please provide a valid post ID.")
 			const now = Date.now();
 			cli.action.start("Opening Puppeteer...");
-			const {browser, page} = (await beginScrape(userAgent, flags.headless))!;
+			const {browser, page} = (await beginScrape(flags.headless))!;
 			cli.action.stop();
 			cli.action.start("Searching for files...");
 			const url = await detectFile(browser, page, post);
@@ -62,7 +62,7 @@ export default class Vsco extends Command {
 	}
 }
 
-export async function beginScrape(userAgent: string, background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
+export async function beginScrape(background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
 	cli.action.start("Opening Puppeteer...");
 	try {
 		const browser = await launch({
@@ -74,7 +74,7 @@ export async function beginScrape(userAgent: string, background: boolean): Promi
 		});
 		cli.action.stop();
 		const page = (await browser.pages())[0];
-		await page.setUserAgent(userAgent);
+		await page.setUserAgent(userAgent());
 		return {browser, page};
 	} catch (error) { console.error(error.message); }
 }
