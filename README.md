@@ -3,16 +3,19 @@ Instagram web scarper for social post file(s) downloads.
 ## Contributing Requirements
 1. Separate Git branch to the master branch
 2. Separate fork to this repository
+## Usage Responsibilities
+* You should use this software with responsibility and with accordance to [Instagram's terms of use](https://help.instagram.com/581066165581870):
+![Instagram's terms of use](https://github.com/AppleGamer22/Social-Scraper/blob/Omri/Instagram's%20Terms%20of%20Use.jpg?raw=true)
 ## Requirements and/or Recommendations:
-- Google Chrome browser
-- Unix-style terminal and/or npm capable command-line
-- Node.js
-- Node Package Manager (NPM)
-- TypeScript
+* Google Chrome browser
+* Unix-style terminal and/or npm capable command-line
+* Node.js
+* Node Package Manager (NPM)
+* TypeScript
 ## Before Using The CLI:
 ### General Usage
 Install via NPM by running:
-- `$ sudo npm i @applegamer22/social-scraper -g` (Unix)
+* `$ sudo npm i @applegamer22/social-scraper -g` (Unix)
 ### Development
 1. Clone this repository by running `$ git clone https://github.com/AppleGamer22/Social-Scraper.git` in your command-line.
 2. Run `$ npm install` in the root directory of the downloaded copy.
@@ -24,9 +27,9 @@ Install via NPM by running:
 ## Using The CLI:
 1. Run `$ scr <instagram or vsco> post_id` in you command line.
 2. Wait until the program says:
-> Download ended.
+> Downloading...Done.
 ## Please Make Sure That:
-- The correct Instagram credentials are entered when using the auth command.
+* The correct Instagram credentials are entered when using the auth command.
 ## How Does It Work?
 1. The user puts Instagram/VSCO credentials ahead of post scraping.
 2. The bot Chromium will remember the credentials entered the login form of the selected social network.

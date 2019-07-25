@@ -43,7 +43,7 @@ export default class Instagram extends Command {
 	downloadFile(URL: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 		const path = `${process.cwd()}/${basename(URL).split("?")[0]}`
 		return new Promise((resolve, reject) => {
-			console.log(`${fileType} ${fileNumber}\n${URL}`);
+			console.log(`File #${fileNumber} (${fileType})\n${URL}`);
 			var file = createWriteStream(path);
 			const request = get(URL, response => {
 				if (response.statusCode !== 200) throw console.error("Download failed.");
