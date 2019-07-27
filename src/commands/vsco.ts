@@ -49,7 +49,10 @@ export default class Vsco extends Command {
 						if (response2.statusCode !== 200) throw console.error("Download failed.");
 						response2.on("end", () => console.log("Download ended.")).pipe(file);
 					});
-				} else response1.on("end", () => console.log("Download ended.")).pipe(file);
+				} else {
+					console.log(`.mp4\n${redirectURL}`);
+					response1.on("end", () => console.log("Download ended.")).pipe(file);
+				}
 			});
 			file.on("finish", () => {
 				resolve();
