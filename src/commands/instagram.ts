@@ -82,7 +82,7 @@ export async function detectFiles(browser: Browser, page: Page, id: string): Pro
 	var srcs: string[] = [];
 	try {
 		await page.goto(`https://www.instagram.com/p/${id}`, {waitUntil: "domcontentloaded"});
-		const errorLabelSelector = "body > div > div.page.-cx-PRIVATE-Page__body.-cx-PRIVATE-Page__body__ > div > div";
+		// const errorLabelSelector = "body > div > div.page.-cx-PRIVATE-Page__body.-cx-PRIVATE-Page__body__ > div > div";
 		if ((await page.$("div.error-container")) !== null) {
 			console.error(`Failed to find post ${id}`);
 			await browser.close();

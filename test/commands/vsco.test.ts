@@ -8,4 +8,5 @@ describe("vsco", () => {
 	// test.stdout().command(["vsco", "--name", "jeff"]).it("runs hello --name jeff", ctx => {
 	// 		expect(ctx.stdout).to.contain("hello jeff");
 	// });
+	// darianvoisard/media/5a988983ec256c540d17960a
 });

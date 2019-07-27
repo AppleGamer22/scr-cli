@@ -1,7 +1,8 @@
-import { Command, flags } from "@oclif/command";
+import {Command, flags} from "@oclif/command";
 import {Browser, Page, launch} from "puppeteer-core";
+import {load} from "cheerio";
 import {get} from "https";
-import {createWriteStream, unlink} from "fs";
+import {createWriteStream, unlinkSync} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
@@ -26,11 +27,11 @@ export default class Vsco extends Command {
 			const {browser, page} = (await beginScrape(flags.headless))!;
 			cli.action.stop();
 			cli.action.start("Searching for files...");
-			const url = await detectFile(browser, page, post);
+			const url = await detectFile(page, post);
 			cli.action.stop();
 			console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
 			cli.action.start("Downloading...");
-			await this.downloadFile(`https:${url!.split("?")[0]}`, post.split("/")[2]);
+			await this.downloadFile(url!, post.split("/")[2]);
 			cli.action.stop();
 			await browser.close();
 		}
@@ -41,22 +42,23 @@ export default class Vsco extends Command {
 		return new Promise((resolve, reject) => {
 			var file = createWriteStream(path);
 			const request = get(redirectURL, response1 => {
-				const realURL = response1.headers.location!;
-				console.log(`.jpg\n${realURL}`);
-				get(realURL, response2 => {
-					response2.headers["last-modified"] = new Date().toUTCString();
-					if (response2.statusCode !== 200) throw console.error("Download failed.");
-					response2.on("end", () => console.log("Download ended.")).pipe(file);
-				});
+				if (redirectURL.includes(".jpg")) {
+					const realURL = response1.headers.location!;
+					console.log(`.jpg\n${realURL}`);
+					get(realURL, response2 => {
+						if (response2.statusCode !== 200) throw console.error("Download failed.");
+						response2.on("end", () => console.log("Download ended.")).pipe(file);
+					});
+				} else response1.on("end", () => console.log("Download ended.")).pipe(file);
 			});
 			file.on("finish", () => {
 				resolve();
-				file.close()
+				file.close();
 			});
 			request.on("error", error => {
-				unlink(path, null!);
+				unlinkSync(path);
 				console.error(error.message);
-				reject();
+				reject(error.message);
 			});
 		});
 	}
@@ -79,23 +81,13 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 	} catch (error) { console.error(error.message); }
 }
 
-export async function detectFile(browser: Browser, page: Page, id: string): Promise<string | undefined> {
+export async function detectFile(page: Page, id: string): Promise<string | undefined> {
 	try {
 		await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
-		if ((await page.$("#root > div > main > div > p")) !== null) {
-			console.error(`Failed to find post ${id}`);
-			await browser.close();
-		}
-		await page.waitForSelector("img", {visible: true});
-		const imageURL = await page.$eval("img", async image => {
-			const url = image.getAttribute("src");
-			if (url !== null && url !== undefined) {
-				return url!;
-			} else {
-				console.error(`Failed to find post ${id}`);
-				await browser.close();
-			}
-		});
-		return imageURL;
+		const $ = load(await page.content());
+		const videoURL = $(`meta[property="og:video"]`).attr("content");
+		if (videoURL !== undefined) return videoURL;
+		const imageURL = $(`meta[property="og:image"]`).attr("content");
+		if (imageURL !== undefined) return imageURL.split("?")[0];
 	} catch (error) { console.error(error.message); }
 }

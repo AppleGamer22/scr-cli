@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a33f4b8-88d7-4040-9f5a-39ae0fd9b65e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/applegamer22.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/applegamer22.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/commands/instagram.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/commands/instagram.test.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -112,7 +108,7 @@
       <workItem from="1562902121286" duration="1043000" />
       <workItem from="1563268829753" duration="4440000" />
       <workItem from="1563885026389" duration="330000" />
-      <workItem from="1564204748857" duration="499000" />
+      <workItem from="1564204748857" duration="599000" />
     </task>
     <task id="LOCAL-00001" summary="use of oclif, better auth flow for instagram and vsco">
       <created>1557748979883</created>
@@ -142,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1563273520722</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="npm update">
+      <created>1564205285677</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1564205285677</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,7 +183,8 @@
     <MESSAGE value="npm update, no auth check" />
     <MESSAGE value="version update to 1.0.0-alpha.3" />
     <MESSAGE value="easier re-authentication&#10;README.md update" />
-    <option name="LAST_COMMIT_MESSAGE" value="easier re-authentication&#10;README.md update" />
+    <MESSAGE value="npm update" />
+    <option name="LAST_COMMIT_MESSAGE" value="npm update" />
   </component>
   <component name="masterDetails">
     <states>
