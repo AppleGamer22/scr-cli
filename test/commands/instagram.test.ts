@@ -1,13 +1,12 @@
 import {expect, test} from "@oclif/test";
 import {Browser, Page} from "puppeteer-core";
 import {beginScrape, detectFiles} from "../../src/commands/instagram";
-import {userAgent} from "../../src/shared";
 
 describe("Instagram", () => {
 	let browser: Browser, page: Page;
 	beforeEach(async () => {
 		try {
-			const puppeteerSuite = (await beginScrape(userAgent, false))!;
+			const puppeteerSuite = (await beginScrape(true))!;
 			browser = puppeteerSuite.browser;
 			page = puppeteerSuite.page;
 		} catch (error) { console.error(error.message); }

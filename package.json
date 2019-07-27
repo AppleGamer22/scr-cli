@@ -31,7 +31,7 @@
 	},
 	"types": "lib/index.d.ts",
 	"dependencies": {
-		"@oclif/command": "^1.5.17",
+		"@oclif/command": "^1.5.18",
 		"@oclif/config": "^1.13.2",
 		"@oclif/plugin-commands": "^1.2.2",
 		"@oclif/plugin-help": "^2.2.0",
@@ -40,7 +40,7 @@
 		"@oclif/plugin-which": "^1.0.3",
 		"cli-ux": "^5.3.1",
 		"dotenv": "^8.0.0",
-		"puppeteer-core": "^1.18.1",
+		"puppeteer-core": "^1.19.0",
 		"tslib": "^1.10.0"
 	},
 	"devDependencies": {
@@ -50,12 +50,12 @@
 		"@types/chai": "^4.1.7",
 		"@types/dotenv": "^6.1.1",
 		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.6.2",
+		"@types/node": "^12.6.8",
 		"@types/puppeteer-core": "^1.9.0",
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",
 		"globby": "^10.0.1",
-		"mocha": "^6.1.4",
+		"mocha": "^6.2.0",
 		"nyc": "^14.1.1",
 		"prettier": "^1.18.2",
 		"ts-node": "^8.3.0",

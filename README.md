@@ -5,7 +5,8 @@ Instagram web scarper for social post file(s) downloads.
 2. Separate fork to this repository
 ## Usage Responsibilities
 * You should use this software with responsibility and with accordance to [Instagram's terms of use](https://help.instagram.com/581066165581870):
-![Instagram's terms of use](https://github.com/AppleGamer22/Social-Scraper/blob/Omri/Instagram's%20Terms%20of%20Use.jpg?raw=true)
+> * **You can't attempt to create accounts or access or collect information in unauthorized ways.**
+> This includes creating accounts or collecting information in an automated way without our express permission.
 ## Requirements and/or Recommendations:
 * Google Chrome browser
 * Unix-style terminal and/or npm capable command-line
