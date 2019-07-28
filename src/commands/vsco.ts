@@ -1,6 +1,5 @@
 import {Command, flags} from "@oclif/command";
 import {Browser, Page, launch} from "puppeteer-core";
-import {load} from "cheerio";
 import {get} from "https";
 import {createWriteStream, unlinkSync} from "fs";
 import {basename} from "path";
@@ -49,10 +48,10 @@ export default class Vsco extends Command {
 						if (response2.statusCode !== 200) throw console.error("Download failed.");
 						response2.on("end", () => console.log("Download ended.")).pipe(file);
 					});
-				} else {
+				} else if (redirectURL.includes(".mp4")) {
 					console.log(`.mp4\n${redirectURL}`);
 					response1.on("end", () => console.log("Download ended.")).pipe(file);
-				}
+				} else reject("Invalid download URL.");
 			});
 			file.on("finish", () => {
 				resolve();
@@ -87,10 +86,17 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 export async function detectFile(page: Page, id: string): Promise<string | undefined> {
 	try {
 		await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
-		const $ = load(await page.content());
-		const videoURL = $(`meta[property="og:video"]`).attr("content");
-		if (videoURL !== undefined) return videoURL;
-		const imageURL = $(`meta[property="og:image"]`).attr("content");
-		if (imageURL !== undefined) return imageURL.split("?")[0];
+		const url = await page.evaluate(() => {
+			const video = document.querySelector(`meta[property="og:video"]`);
+			const image = document.querySelector(`meta[property="og:image"]`);
+			if (video) {
+				const videoURL = video.getAttribute("content");
+				if (videoURL) return videoURL;
+			} else if (image) {
+				const imageURL = image.getAttribute("content");
+				if (imageURL) return imageURL.split("?")[0];
+			}
+		});
+		if (url) return url;
 	} catch (error) { console.error(error.message); }
 }
