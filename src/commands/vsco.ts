@@ -27,17 +27,18 @@ export default class Vsco extends Command {
 			cli.action.stop();
 			cli.action.start("Searching for files...");
 			const url = await detectFile(page, post);
+			const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
 			cli.action.stop();
 			console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
 			cli.action.start("Downloading...");
-			await this.downloadFile(url!, post.split("/")[2]);
+			await this.downloadFile(url!, userName, post.split("/")[2]);
 			cli.action.stop();
 			await browser.close();
 		}
 	}
 
-	async downloadFile(redirectURL: string, id: string) {
-		const path = `${process.cwd()}/${id}${basename(redirectURL)}`;
+	async downloadFile(redirectURL: string, userName: string, id: string) {
+		const path = `${process.cwd()}/${userName}_${id}${basename(redirectURL)}`;
 		return new Promise((resolve, reject) => {
 			var file = createWriteStream(path);
 			const request = get(redirectURL, response1 => {
