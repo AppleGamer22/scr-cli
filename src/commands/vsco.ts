@@ -18,22 +18,26 @@ export default class Vsco extends Command {
 		if (VSCO! !== "true") {
 			console.error("You are not authenticated.");
 		} else if (JSON.parse(VSCO!)) {
-			const {args, flags} = this.parse(Vsco);
-			const post: string  = args.post;
-			if (!post.includes("/media/")) return console.error("Please provide a valid post ID.")
-			const now = Date.now();
-			cli.action.start("Opening Puppeteer...");
-			const {browser, page} = (await beginScrape(flags.headless))!;
-			cli.action.stop();
-			cli.action.start("Searching for files...");
-			const url = await detectFile(page, post);
-			const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
-			cli.action.stop();
-			console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
-			cli.action.start("Downloading...");
-			await this.downloadFile(url!, userName, post.split("/")[2]);
-			cli.action.stop();
-			await browser.close();
+			try {
+				const {args, flags} = this.parse(Vsco);
+				const post: string  = args.post;
+				if (post !== undefined && post !== null) {
+					if (!post.includes("/media/")) return console.error("Please provide a valid post ID.")
+					const now = Date.now();
+					cli.action.start("Opening Puppeteer...");
+					const {browser, page} = (await beginScrape(flags.headless))!;
+					cli.action.stop();
+					cli.action.start("Searching for files...");
+					const url = await detectFile(page, post);
+					const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
+					cli.action.stop();
+					console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
+					cli.action.start("Downloading...");
+					await this.downloadFile(url!, userName, post.split("/")[2]);
+					cli.action.stop();
+					await browser.close();
+				} else return console.log("Please provide a POST argument!");
+			} catch (error) { console.error(error.message); }
 		}
 	}
 
