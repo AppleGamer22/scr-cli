@@ -59,8 +59,9 @@ export default class Vsco extends Command {
 				} else reject("Invalid download URL.");
 			});
 			file.on("finish", () => {
-				resolve();
 				file.close();
+				console.log(`File saved at ${path}`);
+				resolve();
 			});
 			request.on("error", error => {
 				unlinkSync(path);

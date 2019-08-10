@@ -53,8 +53,8 @@ export default class Instagram extends Command {
 				response.on("end", () => cli.action.stop()).pipe(file);
 			});
 			file.on("finish", () => {
-				cli.action.stop();
 				file.close();
+				console.log(`File saved at ${path}`);
 				resolve();
 			});
 			request.on("error", error => {
