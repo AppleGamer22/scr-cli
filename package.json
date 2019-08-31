@@ -1,5 +1,5 @@
 {
-	"name": "@scr/cli",
+	"name": "@applegamer22/scr-cli",
 	"description": "Social media web scarper for post file downloads.",
 	"version": "1.0.0-alpha.14",
 	"author": "Omri Bornstein",
@@ -27,7 +27,7 @@
 		"postpack": "rm -f oclif.manifest.json && rm -f tsconfig.tsbuildinfo",
 		"posttest": "tslint -p test -t stylish",
 		"prepack": "tsc && oclif-dev manifest && oclif-dev readme",
-		"postpublish": "rm -rf lib/ && sudo npm i -g @scr/cli",
+		"postpublish": "rm -rf lib/ && sudo npm i -g @applegamer22/scr-cli",
 		"version": "oclif-dev readme && git add README.md"
 	},
 	"types": "lib/index.d.ts",
