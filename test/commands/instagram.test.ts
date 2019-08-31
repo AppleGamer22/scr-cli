@@ -1,26 +1,27 @@
 import {expect, test} from "@oclif/test";
 import {Browser, Page} from "puppeteer-core";
 import {beginScrape, detectFiles} from "../../src/commands/instagram";
-import {userAgent} from "../../src/shared";
 
 describe("Instagram", () => {
 	let browser: Browser, page: Page;
 	beforeEach(async () => {
 		try {
-			const puppeteerSuite = (await beginScrape(userAgent, false))!;
+			const puppeteerSuite = (await beginScrape(true))!;
 			browser = puppeteerSuite.browser;
 			page = puppeteerSuite.page;
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes Bz2MPhPhOQu & gets 1 JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes Bz2MPhPhOQu & gets 1 public JPEG", async (_, done) => {
 		try {
 			const urls = await detectFiles(browser, page, "Bz2MPhPhOQu");
 			await browser.close();
 			done();
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
+			expect(urls[0]).to.include("https://");
 			expect(urls[0]).to.include(".jpg");
 			expect(urls[0]).to.include("cdninstagram.com");
 		} catch (error) { console.error(error.message); }
 	});
 });
+//BkfivDeF0w9

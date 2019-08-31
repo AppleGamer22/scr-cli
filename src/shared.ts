@@ -1,8 +1,9 @@
 import {homedir} from "os";
 import {writeFile} from "fs";
+import chalk from "chalk";
 
-export const chromeUserDataDirectory = `${homedir()}/.social-scraper/`;
-export const environmentVariablesFile = `${homedir()}/.social-scraper/env.env`;
+export const chromeUserDataDirectory = `${homedir()}/.scr/`;
+export const environmentVariablesFile = `${homedir()}/.scr/env.env`;
 
 export function userAgent(): string {
 	switch (process.platform) {
@@ -31,4 +32,18 @@ export function writeEnviornmentVariables(content: string) {
 		if (error) throw new Error(error.message);
 		return;
 	});
+}
+export function alert(message: string, type: ("info" | "log" | "success" | "warning" | "danger")) {
+	switch (type) {
+		case "info":
+			return console.info(chalk.blue(message));
+		case "log":
+			return console.log(message)
+		case "success":
+			return console.info(chalk.green(message));
+		case "warning":
+			return console.warn(chalk.yellow(message));
+		case "danger":
+			return console.error(chalk.red(message));
+	}
 }

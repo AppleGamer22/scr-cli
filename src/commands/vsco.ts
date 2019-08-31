@@ -1,11 +1,12 @@
-import { Command, flags } from "@oclif/command";
+import {Command, flags} from "@oclif/command";
 import {Browser, Page, launch} from "puppeteer-core";
 import {get} from "https";
-import {createWriteStream, unlink} from "fs";
+import {createWriteStream, unlinkSync} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
-import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent, alert} from "../shared";
+import chalk from "chalk";
 
 export default class Vsco extends Command {
 	static description = "Command for scarping VSCO post file.";
@@ -16,47 +17,57 @@ export default class Vsco extends Command {
 		config({path: environmentVariablesFile});
 		const {VSCO} = process.env;
 		if (VSCO! !== "true") {
-			console.error("You are not authenticated.");
+			alert("You are not authenticated.", "danger");
 		} else if (JSON.parse(VSCO!)) {
-			const {args, flags} = this.parse(Vsco);
-			const post: string  = args.post;
-			if (!post.includes("/media/")) return console.error("Please provide a valid post ID.")
-			const now = Date.now();
-			cli.action.start("Opening Puppeteer...");
-			const {browser, page} = (await beginScrape(flags.headless))!;
-			cli.action.stop();
-			cli.action.start("Searching for files...");
-			const url = await detectFile(browser, page, post);
-			cli.action.stop();
-			console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
-			cli.action.start("Downloading...");
-			await this.downloadFile(`https:${url!.split("?")[0]}`, post.split("/")[2]);
-			cli.action.stop();
-			await browser.close();
+			try {
+				const {args, flags} = this.parse(Vsco);
+				const post: string  = args.post;
+				if (post !== undefined && post !== null) {
+					if (!post.includes("/media/")) return alert("Please provide a valid post ID.", "danger");
+					const now = Date.now();
+					cli.action.start("Opening Puppeteer...");
+					const {browser, page} = (await beginScrape(flags.headless))!;
+					cli.action.stop();
+					cli.action.start("Searching for files...");
+					const url = await detectFile(page, post);
+					const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
+					cli.action.stop();
+					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
+					cli.action.start("Downloading...");
+					await this.downloadFile(url!, userName, post.split("/")[2]);
+					cli.action.stop();
+					await browser.close();
+				} else return alert("Please provide a POST argument!", "danger");
+			} catch (error) { alert(error.message, "danger"); }
 		}
 	}
 
-	async downloadFile(redirectURL: string, id: string) {
-		const path = `${process.cwd()}/${id}${basename(redirectURL)}`;
+	async downloadFile(redirectURL: string, userName: string, id: string) {
+		const path = `${process.cwd()}/${userName}_${id}${basename(redirectURL)}`;
 		return new Promise((resolve, reject) => {
-			var file = createWriteStream(path);
+			var file = createWriteStream(path, {autoClose: true});
 			const request = get(redirectURL, response1 => {
-				const realURL = response1.headers.location!;
-				console.log(`.jpg\n${realURL}`);
-				get(realURL, response2 => {
-					response2.headers["last-modified"] = new Date().toUTCString();
-					if (response2.statusCode !== 200) throw console.error("Download failed.");
-					response2.on("end", () => console.log("Download ended.")).pipe(file);
-				});
+				if (redirectURL.includes(".jpg")) {
+					const realURL = response1.headers.location!;
+					alert(chalk.underline(`.jpg\n${realURL}`), "log");
+					get(realURL, response2 => {
+						if (response2.statusCode !== 200) throw alert("Download failed.", "danger");
+						response2.on("end", () => cli.action.stop()).pipe(file);
+					});
+				} else if (redirectURL.includes(".mp4")) {
+					alert(chalk.underline(`.mp4\n${redirectURL}`), "log");
+					response1.on("end", () => cli.action.stop()).pipe(file);
+				} else reject("Invalid download URL.");
 			});
 			file.on("finish", () => {
+				file.close();
+				alert(`File saved at ${path}`, "success");
 				resolve();
-				file.close()
 			});
 			request.on("error", error => {
-				unlink(path, null!);
-				console.error(error.message);
-				reject();
+				unlinkSync(path);
+				alert(error.message, "danger");
+				reject(error.message);
 			});
 		});
 	}
@@ -76,26 +87,23 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent());
 		return {browser, page};
-	} catch (error) { console.error(error.message); }
+	} catch (error) { alert(error.message, "danger"); }
 }
 
-export async function detectFile(browser: Browser, page: Page, id: string): Promise<string | undefined> {
+export async function detectFile(page: Page, id: string): Promise<string | undefined> {
 	try {
 		await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
-		if ((await page.$("#root > div > main > div > p")) !== null) {
-			console.error(`Failed to find post ${id}`);
-			await browser.close();
-		}
-		await page.waitForSelector("img", {visible: true});
-		const imageURL = await page.$eval("img", async image => {
-			const url = image.getAttribute("src");
-			if (url !== null && url !== undefined) {
-				return url!;
-			} else {
-				console.error(`Failed to find post ${id}`);
-				await browser.close();
+		const url = await page.evaluate(() => {
+			const video = document.querySelector(`meta[property="og:video"]`);
+			const image = document.querySelector(`meta[property="og:image"]`);
+			if (video) {
+				const videoURL = video.getAttribute("content");
+				if (videoURL) return videoURL;
+			} else if (image) {
+				const imageURL = image.getAttribute("content");
+				if (imageURL) return imageURL.split("?")[0];
 			}
 		});
-		return imageURL;
-	} catch (error) { console.error(error.message); }
+		if (url) return url;
+	} catch (error) { alert(error.message, "danger"); }
 }
