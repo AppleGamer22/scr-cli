@@ -5,7 +5,8 @@ import {createWriteStream, unlinkSync} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
-import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
+import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent, alert} from "../shared";
+import chalk from "chalk";
 
 export default class Vsco extends Command {
 	static description = "Command for scarping VSCO post file.";
@@ -16,13 +17,13 @@ export default class Vsco extends Command {
 		config({path: environmentVariablesFile});
 		const {VSCO} = process.env;
 		if (VSCO! !== "true") {
-			console.error("You are not authenticated.");
+			alert("You are not authenticated.", "danger");
 		} else if (JSON.parse(VSCO!)) {
 			try {
 				const {args, flags} = this.parse(Vsco);
 				const post: string  = args.post;
 				if (post !== undefined && post !== null) {
-					if (!post.includes("/media/")) return console.error("Please provide a valid post ID.")
+					if (!post.includes("/media/")) return alert("Please provide a valid post ID.", "danger");
 					const now = Date.now();
 					cli.action.start("Opening Puppeteer...");
 					const {browser, page} = (await beginScrape(flags.headless))!;
@@ -31,41 +32,41 @@ export default class Vsco extends Command {
 					const url = await detectFile(page, post);
 					const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
 					cli.action.stop();
-					console.log(`Scrape time: ${(Date.now() - now)/1000}s`);
+					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
 					cli.action.start("Downloading...");
 					await this.downloadFile(url!, userName, post.split("/")[2]);
 					cli.action.stop();
 					await browser.close();
-				} else return console.log("Please provide a POST argument!");
-			} catch (error) { console.error(error.message); }
+				} else return alert("Please provide a POST argument!", "danger");
+			} catch (error) { alert(error.message, "danger"); }
 		}
 	}
 
 	async downloadFile(redirectURL: string, userName: string, id: string) {
 		const path = `${process.cwd()}/${userName}_${id}${basename(redirectURL)}`;
 		return new Promise((resolve, reject) => {
-			var file = createWriteStream(path);
+			var file = createWriteStream(path, {autoClose: true});
 			const request = get(redirectURL, response1 => {
 				if (redirectURL.includes(".jpg")) {
 					const realURL = response1.headers.location!;
-					console.log(`.jpg\n${realURL}`);
+					alert(chalk.underline(`.jpg\n${realURL}`), "log");
 					get(realURL, response2 => {
-						if (response2.statusCode !== 200) throw console.error("Download failed.");
-						response2.on("end", () => console.log("Download ended.")).pipe(file);
+						if (response2.statusCode !== 200) throw alert("Download failed.", "danger");
+						response2.on("end", () => cli.action.stop()).pipe(file);
 					});
 				} else if (redirectURL.includes(".mp4")) {
-					console.log(`.mp4\n${redirectURL}`);
-					response1.on("end", () => console.log("Download ended.")).pipe(file);
+					alert(chalk.underline(`.mp4\n${redirectURL}`), "log");
+					response1.on("end", () => cli.action.stop()).pipe(file);
 				} else reject("Invalid download URL.");
 			});
 			file.on("finish", () => {
 				file.close();
-				console.log(`File saved at ${path}`);
+				alert(`File saved at ${path}`, "success");
 				resolve();
 			});
 			request.on("error", error => {
 				unlinkSync(path);
-				console.error(error.message);
+				alert(error.message, "danger");
 				reject(error.message);
 			});
 		});
@@ -86,7 +87,7 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent());
 		return {browser, page};
-	} catch (error) { console.error(error.message); }
+	} catch (error) { alert(error.message, "danger"); }
 }
 
 export async function detectFile(page: Page, id: string): Promise<string | undefined> {
@@ -104,5 +105,5 @@ export async function detectFile(page: Page, id: string): Promise<string | undef
 			}
 		});
 		if (url) return url;
-	} catch (error) { console.error(error.message); }
+	} catch (error) { alert(error.message, "danger"); }
 }

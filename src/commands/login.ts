@@ -2,7 +2,7 @@ import {launch, Browser} from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import {config} from "dotenv";
 import cli from "cli-ux";
-import {chromeExecutable, writeEnviornmentVariables, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
+import {chromeExecutable, writeEnviornmentVariables, chromeUserDataDirectory, environmentVariablesFile, userAgent, alert} from "../shared";
 
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
@@ -27,14 +27,14 @@ export default class LogIn extends Command {
 			const {flags} = this.parse(LogIn);
 			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
 			if (flags.vsco) return await this.vscoSignIn(browser, username, password);
-		} catch (error) { console.error(error.message); }
+		} catch (error) { alert(error.message, "danger"); }
 	}
 
 	async instagramSignIn(browser: Browser, username: string, password: string) {
 		try {
 			if (process.env.INSTAGRAM! === "true") {
 				await browser.close();
-				return console.log("You are already logged-in.");
+				return alert("You are already logged-in.", "success");
 			}
 			cli.action.start("Signing in to your VSCO account...");
 			const page = (await browser.pages())[0];
@@ -61,13 +61,13 @@ export default class LogIn extends Command {
 			await page.type(`input[name="username"]`, username);
 			await page.type(`input[name="password"]`, password);
 			await page.click(`button[type="submit"]`);
-		} catch (error) { console.error(error.message); }
+		} catch (error) { alert(error.message, "danger"); }
 	}
 	async vscoSignIn(browser: Browser, username: string, password: string) {
 		try {
 			if (process.env.VSCO! === "true") {
 				await browser.close();
-				return console.log("You are already loged-in.");
+				return alert("You are already loged-in.", "success");
 			}
 		cli.action.start("Signing in to your VSCO account...");
 			const page = (await browser.pages())[0];
@@ -94,6 +94,6 @@ export default class LogIn extends Command {
 			await page.type("input#login", username);
 			await page.type("input#password", password);
 			await page.click("button#loginButton");
-		} catch (error) { console.error(error.message); }
+		} catch (error) { alert(error.message, "danger"); }
 	}
 }

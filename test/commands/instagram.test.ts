@@ -11,7 +11,7 @@ describe("Instagram", () => {
 			page = puppeteerSuite.page;
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes Bz2MPhPhOQu & gets 1 JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes Bz2MPhPhOQu & gets 1 public JPEG", async (_, done) => {
 		try {
 			const urls = await detectFiles(browser, page, "Bz2MPhPhOQu");
 			await browser.close();
@@ -24,3 +24,4 @@ describe("Instagram", () => {
 		} catch (error) { console.error(error.message); }
 	});
 });
+//BkfivDeF0w9
