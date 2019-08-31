@@ -2,8 +2,8 @@ import {homedir} from "os";
 import {writeFile} from "fs";
 import chalk from "chalk";
 
-export const chromeUserDataDirectory = `${homedir()}/.social-scraper/`;
-export const environmentVariablesFile = `${homedir()}/.social-scraper/env.env`;
+export const chromeUserDataDirectory = `${homedir()}/.scr/`;
+export const environmentVariablesFile = `${homedir()}/.scr/env.env`;
 
 export function userAgent(): string {
 	switch (process.platform) {
