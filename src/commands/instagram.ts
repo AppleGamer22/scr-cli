@@ -10,7 +10,7 @@ import chalk from "chalk";
 
 export default class Instagram extends Command {
 	static description = "Command for scarping Instagram post files.";
-	static args = [{name: "post"}];
+	static args = [{name: "post", required: true}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
