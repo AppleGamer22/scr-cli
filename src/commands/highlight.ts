@@ -10,18 +10,7 @@ import {get} from "https";
 
 export default class Highlight extends Command {
 	static description = "Command for scarping Instagram highlight files.";
-	static args = [
-		{
-			name: "highlight",
-			required: true
-		},{
-			name: "type",
-			required: true,
-			options: ["image", "video"]
-		},{
-			name: "item",
-			required: true
-		}];
+	static args = [{name: "highlight", required: true}, {name: "item", required: true}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
@@ -38,25 +27,28 @@ export default class Highlight extends Command {
 					const {browser, page} = (await beginScrape(flags.headless))!;
 					cli.action.stop();
 					cli.action.start("Searching for files...");
-					const URL = await detectFiles(page, args.highlight, args.type , Number(args.item));
+					const URLs = await detectFiles(page, args.highlight, Number(args.item));
 					const userName = await page.evaluate(() => document.querySelector("div.yn6BW > a")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
-					if (URL) {
-						cli.action.start("Downloading...");
-						if (URL.includes(".jpg")) await this.downloadFile(URL, userName, ".jpg");
-						if (URL.includes(".mp4")) await this.downloadFile(URL, userName, ".mp4");
-						cli.action.stop();
+					if (URLs) {
+						for (let i = 0; i < URLs.length; i += 1) {
+							const URL = URLs[i];
+							cli.action.start("Downloading...");
+							if (URL.includes(".jpg")) await this.downloadFile(URL, userName, ".jpg", i + 1);
+							if (URL.includes(".mp4")) await this.downloadFile(URL, userName, ".mp4", i + 1);
+							cli.action.stop();
+						}
 					}
 					await browser.close();
 				} else return alert("Please provide a POST argument!", "danger");
 			} catch (error) { alert(error.message, "danger"); }
 		}
 	}
-	downloadFile(URL: string, userName: string, fileType: ".jpg" | ".mp4") {
+	downloadFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 		const path = `${process.cwd()}/${userName}_${basename(URL).split("?")[0]}`
 		return new Promise((resolve, reject) => {
-			alert(chalk.underline(`${fileType}\n${URL}`), "log");
+			alert(chalk.underline(`File #${fileNumber} (${fileType})\n${URL}`), "log");
 			var file = createWriteStream(path, {autoClose: true});
 			const request = get(URL, response => {
 				if (response.statusCode !== 200) throw alert("Download failed.", "danger");
@@ -89,34 +81,19 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 		return {browser, page};
 	} catch (error) { alert(error.message, "danger"); }
 }
-export async function detectFiles(page: Page, highlight: string, type: "image" | "video", item: number): Promise<string | undefined> {
+export async function detectFiles(page: Page, highlight: string, item: number): Promise<string[] | undefined> {
 	try {
 		await page.goto(`https://www.instagram.com/stories/highlights/${highlight}`, {waitUntil: "networkidle2"});
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
 		}
-		if (type === "video") {
-			const video = await detectVideo(page);
-			if (video !== undefined) return video;
-		} else if (type === "image") {
-			const image = await detectImage(page);
-			if (image !== undefined) return image;
-		}
-	} catch (error) { alert(error.message, "danger"); }
-}
-async function detectImage(page: Page): Promise<string | undefined> {
-	try {
-		//.VO0ra.i1HvM.y-yJ5
-		await page.waitForSelector("div.qbCDp > img", {visible: true});
-		const imageURLs = await page.$eval("div.qbCDp > img", img => img.getAttribute("srcset"));
-		if (imageURLs) return imageURLs.split(",")[0].split(" ")[0];
-	} catch (error) { alert(error.message, "danger"); }
-}
-async function detectVideo(page: Page): Promise<string | undefined> {
-	try {
-		await page.waitForSelector("video > source");
-		const videoURL = await page.$eval("video > source", source => source.getAttribute("src"));
-		if (videoURL) return videoURL;
+		var urls: string[] = [];
+		await page.waitForSelector("div.qbCDp");
+		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("srcset"))))[0];
+		if (imageURL) urls.push(imageURL.split(",")[0].split(" ")[0]);
+		const videoURL = (await page.$$eval("video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
+		if (videoURL) urls.push(videoURL);
+		return urls;
 	} catch (error) { alert(error.message, "danger"); }
 }
