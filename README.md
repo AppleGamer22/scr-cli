@@ -1,5 +1,5 @@
 # Social-Scraper
-Instagram web scarper for social post file(s) downloads.
+Instagram web scraper for social post file(s) downloads.
 ## Contributing Requirements
 1. Separate Git branch to the master branch
 2. Separate fork to this repository
