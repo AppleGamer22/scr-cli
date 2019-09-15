@@ -9,7 +9,7 @@ import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, use
 import chalk from "chalk";
 
 export default class Vsco extends Command {
-	static description = "Command for scarping VSCO post file.";
+	static description = "Command for scraping VSCO post file.";
 	static args = [{name: "post", required: true}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 

@@ -9,7 +9,7 @@ import chalk from "chalk";
 import {get} from "https";
 
 export default class Highlight extends Command {
-	static description = "Command for scarping Instagram highlight files.";
+	static description = "Command for scraping Instagram highlight files.";
 	static args = [{name: "highlight", required: true}, {name: "item", required: true}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 

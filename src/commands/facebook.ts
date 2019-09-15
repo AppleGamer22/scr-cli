@@ -5,8 +5,8 @@ import {Browser, Page, launch} from "puppeteer-core";
 import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
 
 export default class Facebook extends Command {
-	static description = "Command for scarping Facebook post files.";
-	startScarpingTime = 0;
+	static description = "Command for scraping Facebook post files.";
+	startScrapingTime = 0;
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 	static args = [{name: "post"}];
 	readonly userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
@@ -29,7 +29,7 @@ export default class Facebook extends Command {
 				// executablePath: "/Applications/Google Chrome.app/"
 			});
 			cli.action.stop();
-			this.startScarpingTime = Date.now();
+			this.startScrapingTime = Date.now();
 			const page = (await browser.pages())[0];
 			await page.setUserAgent(userAgent());
 			await page.goto(`https://www.facebook.com/${args.post}`, {waitUntil: "domcontentloaded"});

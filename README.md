@@ -1,5 +1,5 @@
 # Social-Scraper
-Instagram web scarper for social post file(s) downloads.
+Instagram web scraper for social post file(s) downloads.
 ## Contributing Requirements
 1. Separate Git branch to the master branch
 2. Separate fork to this repository
@@ -7,12 +7,18 @@ Instagram web scarper for social post file(s) downloads.
 * You should use this software with responsibility and with accordance to [Instagram's terms of use](https://help.instagram.com/581066165581870):
 > * **You can't attempt to create accounts or access or collect information in unauthorized ways.**
 > This includes creating accounts or collecting information in an automated way without our express permission.
-## Requirements and/or Recommendations:
-* Google Chrome browser
-* Unix-style terminal and/or npm capable command-line
-* Node.js
-* Node Package Manager (NPM)
-* TypeScript
+* You should use this software with responsibility and with accordance to [VSCO's terms of use](https://vsco.co/about/terms_of_use):
+> **C Service Rules**
+> You agree not to engage in any of the following prohibited activities:
+> * **(I)** copying, distributing, or disclosing any part of the Service in any medium, including without limitation by any automated or non-automated “scraping”,
+> * **(II)** using any automated system, including without limitation “robots,” “spiders,” “offline readers,” etc., to access the Service in a manner that sends more request messages to the VSCO servers than a human can reasonably produce in the same period of time by using a conventional on-line web browser (except that VSCO grants the operators of public search engines revocable permission to use spiders to copy materials from vsco.co for the sole purpose of and solely to the extent necessary for creating publicly available searchable indices of the materials but not caches or archives of such materials),
+> * **(XI)** accessing any content on the Service through any technology or means other than those provided or authorized by the Service,
+> * **(XII)** bypassing the measures we may use to prevent or restrict access to the Service, including without limitation features that prevent or restrict use or copying of any content or enforce limitations on use of the Service or the content therein.
+## Prerequisites
+* [Google Chrome web browser](https://www.google.com/chrome/)
+* A command-line with:
+  * [NPM](https://npmjs.com)
+  * [Node.js](https://nodejs.org/)
 ## Before Using The CLI:
 ### General Usage
 Install via NPM by running:
