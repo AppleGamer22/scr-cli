@@ -65,6 +65,8 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="TypeScript">
+      <option name="RIGHT_MARGIN" value="200" />
+      <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="SOFT_MARGINS" value="80" />
       <indentOptions>
         <option name="USE_TAB_CHARACTER" value="true" />

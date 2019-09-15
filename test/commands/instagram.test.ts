@@ -23,5 +23,17 @@ describe("Instagram", () => {
 			expect(urls[0]).to.include("cdninstagram.com");
 		} catch (error) { console.error(error.message); }
 	});
+	test.timeout(6000).it("scrapes B2VA_gNg2EQ & gets 1 public MP4", async (_, done) => {
+		try {
+			const urls = await detectFiles(browser, page, "B2VA_gNg2EQ");
+			await browser.close();
+			done();
+			expect(urls.length).to.equal(1);
+			console.log(urls[0]);
+			expect(urls[0]).to.include("https://");
+			expect(urls[0]).to.include(".mp4");
+			expect(urls[0]).to.include("cdninstagram.com");
+		} catch (error) { console.error(error.message); }
+	});
 });
 //BkfivDeF0w9
