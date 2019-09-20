@@ -5,7 +5,7 @@ import {createWriteStream, unlinkSync} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
-import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent, alert} from "../shared";
+import {environmentVariablesFile, alert, beginScrape} from "../shared";
 import chalk from "chalk";
 
 export default class Vsco extends Command {
@@ -71,23 +71,6 @@ export default class Vsco extends Command {
 			});
 		});
 	}
-}
-
-export async function beginScrape(background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
-	cli.action.start("Opening Puppeteer...");
-	try {
-		const browser = await launch({
-			headless: background,
-			devtools: !background,
-			defaultViewport: null,
-			executablePath: chromeExecutable(),
-			userDataDir: chromeUserDataDirectory
-		});
-		cli.action.stop();
-		const page = (await browser.pages())[0];
-		await page.setUserAgent(userAgent());
-		return {browser, page};
-	} catch (error) { alert(error.message, "danger"); }
 }
 
 export async function detectFile(page: Page, id: string): Promise<string | undefined> {

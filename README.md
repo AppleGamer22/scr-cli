@@ -1,4 +1,4 @@
-# Social-Scraper
+# @applegamer22/scr-cli
 Instagram web scraper for social post file(s) downloads.
 ## Contributing Requirements
 1. Separate Git branch to the master branch

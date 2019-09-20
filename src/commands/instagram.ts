@@ -5,7 +5,7 @@ import {createWriteStream, unlink} from "fs";
 import {basename} from "path";
 import cli from "cli-ux";
 import {config} from "dotenv";
-import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent, alert} from "../shared";
+import {environmentVariablesFile, alert, beginScrape, downloadInstagramFile} from "../shared";
 import chalk from "chalk";
 
 export default class Instagram extends Command {
@@ -34,8 +34,8 @@ export default class Instagram extends Command {
 					for (var i = 0; i < urls.length; i += 1) {
 						const url = urls[i];
 						cli.action.start("Downloading...");
-						if (url.includes(".jpg")) await this.downloadFile(url, userName, ".jpg", i +1);
-						if (url.includes(".mp4")) await this.downloadFile(url, userName, ".mp4", i +1);
+						if (url.includes(".jpg")) await downloadInstagramFile(url, userName, ".jpg", i +1);
+						if (url.includes(".mp4")) await downloadInstagramFile(url, userName, ".mp4", i +1);
 						cli.action.stop();
 					}
 					await browser.close();
@@ -43,43 +43,6 @@ export default class Instagram extends Command {
 			} catch (error) { alert(error.message, "danger"); }
 		}
 	}
-
-	downloadFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
-		const path = `${process.cwd()}/${userName}_${basename(URL).split("?")[0]}`
-		return new Promise((resolve, reject) => {
-			alert(chalk.underline(`File #${fileNumber} (${fileType})\n${URL}`), "log");
-			var file = createWriteStream(path, {autoClose: true});
-			const request = get(URL, response => {
-				if (response.statusCode !== 200) throw alert("Download failed.", "danger");
-				response.on("end", () => cli.action.stop()).pipe(file);
-			});
-			file.on("finish", () => {
-				file.close();
-				alert(`File saved at ${path}`, "success");
-				resolve();
-			});
-			request.on("error", error => {
-				unlink(path, null!);
-				alert(error.message, "danger");
-				reject();
-			});
-		});
-	}
-}
-
-export async function beginScrape(background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
-	try {
-		const browser = await launch({
-			headless: background,
-			userDataDir: chromeUserDataDirectory,
-			executablePath: chromeExecutable(),
-			devtools: !background,
-			defaultViewport: null
-		});
-		const page = (await browser.pages())[0];
-		await page.setUserAgent(userAgent());
-		return {browser, page};
-	} catch (error) { alert(error.message, "danger"); }
 }
 
 export async function detectFiles(browser: Browser, page: Page, id: string): Promise<string[]> {

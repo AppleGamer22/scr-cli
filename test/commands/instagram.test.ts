@@ -1,6 +1,7 @@
 import {expect, test} from "@oclif/test";
 import {Browser, Page} from "puppeteer-core";
-import {beginScrape, detectFiles} from "../../src/commands/instagram";
+import {detectFiles} from "../../src/commands/instagram";
+import {beginScrape} from "../../src/shared";
 
 describe("Instagram", () => {
 	let browser: Browser, page: Page;

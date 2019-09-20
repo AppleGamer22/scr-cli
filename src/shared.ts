@@ -1,6 +1,10 @@
 import {homedir} from "os";
-import {writeFile} from "fs";
+import {get} from "https";
+import {basename} from "path";
+import {createWriteStream, writeFile, unlink} from "fs";
 import chalk from "chalk";
+import cli from "cli-ux";
+import {Browser, Page, launch} from "puppeteer-core";
 
 export const chromeUserDataDirectory = `${homedir()}/.scr/`;
 export const environmentVariablesFile = `${homedir()}/.scr/env.env`;
@@ -27,12 +31,14 @@ export function chromeExecutable(): string {
 			// or /usr/bin/google-chrome | /usr/lib/google-chrome
 	}
 }
+
 export function writeEnviornmentVariables(content: string) {
 	writeFile(environmentVariablesFile, content, error => {
 		if (error) throw new Error(error.message);
 		return;
 	});
 }
+
 export function alert(message: string, type: ("info" | "log" | "success" | "warning" | "danger")) {
 	switch (type) {
 		case "info":
@@ -46,4 +52,41 @@ export function alert(message: string, type: ("info" | "log" | "success" | "warn
 		case "danger":
 			return console.error(chalk.red(message));
 	}
+}
+
+export async function beginScrape(background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
+	try {
+		const browser = await launch({
+			headless: background,
+			userDataDir: chromeUserDataDirectory,
+			executablePath: chromeExecutable(),
+			devtools: !background,
+			defaultViewport: null
+		});
+		const page = (await browser.pages())[0];
+		await page.setUserAgent(userAgent());
+		return {browser, page};
+	} catch (error) { alert(error.message, "danger"); }
+}
+
+export function downloadFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
+	const path = `${process.cwd()}/${userName}_${basename(URL).split("?")[0]}`
+	return new Promise((resolve, reject) => {
+		alert(chalk.underline(`File #${fileNumber} (${fileType})\n${URL}`), "log");
+		var file = createWriteStream(path, {autoClose: true});
+		const request = get(URL, response => {
+			if (response.statusCode !== 200) throw alert("Download failed.", "danger");
+			response.on("end", () => cli.action.stop()).pipe(file);
+		});
+		file.on("finish", () => {
+			file.close();
+			alert(`File saved at ${path}`, "success");
+			resolve();
+		});
+		request.on("error", error => {
+			unlink(path, null!);
+			alert(error.message, "danger");
+			reject();
+		});
+	});
 }
