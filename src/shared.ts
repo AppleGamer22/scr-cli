@@ -69,7 +69,7 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 	} catch (error) { alert(error.message, "danger"); }
 }
 
-export function downloadFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
+export function downloadInstagramFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 	const path = `${process.cwd()}/${userName}_${basename(URL).split("?")[0]}`
 	return new Promise((resolve, reject) => {
 		alert(chalk.underline(`File #${fileNumber} (${fileType})\n${URL}`), "log");
