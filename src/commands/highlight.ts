@@ -1,5 +1,5 @@
 import {Command, flags} from "@oclif/command";
-import {Page} from "puppeteer-core";
+import {Page, Browser} from "puppeteer-core";
 import {environmentVariablesFile, alert, beginScrape, downloadInstagramFile} from "../shared";
 import {config} from "dotenv";
 import cli from "cli-ux";
@@ -23,7 +23,7 @@ export default class Highlight extends Command {
 					const {browser, page} = (await beginScrape(flags.headless))!;
 					cli.action.stop();
 					cli.action.start("Searching for files...");
-					const URLs = await detectFiles(page, args.highlight, Number(args.item));
+					const URLs = await detectFiles(browser, page, args.highlight, Number(args.item));
 					const userName = await page.evaluate(() => document.querySelector("div.yn6BW > a")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now) / 1000}s`, "info");
@@ -42,9 +42,14 @@ export default class Highlight extends Command {
 		}
 	}
 }
-export async function detectFiles(page: Page, highlight: string, item: number): Promise<string[] | undefined> {
+export async function detectFiles(browser: Browser, page: Page, highlight: string, item: number): Promise<string[] | undefined> {
 	try {
-		await page.goto(`https://www.instagram.com/stories/highlights/${highlight}`, {waitUntil: "networkidle2"});
+		await page.goto(`https://www.instagram.com/stories/highlights/${highlight}`, {waitUntil: "domcontentloaded"});
+		const potentialErrorMessage: string = await (await (await page.$("body"))!.getProperty("textContent")).jsonValue();
+		if (potentialErrorMessage.includes("Oops, an error occurred.")) {
+			alert(`Failed to find highlight ${highlight}.`, "danger");
+			await browser.close();
+		}
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");

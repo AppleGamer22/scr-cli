@@ -1,11 +1,11 @@
 import {Command, flags} from "@oclif/command";
-import {Page} from "puppeteer-core";
+import {Page, Browser} from "puppeteer-core";
 import {environmentVariablesFile, alert, downloadInstagramFile, beginScrape} from "../shared";
 import {config} from "dotenv";
 import cli from "cli-ux";
 
 export default class Story extends Command {
-	static description = "Command for scraping Instagram stories files.";
+	static description = "Command for scraping Instagram story files.";
 	static args = [{name: "user", required: true}, {name: "item", required: true}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
@@ -23,7 +23,7 @@ export default class Story extends Command {
 					const {browser, page} = (await beginScrape(flags.headless))!;
 					cli.action.stop();
 					cli.action.start("Searching for files...");
-					const URLs = await detectFiles(page, args.user, Number(args.item));
+					const URLs = await detectFiles(browser, page, args.user, Number(args.item));
 					await page.waitForSelector("div.yn6BW > a");
 					const userName = await page.evaluate(() => document.querySelector("div.yn6BW > a")!.innerHTML);
 					cli.action.stop();
@@ -43,9 +43,14 @@ export default class Story extends Command {
 		}
 	}
 }
-export async function detectFiles(page: Page, user: string, item: number): Promise<string[] | undefined> {
+export async function detectFiles(browser: Browser, page: Page, user: string, item: number): Promise<string[] | undefined> {
 	try {
-		await page.goto(`https://www.instagram.com/stories/${user}`, {waitUntil: "networkidle2"});
+		await page.goto(`https://www.instagram.com/${user}`);
+		await page.goto(`https://www.instagram.com/stories/${user}`, {waitUntil: "domcontentloaded"});
+		if ((await page.$("div.error-container")) !== null) {
+			alert(`Failed to find ${user}'s story feed.`, "danger");
+			await browser.close();
+		}
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
