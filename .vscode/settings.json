@@ -1,4 +1,3 @@
 {
-    "git.ignoreLimitWarning": true,
-    "npm-scripts.showStartNotification": false
+	"git.ignoreLimitWarning": true
 }
