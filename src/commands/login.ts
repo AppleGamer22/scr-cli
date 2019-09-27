@@ -36,7 +36,7 @@ export default class LogIn extends Command {
 				await browser.close();
 				return alert("You are already logged-in.", "success");
 			}
-			cli.action.start("Signing in to your VSCO account...");
+			cli.action.start("Signing in to your Instagram account...");
 			const page = (await browser.pages())[0];
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://www.instagram.com/") {
