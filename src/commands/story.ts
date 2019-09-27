@@ -28,14 +28,11 @@ export default class Story extends Command {
 					const userName = await page.evaluate(() => document.querySelector("div.yn6BW > a")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
-					if (URLs) {
-						for (let i = 0; i < URLs.length; i += 1) {
-							const URL = URLs[i];
-							cli.action.start("Downloading...");
-							if (URL.includes(".jpg")) await downloadInstagramFile(URL, userName, ".jpg", i + 1);
-							if (URL.includes(".mp4")) await downloadInstagramFile(URL, userName, ".mp4", i + 1);
-							cli.action.stop();
-						}
+					cli.action.start("Downloading");
+					if (URLs && URLs.length === 2 && URLs[1].includes(".mp4")) {
+						await downloadInstagramFile(URLs[1], userName, ".mp4", 1);
+					} else if (URLs && URLs.length === 1 && URLs[0].includes(".jpg")) {
+						await downloadInstagramFile(URLs[0], userName, ".jpg", 1);
 					}
 					await browser.close();
 				} else return alert("Please provide a POST argument!", "danger");

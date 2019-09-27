@@ -1,5 +1,10 @@
 # @applegamer22/scr-cli
+## Description
 Instagram web scraper for social post file(s) downloads.
+## Installation
+```bash
+$ sudo npm i -g @applegamer22/scr-cli
+```
 ## Contributing Requirements
 1. Separate Git branch to the master branch
 2. Separate fork to this repository
@@ -20,17 +25,15 @@ Instagram web scraper for social post file(s) downloads.
   * [NPM](https://npmjs.com)
   * [Node.js](https://nodejs.org/)
 ## Before Using The CLI:
-### General Usage
-Install via NPM by running:
-* `$ sudo npm i -g @applegamer22/scr-cli` (Unix)
 ### Development
 1. Clone this repository by running `$ git clone https://github.com/AppleGamer22/Social-Scraper.git` in your command-line.
 2. Run `$ npm install` in the root directory of the downloaded copy.
-3. Run `$ scr auth --<instagram or vsco>`.
-4. A Chromium broswer will be opened at [https://www.instagram.com/accounts/login/](https://www.instagram.com/accounts/login/).
-5. Sign-in to your Instagram account.
-6. Your Instagram credentials will be securely saved in the CLI's private Chromium instance.
-7. After a successful Instagram authentication, Chromium will be closed.
+### General Usage
+1. Run `$ scr auth --<instagram or vsco>`.
+2. A Chromium broswer will be opened at [https://www.instagram.com/accounts/login/](https://www.instagram.com/accounts/login/).
+3. Sign-in to your Instagram account.
+4. Your Instagram credentials will be securely saved in the CLI's private Chromium instance.
+5. After a successful Instagram authentication, Chromium will be closed.
 ## Using The CLI:
 1. Run `$ scr <instagram or vsco> post_id` in you command line.
 2. Wait until the program says:

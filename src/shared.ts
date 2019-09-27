@@ -72,7 +72,8 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 export function downloadInstagramFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 	const path = `${process.cwd()}/${userName}_${basename(URL).split("?")[0]}`
 	return new Promise((resolve, reject) => {
-		alert(chalk.underline(`File #${fileNumber} (${fileType})\n${URL}`), "log");
+		alert(chalk.underline(`File #${fileNumber} (${fileType})`), "log");
+		cli.url(chalk.underline(URL), URL);
 		var file = createWriteStream(path, {autoClose: true});
 		const request = get(URL, response => {
 			if (response.statusCode !== 200) throw alert("Download failed.", "danger");

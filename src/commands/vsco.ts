@@ -1,5 +1,5 @@
 import {Command, flags} from "@oclif/command";
-import {Browser, Page, launch} from "puppeteer-core";
+import {Page} from "puppeteer-core";
 import {get} from "https";
 import {createWriteStream, unlinkSync} from "fs";
 import {basename} from "path";
@@ -49,7 +49,8 @@ export default class Vsco extends Command {
 			const request = get(redirectURL, response1 => {
 				if (redirectURL.includes(".jpg")) {
 					const realURL = response1.headers.location!;
-					alert(chalk.underline(`.jpg\n${realURL}`), "log");
+					alert(chalk.underline(`.jpg`), "log");
+					cli.url(chalk.underline(realURL), realURL);
 					get(realURL, response2 => {
 						if (response2.statusCode !== 200) throw alert("Download failed.", "danger");
 						response2.on("end", () => cli.action.stop()).pipe(file);
