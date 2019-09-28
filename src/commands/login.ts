@@ -1,8 +1,8 @@
-import {launch, Browser} from "puppeteer-core";
+import {Browser} from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import {config} from "dotenv";
 import cli from "cli-ux";
-import {chromeExecutable, writeEnviornmentVariables, chromeUserDataDirectory, environmentVariablesFile, userAgent, alert} from "../shared";
+import {writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent, alert} from "../shared";
 
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
@@ -17,12 +17,7 @@ export default class LogIn extends Command {
 			const username: string = await cli.prompt("username");
 			const password: string = await cli.prompt("password", {type: "hide"});
 			cli.action.start("Opening browser");
-			const browser = await launch({
-				headless: true,
-				executablePath: chromeExecutable(),
-				userDataDir: chromeUserDataDirectory,
-				defaultViewport: null
-			});
+			const {browser, page} = (await beginScrape(true))!;
 			cli.action.stop();
 			const {flags} = this.parse(LogIn);
 			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
