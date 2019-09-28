@@ -25,15 +25,15 @@ export default class Vsco extends Command {
 				if (post !== undefined && post !== null) {
 					if (!post.includes("/media/")) return alert("Please provide a valid post ID.", "danger");
 					const now = Date.now();
-					cli.action.start("Opening Puppeteer...");
+					cli.action.start("Opening browser");
 					const {browser, page} = (await beginScrape(flags.headless))!;
 					cli.action.stop();
-					cli.action.start("Searching for files...");
+					cli.action.start("Searching for files");
 					const url = await detectFile(page, post);
 					const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
-					cli.action.start("Downloading...");
+					cli.action.start("Downloading");
 					await this.downloadFile(url!, userName, post.split("/")[2]);
 					cli.action.stop();
 					await browser.close();

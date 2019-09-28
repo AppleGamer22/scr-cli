@@ -23,17 +23,17 @@ export default class Instagram extends Command {
 				const {args, flags} = this.parse(Instagram);
 				if (args.post !== undefined && args.post !== null) {
 					const now = Date.now();
-					cli.action.start("Opening Puppeteer...");
+					cli.action.start("Opening browser");
 					const {browser, page} = (await beginScrape(flags.headless))!;
 					cli.action.stop();
-					cli.action.start("Searching for files...");
+					cli.action.start("Searching for files");
 					const urls = [...(new Set<string>(await detectFiles(browser, page, args.post)))];
 					const userName = await page.evaluate(() => document.querySelector("a.FPmhX.notranslate.nJAzx")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
 					for (var i = 0; i < urls.length; i += 1) {
 						const url = urls[i];
-						cli.action.start("Downloading...");
+						cli.action.start("Downloading");
 						if (url.includes(".jpg")) await downloadInstagramFile(url, userName, ".jpg", i +1);
 						if (url.includes(".mp4")) await downloadInstagramFile(url, userName, ".mp4", i +1);
 						cli.action.stop();

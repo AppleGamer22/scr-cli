@@ -14,7 +14,7 @@ describe("Highlight", () => {
 	});
 	test.timeout(6000).it("scrapes 1st 17941742392256135 and gets a JPEG & an MP4", async (_, done) => {
 		try {
-			const url = await detectFiles(page, "17941742392256135", 1);
+			const url = await detectFiles(browser, page, "17941742392256135", 1);
 			await browser.close();
 			done();
 			if (url) {
@@ -31,7 +31,7 @@ describe("Highlight", () => {
 	});
 	test.timeout(6000).it("scrapes 4th 17912059153309881 and gets a JPEG", async (_, done) => {
 		try {
-			const url = await detectFiles(page, "17912059153309881", 4);
+			const url = await detectFiles(browser, page, "17912059153309881", 4);
 			await browser.close();
 			done();
 			if (url) {

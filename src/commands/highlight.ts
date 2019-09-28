@@ -19,10 +19,10 @@ export default class Highlight extends Command {
 				const {args, flags} = this.parse(Highlight);
 				if (args.highlight !== undefined && args.highlight !== null) {
 					const now = Date.now();
-					cli.action.start("Opening Puppeteer...");
+					cli.action.start("Opening browser");
 					const {browser, page} = (await beginScrape(flags.headless))!;
 					cli.action.stop();
-					cli.action.start("Searching for files...");
+					cli.action.start("Searching for files");
 					const URLs = await detectFiles(browser, page, args.highlight, Number(args.item));
 					const userName = await page.evaluate(() => document.querySelector("div.yn6BW > a")!.innerHTML);
 					cli.action.stop();

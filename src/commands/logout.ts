@@ -15,7 +15,7 @@ export default class LogOut extends Command {
 	async run() {
 		config({path: environmentVariablesFile});
 		try {
-			cli.action.start("Opening Puppeteer...");
+			cli.action.start("Opening browser");
 			const browser = await launch({
 				headless: true,
 				executablePath: chromeExecutable(),
@@ -35,7 +35,7 @@ export default class LogOut extends Command {
 				await browser.close();
 				return console.log("You are already signed-out.");
 			}
-			cli.action.start("Signing out from your Instagram account...");
+			cli.action.start("Signing out from your Instagram account");
 			const page = (await browser.pages())[0];
 			await page.setUserAgent(userAgent());
 			page.on("framenavigated", async frame => {
@@ -73,7 +73,7 @@ export default class LogOut extends Command {
 				await browser.close();
 				return console.log("You are already signed-out.");
 			}
-			cli.action.start("Signing out from your VSCO account...");
+			cli.action.start("Signing out from your VSCO account");
 			const page = (await browser.pages())[0];
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://vsco.co/feed") {
