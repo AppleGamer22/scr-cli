@@ -18,7 +18,7 @@ export default class Facebook extends Command {
 	}
 
 	async beginScrape(id: string, background: boolean) {
-		cli.action.start("Opening Puppeteer...");
+		cli.action.start("Opening browser");
 		try {
 // tslint:disable-next-line: no-shadowed-variable
 			const {args, flags} = this.parse(Facebook);
@@ -33,7 +33,7 @@ export default class Facebook extends Command {
 			const page = (await browser.pages())[0];
 			await page.setUserAgent(userAgent());
 			await page.goto(`https://www.facebook.com/${args.post}`, {waitUntil: "domcontentloaded"});
-			cli.action.start("Searching for files...");
+			cli.action.start("Searching for files");
 			await page.waitForSelector("video");
 			await page.click("video");
 			page.on("response", async res => {

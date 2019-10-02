@@ -1,13 +1,13 @@
-import {launch, Browser} from "puppeteer-core";
+import {Browser} from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import {config} from "dotenv";
 import cli from "cli-ux";
-import {chromeExecutable, writeEnviornmentVariables, chromeUserDataDirectory, environmentVariablesFile, userAgent, alert} from "../shared";
+import {writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent, alert} from "../shared";
 
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
 	static flags = {
-		vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-in."}),
+		// vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-in."}),
 		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-in."})
 	};
 
@@ -16,17 +16,12 @@ export default class LogIn extends Command {
 		try {
 			const username: string = await cli.prompt("username");
 			const password: string = await cli.prompt("password", {type: "hide"});
-			cli.action.start("Opening Puppeteer...");
-			const browser = await launch({
-				headless: true,
-				executablePath: chromeExecutable(),
-				userDataDir: chromeUserDataDirectory,
-				defaultViewport: null
-			});
+			cli.action.start("Opening browser");
+			const {browser, page} = (await beginScrape(true))!;
 			cli.action.stop();
 			const {flags} = this.parse(LogIn);
 			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
-			if (flags.vsco) return await this.vscoSignIn(browser, username, password);
+			// if (flags.vsco) return await this.vscoSignIn(browser, username, password);
 		} catch (error) { alert(error.message, "danger"); }
 	}
 
@@ -36,7 +31,7 @@ export default class LogIn extends Command {
 				await browser.close();
 				return alert("You are already logged-in.", "success");
 			}
-			cli.action.start("Signing in to your Instagram account...");
+			cli.action.start("Signing in to your Instagram account");
 			const page = (await browser.pages())[0];
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://www.instagram.com/") {
@@ -69,7 +64,7 @@ export default class LogIn extends Command {
 				await browser.close();
 				return alert("You are already loged-in.", "success");
 			}
-		cli.action.start("Signing in to your VSCO account...");
+		cli.action.start("Signing in to your VSCO account");
 			const page = (await browser.pages())[0];
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://vsco.co/") {

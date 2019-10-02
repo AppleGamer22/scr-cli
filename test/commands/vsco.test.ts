@@ -3,7 +3,7 @@ import {Browser, Page} from "puppeteer-core";
 import {detectFile} from "../../src/commands/vsco";
 import {beginScrape} from "../../src/shared";
 
-describe("vsco", () => {
+describe("VSCO", () => {
 	let browser: Browser, page: Page;
 	beforeEach(async () => {
 		try {

@@ -1,31 +1,26 @@
 import {Command, flags} from "@oclif/command";
-import {launch, Browser} from "puppeteer-core";
+import {Browser} from "puppeteer-core";
 import {config} from "dotenv";
 import cli from "cli-ux";
 import {randomBytes} from "crypto";
-import {chromeExecutable, writeEnviornmentVariables, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
+import {writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent} from "../shared";
 
 export default class LogOut extends Command {
 	static description = "Command for supported social network log-out.";
 	static flags = {
-		vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-out"}),
+		// vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-out"}),
 		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-out."})
 	};
 
 	async run() {
 		config({path: environmentVariablesFile});
 		try {
-			cli.action.start("Opening Puppeteer...");
-			const browser = await launch({
-				headless: true,
-				executablePath: chromeExecutable(),
-				userDataDir: chromeUserDataDirectory,
-				defaultViewport: null
-			});
+			cli.action.start("Opening browser");
+			const {browser, page} = (await beginScrape(true))!;
 			cli.action.stop();
 			const {flags} = this.parse(LogOut);
 			if (flags.instagram) return await this.instagramLogOut(browser);
-			if (flags.vsco) return await this.vscoLogOut(browser);
+			// if (flags.vsco) return await this.vscoLogOut(browser);
 		} catch (error) { console.error(error.message); }
 	}
 
@@ -35,7 +30,7 @@ export default class LogOut extends Command {
 				await browser.close();
 				return console.log("You are already signed-out.");
 			}
-			cli.action.start("Signing out from your Instagram account...");
+			cli.action.start("Signing out from your Instagram account");
 			const page = (await browser.pages())[0];
 			await page.setUserAgent(userAgent());
 			page.on("framenavigated", async frame => {
@@ -73,7 +68,7 @@ export default class LogOut extends Command {
 				await browser.close();
 				return console.log("You are already signed-out.");
 			}
-			cli.action.start("Signing out from your VSCO account...");
+			cli.action.start("Signing out from your VSCO account");
 			const page = (await browser.pages())[0];
 			page.on("framenavigated", async frame => {
 				if (frame.url() === "https://vsco.co/feed") {
