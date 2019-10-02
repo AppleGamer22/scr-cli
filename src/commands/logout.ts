@@ -8,7 +8,7 @@ import {writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAg
 export default class LogOut extends Command {
 	static description = "Command for supported social network log-out.";
 	static flags = {
-		vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-out"}),
+		// vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-out"}),
 		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-out."})
 	};
 
@@ -20,7 +20,7 @@ export default class LogOut extends Command {
 			cli.action.stop();
 			const {flags} = this.parse(LogOut);
 			if (flags.instagram) return await this.instagramLogOut(browser);
-			if (flags.vsco) return await this.vscoLogOut(browser);
+			// if (flags.vsco) return await this.vscoLogOut(browser);
 		} catch (error) { console.error(error.message); }
 	}
 

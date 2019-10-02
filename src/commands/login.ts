@@ -7,7 +7,7 @@ import {writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAg
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
 	static flags = {
-		vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-in."}),
+		// vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-in."}),
 		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-in."})
 	};
 
@@ -21,7 +21,7 @@ export default class LogIn extends Command {
 			cli.action.stop();
 			const {flags} = this.parse(LogIn);
 			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
-			if (flags.vsco) return await this.vscoSignIn(browser, username, password);
+			// if (flags.vsco) return await this.vscoSignIn(browser, username, password);
 		} catch (error) { alert(error.message, "danger"); }
 	}
 
