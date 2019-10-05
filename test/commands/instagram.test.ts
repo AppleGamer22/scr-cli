@@ -29,7 +29,7 @@ describe("Instagram", () => {
 			const urls = await detectFiles(browser, page, "B2VA_gNg2EQ");
 			await browser.close();
 			done();
-			expect(urls.length).to.equal(1);
+			expect(urls.length).to.equal(2);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
 			expect(urls[0]).to.include(".mp4");
