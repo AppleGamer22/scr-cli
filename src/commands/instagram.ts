@@ -58,6 +58,8 @@ export async function detectFiles(browser: Browser, page: Page, id: string): Pro
 		do {
 			const videosDuplicates = await page.$$eval("video.tWeCl", videos => videos.map(video => video.getAttribute("src")));
 			const imagesDuplicates = await page.$$eval("img.FFVAD", images => images.map(image => image.getAttribute("src")));
+			srcs.push(...await page.$$eval(`meta[property="og:video"]`, metas => metas.map(meta => meta.getAttribute("content")!)));
+			// srcs.push(...await page.$$eval(`meta[property="og:image"]`, metas => metas.map(meta => meta.getAttribute("content")!)));
 			imagesDuplicates.forEach(duplicate => { if (duplicate) srcs.push(duplicate); });
 			videosDuplicates.forEach(duplicate => { if (duplicate) srcs.push(duplicate); });
 			await page.click("div.coreSpriteRightChevron");
