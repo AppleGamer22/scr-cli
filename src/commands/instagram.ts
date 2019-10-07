@@ -1,12 +1,14 @@
 import {Command, flags} from "@oclif/command";
-import {Browser, Page, launch} from "puppeteer-core";
-import {get} from "https";
-import {createWriteStream, unlink} from "fs";
-import {basename} from "path";
+import {Browser, Page} from "puppeteer-core";
 import cli from "cli-ux";
 import {config} from "dotenv";
 import {environmentVariablesFile, alert, beginScrape, downloadInstagramFile} from "../shared";
-import chalk from "chalk";
+
+declare global {
+	interface Window {
+		_sharedData: any
+	}
+}
 
 export default class Instagram extends Command {
 	static description = "Command for scraping Instagram post files.";
@@ -45,7 +47,7 @@ export default class Instagram extends Command {
 	}
 }
 
-export async function detectFiles(browser: Browser, page: Page, id: string): Promise<string[]> {
+export async function detectFiles(browser: Browser, page: Page, id: string): Promise<string[] | undefined> {
 	var srcs: string[] = [];
 	try {
 		await page.goto(`https://www.instagram.com/p/${id}`, {waitUntil: "domcontentloaded"});
@@ -53,20 +55,19 @@ export async function detectFiles(browser: Browser, page: Page, id: string): Pro
 			alert(`Failed to find post ${id}`, "danger");
 			await browser.close();
 		}
-		await page.waitForSelector("div.ZyFrc", {visible: true});
-		var nextButtons = await page.$("div.coreSpriteRightChevron");
-		do {
-			const videosDuplicates = await page.$$eval("video.tWeCl", videos => videos.map(video => video.getAttribute("src")));
-			const imagesDuplicates = await page.$$eval("img.FFVAD", images => images.map(image => image.getAttribute("src")));
-			srcs.push(...await page.$$eval(`meta[property="og:video"]`, metas => metas.map(meta => meta.getAttribute("content")!)));
-			// srcs.push(...await page.$$eval(`meta[property="og:image"]`, metas => metas.map(meta => meta.getAttribute("content")!)));
-			imagesDuplicates.forEach(duplicate => { if (duplicate) srcs.push(duplicate); });
-			videosDuplicates.forEach(duplicate => { if (duplicate) srcs.push(duplicate); });
-			await page.click("div.coreSpriteRightChevron");
-			nextButtons = await page.$("div.coreSpriteRightChevron");
-		} while (nextButtons !== null);
-	} catch (error) {
-		return [...(new Set<string>(srcs))!];
-	}
-	return [...(new Set<string>(srcs))!];
+		const sources = await page.evaluate(() => {
+			return window._sharedData.entry_data.PostPage[0].graphql.shortcode_media;
+		});
+		const urls: string[] = [];
+		if (sources.edge_sidecar_to_children) {
+			for (let edge of sources.edge_sidecar_to_children.edges) {
+				if (!edge.node.is_video) urls.push(edge.node.display_url);
+				if (edge.node.is_video) urls.push(edge.node.video_url);
+			}
+		} else {
+			if (!sources.is_video) urls.push(sources.display_url);
+			if (sources.is_video) urls.push(sources.video_url);
+		}
+		return urls;
+	} catch (error) { alert(error.message, "danger"); }
 }

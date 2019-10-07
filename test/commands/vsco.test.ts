@@ -24,9 +24,9 @@ describe("VSCO", () => {
 			expect(url).to.include("aws");
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes darianvoisard/media/5cf82ce5129e4b2929e17d18 & gets 1 JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes sarahm36/media/5d727b9dc7fe090749a25cad & gets 1 JPEG", async (_, done) => {
 		try {
-			const url = await detectFile(page, "darianvoisard/media/5cf82ce5129e4b2929e17d18");
+			const url = await detectFile(page, "sarahm36/media/5d727b9dc7fe090749a25cad");
 			await browser.close();
 			done();
 			console.log(url);
