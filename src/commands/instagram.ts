@@ -58,7 +58,7 @@ export async function detectFiles(browser: Browser, page: Page, id: string): Pro
 		const sources = await page.evaluate(() => {
 			return window._sharedData.entry_data.PostPage[0].graphql.shortcode_media;
 		});
-		const urls: string[] = [];
+		var urls: string[] = [];
 		if (sources.edge_sidecar_to_children) {
 			for (let edge of sources.edge_sidecar_to_children.edges) {
 				if (!edge.node.is_video) urls.push(edge.node.display_url);
