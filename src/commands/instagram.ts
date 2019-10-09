@@ -30,6 +30,7 @@ export default class Instagram extends Command {
 					cli.action.stop();
 					cli.action.start("Searching for files");
 					const urls = [...(new Set<string>(await detectFiles(browser, page, args.post)))];
+					await page.waitForSelector("a.FPmhX.notranslate.nJAzx", {visible: true});
 					const userName = await page.evaluate(() => document.querySelector("a.FPmhX.notranslate.nJAzx")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
