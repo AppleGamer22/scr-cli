@@ -1,5 +1,5 @@
 import {Command, flags} from "@oclif/command";
-import {Page} from "puppeteer-core";
+import {Page, Browser} from "puppeteer-core";
 import {get} from "https";
 import {createWriteStream, unlinkSync} from "fs";
 import {basename} from "path";
@@ -29,7 +29,7 @@ export default class Vsco extends Command {
 					const {browser, page} = (await beginScrape(flags.headless))!;
 					cli.action.stop();
 					cli.action.start("Searching for files");
-					const url = await detectFile(page, post);
+					const url = await detectFile(browser, page, post);
 					const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
@@ -74,20 +74,20 @@ export default class Vsco extends Command {
 	}
 }
 
-export async function detectFile(page: Page, id: string): Promise<string | undefined> {
+export async function detectFile(browser: Browser, page: Page, id: string): Promise<string | undefined> {
 	try {
 		await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
-		const url = await page.evaluate(() => {
-			const video = document.querySelector(`meta[property="og:video"]`);
-			const image = document.querySelector(`meta[property="og:image"]`);
-			if (video) {
-				const videoURL = video.getAttribute("content");
-				if (videoURL) return videoURL;
-			} else if (image) {
-				const imageURL = image.getAttribute("content");
-				if (imageURL) return imageURL.split("?")[0];
-			}
+		if ((await page.$("p.NotFound-heading")) !== null) {
+			alert(`Failed to find post ${id}`, "danger");
+			await browser.close();
+		}
+		const imageURLs = await page.$$eval(`meta[property="og:image"]`, metas => {
+			return  metas.map(meta => meta.getAttribute("content"));
 		});
-		if (url) return url;
+		const videoURLs = await page.$$eval(`meta[property="og:video"]`, metas => {
+			return metas.map(meta => meta.getAttribute("content"));
+		});
+		if (videoURLs[0]) return videoURLs[0];
+		if (imageURLs[0]) return imageURLs[0].split("?")[0];
 	} catch (error) { alert(error.message, "danger"); }
 }
