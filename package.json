@@ -1,7 +1,7 @@
 {
 	"name": "@applegamer22/scr-cli",
 	"description": "Social media web scraper for post file downloads.",
-	"version": "1.0.0-alpha.19",
+	"version": "1.0.0-alpha.20",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
@@ -57,7 +57,7 @@
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",
 		"globby": "^10.0.1",
-		"mocha": "^6.2.0",
+		"mocha": "^6.2.1",
 		"nyc": "^14.1.1",
 		"prettier": "^1.18.2",
 		"ts-node": "^8.4.1",

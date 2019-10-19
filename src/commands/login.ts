@@ -17,7 +17,7 @@ export default class LogIn extends Command {
 			const username: string = await cli.prompt("username");
 			const password: string = await cli.prompt("password", {type: "hide"});
 			cli.action.start("Opening browser");
-			const {browser, page} = (await beginScrape(true))!;
+			const {browser, page} = (await beginScrape(false))!;
 			cli.action.stop();
 			const {flags} = this.parse(LogIn);
 			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
@@ -33,30 +33,31 @@ export default class LogIn extends Command {
 			}
 			cli.action.start("Signing in to your Instagram account");
 			const page = (await browser.pages())[0];
-			page.on("framenavigated", async frame => {
-				if (frame.url() === "https://www.instagram.com/") {
-					var environmentFileData: string;
-					const {VSCO} = process.env;
-					if (VSCO !== undefined) {
-						environmentFileData = `INSTAGRAM=${true}\nVSCO=${VSCO}`;
-						writeEnviornmentVariables(environmentFileData);
-						cli.action.stop();
-						await browser.close();
-					} else if (VSCO === undefined) {
-						environmentFileData = `INSTAGRAM=${true}\nVSCO=${false}`;
-						writeEnviornmentVariables(environmentFileData);
-						cli.action.stop();
-						await browser.close();
-					}
-				}
-			});
 			await page.setUserAgent(userAgent());
 			await page.goto("https://www.instagram.com/accounts/login/");
 			await page.waitForSelector(`input[name="username"]`);
 			await page.type(`input[name="username"]`, username);
 			await page.type(`input[name="password"]`, password);
 			await page.click(`button[type="submit"]`);
-		} catch (error) { alert(error.message, "danger"); }
+			await page.waitForResponse("https://www.instagram.com/");
+			var environmentFileData: string;
+			const {VSCO} = process.env;
+			if (VSCO !== undefined) {
+				environmentFileData = `INSTAGRAM=${true}\nVSCO=${VSCO}`;
+				writeEnviornmentVariables(environmentFileData);
+				cli.action.stop();
+				await browser.close();
+			} else if (VSCO === undefined) {
+				environmentFileData = `INSTAGRAM=${true}\nVSCO=${false}`;
+				writeEnviornmentVariables(environmentFileData);
+				cli.action.stop();
+				await browser.close();
+			}
+		} catch (error) {
+			alert(error.message, "danger");
+			cli.action.stop();
+			await browser.close();
+		}
 	}
 	async vscoSignIn(browser: Browser, username: string, password: string) {
 		try {

@@ -33,23 +33,6 @@ export default class LogOut extends Command {
 			cli.action.start("Signing out from your Instagram account");
 			const page = (await browser.pages())[0];
 			await page.setUserAgent(userAgent());
-			page.on("framenavigated", async frame => {
-				if (frame.url() === "https://www.instagram.com/") {
-					var environmentFileData: string;
-					const {VSCO} = process.env;
-					if (VSCO !== undefined) {
-						environmentFileData = `VSCO=${VSCO}\nINSTAGRAM=${false}`;
-						writeEnviornmentVariables(environmentFileData);
-						cli.action.stop();
-						await browser.close();
-					} else if (VSCO === undefined) {
-						environmentFileData = `VSCO=${false}\nINSTAGRAM=${false}`;
-						writeEnviornmentVariables(environmentFileData);
-						cli.action.stop();
-						await browser.close();
-					}
-				}
-			});
 			await page.goto(`https://www.instagram.com/${randomBytes(5).toString("hex")}/`);
 			const profileButton = "#link_profile > a";
 			await page.waitForSelector(profileButton);
@@ -57,9 +40,23 @@ export default class LogOut extends Command {
 			const settingsButton = "#react-root > section > main > div > header > section > div.nZSzR > div > button";
 			await page.waitForSelector(settingsButton);
 			await page.click(settingsButton);
-			const logOutButton = "body > div.RnEpo.Yx5HN > div > div > div > button:nth-child(6)";
+			const logOutButton = "body > div.RnEpo.Yx5HN > div > div > div > button:nth-child(8)";
 			await page.waitForSelector(logOutButton);
 			await page.click(logOutButton);
+			await page.waitForResponse("https://www.instagram.com/");
+			var environmentFileData: string;
+			const {VSCO} = process.env;
+			if (VSCO !== undefined) {
+				environmentFileData = `VSCO=${VSCO}\nINSTAGRAM=${false}`;
+				writeEnviornmentVariables(environmentFileData);
+				cli.action.stop();
+				await browser.close();
+			} else if (VSCO === undefined) {
+				environmentFileData = `VSCO=${false}\nINSTAGRAM=${false}`;
+				writeEnviornmentVariables(environmentFileData);
+				cli.action.stop();
+				await browser.close();
+			}
 		} catch (error) { console.error(error.message); }
 	}
 	async vscoLogOut(browser: Browser) {
