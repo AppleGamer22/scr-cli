@@ -52,7 +52,7 @@ export async function detectFiles(browser: Browser, page: Page, highlight: strin
 			await page.click("div.coreSpriteRightChevron");
 		}
 		var urls: string[] = [];
-		await page.waitForSelector("div.qbCDp");
+		await page.waitForSelector("div.qbCDp", {visible: true});
 		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("srcset"))))[0];
 		if (imageURL) urls.push(imageURL.split(",")[0].split(" ")[0]);
 		const videoURL = (await page.$$eval("video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
