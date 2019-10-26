@@ -17,7 +17,7 @@ export default class LogIn extends Command {
 			const username: string = await cli.prompt("username");
 			const password: string = await cli.prompt("password", {type: "hide"});
 			cli.action.start("Opening browser");
-			const {browser, page} = (await beginScrape(false))!;
+			const {browser, page} = (await beginScrape(true))!;
 			cli.action.stop();
 			const {flags} = this.parse(LogIn);
 			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
