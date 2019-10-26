@@ -40,7 +40,7 @@
 		"@oclif/plugin-warn-if-update-available": "^1.7.0",
 		"@oclif/plugin-which": "^1.0.3",
 		"chalk": "^2.4.2",
-		"cli-ux": "^5.3.2",
+		"cli-ux": "^5.3.3",
 		"dotenv": "^8.1.0",
 		"puppeteer-core": "^1.20.0",
 		"tslib": "^1.10.0"
