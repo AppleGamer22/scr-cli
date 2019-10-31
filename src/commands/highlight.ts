@@ -24,6 +24,7 @@ export default class Highlight extends Command {
 					cli.action.stop();
 					cli.action.start("Searching for files");
 					const URLs = await detectFiles(browser, page, args.highlight, Number(args.item));
+					await page.waitForSelector("div.yn6BW > a", {visible: true});
 					const userName = await page.evaluate(() => document.querySelector("div.yn6BW > a")!.innerHTML);
 					cli.action.stop();
 					alert(`Scrape time: ${(Date.now() - now) / 1000}s`, "info");
