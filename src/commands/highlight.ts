@@ -43,8 +43,9 @@ export default class Highlight extends Command {
 export async function detectFiles(browser: Browser, page: Page, highlight: string, item: number): Promise<string[] | undefined> {
 	try {
 		await page.goto(`https://www.instagram.com/stories/highlights/${highlight}`, {waitUntil: "domcontentloaded"});
-		const potentialErrorMessage: string = await (await (await page.$("body"))!.getProperty("textContent")).jsonValue();
-		if (potentialErrorMessage.includes("Oops, an error occurred.")) {
+		await page.waitForSelector("body", {visible: true});
+		const potentialError = await page.$eval("body", body => body.innerHTML);
+		if (potentialError.includes("Oops, an error occurred.")) {
 			alert(`Failed to find highlight ${highlight}.`, "danger");
 			await browser.close();
 		}
