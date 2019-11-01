@@ -1,7 +1,7 @@
 import { expect, test } from "@oclif/test";
 import { Browser, Page } from "puppeteer-core";
-import {detectFiles} from "../../src/commands/highlight";
-import {beginScrape} from "../../src/shared";
+import { detectFiles } from "../../src/commands/highlight";
+import { beginScrape } from "../../src/shared";
 
 describe("Highlight", () => {
 	let browser: Browser, page: Page;
