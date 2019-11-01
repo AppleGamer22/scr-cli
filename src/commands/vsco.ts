@@ -1,11 +1,11 @@
-import {Command, flags} from "@oclif/command";
-import {Page, Browser} from "puppeteer-core";
-import {get} from "https";
-import {createWriteStream, unlinkSync} from "fs";
-import {basename} from "path";
+import { Command, flags } from "@oclif/command";
+import { Page, Browser } from "puppeteer-core";
+import { get } from "https";
+import { createWriteStream, unlinkSync } from "fs";
+import { basename } from "path";
 import cli from "cli-ux";
-import {config} from "dotenv";
-import {environmentVariablesFile, alert, beginScrape} from "../shared";
+import { config } from "dotenv";
+import { environmentVariablesFile, alert, beginScrape } from "../shared";
 import chalk from "chalk";
 
 export default class Vsco extends Command {
@@ -20,13 +20,13 @@ export default class Vsco extends Command {
 			alert("You are not authenticated.", "danger");
 		} else if (JSON.parse(VSCO!)) {
 			try {
-				const {args, flags} = this.parse(Vsco);
+				const { args, flags } = this.parse(Vsco);
 				const post: string  = args.post;
 				if (post !== undefined && post !== null) {
 					if (!post.includes("/media/")) return alert("Please provide a valid post ID.", "danger");
 					const now = Date.now();
 					cli.action.start("Opening browser");
-					const {browser, page} = (await beginScrape(flags.headless))!;
+					const { browser, page } = (await beginScrape(flags.headless))!;
 					cli.action.stop();
 					cli.action.start("Searching for files");
 					const url = await detectFile(browser, page, post);

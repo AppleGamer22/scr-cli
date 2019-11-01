@@ -1,7 +1,7 @@
-import {expect, test} from "@oclif/test";
-import {Browser, Page} from "puppeteer-core";
-import {detectFile} from "../../src/commands/vsco";
-import {beginScrape} from "../../src/shared";
+import { expect, test } from "@oclif/test";
+import { Browser, Page } from "puppeteer-core";
+import { detectFile } from "../../src/commands/vsco";
+import { beginScrape } from "../../src/shared";
 
 describe("VSCO", () => {
 	let browser: Browser, page: Page;

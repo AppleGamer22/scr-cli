@@ -1,7 +1,7 @@
-import {Command, flags} from "@oclif/command";
-import {Page, Browser} from "puppeteer-core";
-import {environmentVariablesFile, alert, beginScrape, downloadInstagramFile} from "../shared";
-import {config} from "dotenv";
+import {Command, flags } from "@oclif/command";
+import { Page, Browser } from "puppeteer-core";
+import { environmentVariablesFile, alert, beginScrape, downloadInstagramFile} from "../shared";
+import { config } from "dotenv";
 import cli from "cli-ux";
 
 export default class Highlight extends Command {
@@ -16,11 +16,11 @@ export default class Highlight extends Command {
 			alert("You are not authenticated.", "danger");
 		} else if (JSON.parse(INSTAGRAM!)) {
 			try {
-				const {args, flags} = this.parse(Highlight);
+				const { args, flags } = this.parse(Highlight);
 				if (args.highlight !== undefined && args.highlight !== null) {
 					const now = Date.now();
 					cli.action.start("Opening browser");
-					const {browser, page} = (await beginScrape(flags.headless))!;
+					const { browser, page } = (await beginScrape(flags.headless))!;
 					cli.action.stop();
 					cli.action.start("Searching for files");
 					const URLs = await detectFiles(browser, page, args.highlight, Number(args.item));
