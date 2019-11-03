@@ -1,8 +1,8 @@
-import {Browser} from "puppeteer-core";
+import { Browser } from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
-import {config} from "dotenv";
+import { config } from "dotenv";
 import cli from "cli-ux";
-import {writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent, alert} from "../shared";
+import { writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent, alert } from "../shared";
 
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";

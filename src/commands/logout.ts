@@ -1,9 +1,9 @@
-import {Command, flags} from "@oclif/command";
-import {Browser} from "puppeteer-core";
-import {config} from "dotenv";
+import { Command, flags } from "@oclif/command";
+import { Browser } from "puppeteer-core";
+import { config } from "dotenv";
 import cli from "cli-ux";
-import {randomBytes} from "crypto";
-import {writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent} from "../shared";
+import { randomBytes } from "crypto";
+import { writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent } from "../shared";
 
 export default class LogOut extends Command {
 	static description = "Command for supported social network log-out.";

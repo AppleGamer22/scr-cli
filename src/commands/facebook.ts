@@ -1,8 +1,8 @@
 import { Command, flags } from "@oclif/command";
 import { config } from "dotenv";
 import cli from "cli-ux";
-import {Browser, Page, launch} from "puppeteer-core";
-import {chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent} from "../shared";
+import { Browser, Page, launch } from "puppeteer-core";
+import { chromeExecutable, chromeUserDataDirectory, environmentVariablesFile, userAgent } from "../shared";
 
 export default class Facebook extends Command {
 	static description = "Command for scraping Facebook post files.";
