@@ -1,6 +1,6 @@
 import {Command, flags } from "@oclif/command";
 import { Page, Browser } from "puppeteer-core";
-import { environmentVariablesFile, alert, beginScrape, downloadInstagramFile} from "../shared";
+import { environmentVariablesFile, alert, beginScrape, downloadInstagramFile } from "../shared";
 import { config } from "dotenv";
 import cli from "cli-ux";
 

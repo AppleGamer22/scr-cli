@@ -1,10 +1,10 @@
-import {homedir} from "os";
-import {get} from "https";
-import {basename} from "path";
-import {createWriteStream, writeFile, unlink} from "fs";
+import { homedir } from "os";
+import { get } from "https";
+import { basename } from "path";
+import { createWriteStream, writeFile, unlink } from "fs";
 import chalk from "chalk";
 import cli from "cli-ux";
-import {Browser, Page, launch} from "puppeteer-core";
+import { Browser, Page, launch } from "puppeteer-core";
 
 export const chromeUserDataDirectory = `${homedir()}/.scr/`;
 export const environmentVariablesFile = `${homedir()}/.scr/env.env`;
@@ -76,7 +76,10 @@ export function downloadInstagramFile(URL: string, userName: string, fileType: "
 		cli.url(chalk.underline(URL), URL);
 		var file = createWriteStream(path, {autoClose: true});
 		const request = get(URL, response => {
-			if (response.statusCode !== 200) throw alert("Download failed.", "danger");
+			if (response.statusCode !== 200) {
+				alert("Download failed.", "danger");
+				reject("Download failed.");
+			}
 			response.on("end", () => cli.action.stop()).pipe(file);
 		});
 		file.on("finish", () => {
@@ -87,7 +90,7 @@ export function downloadInstagramFile(URL: string, userName: string, fileType: "
 		request.on("error", error => {
 			unlink(path, null!);
 			alert(error.message, "danger");
-			reject();
+			reject(error.message);
 		});
 	});
 }
