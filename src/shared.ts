@@ -2,7 +2,7 @@ import { homedir } from "os";
 import { get } from "https";
 import { basename } from "path";
 import { createWriteStream, writeFile, unlink } from "fs";
-import chalk from "chalk";
+import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
 
@@ -42,15 +42,15 @@ export function writeEnviornmentVariables(content: string) {
 export function alert(message: string, type: ("info" | "log" | "success" | "warning" | "danger")) {
 	switch (type) {
 		case "info":
-			return console.info(chalk.blue(message));
+			return console.info(blue(message));
 		case "log":
 			return console.log(message)
 		case "success":
-			return console.info(chalk.green(message));
+			return console.info(green(message));
 		case "warning":
-			return console.warn(chalk.yellow(message));
+			return console.warn(yellow(message));
 		case "danger":
-			return console.error(chalk.red(message));
+			return console.error(red(message));
 	}
 }
 
@@ -72,8 +72,8 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 export function downloadInstagramFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 	const path = `${process.cwd()}/${userName}_${basename(URL).split("?")[0]}`
 	return new Promise((resolve, reject) => {
-		alert(chalk.underline(`File #${fileNumber} (${fileType})`), "log");
-		cli.url(chalk.underline(URL), URL);
+		alert(underline(`File #${fileNumber} (${fileType})`), "log");
+		cli.url(underline(URL), URL);
 		var file = createWriteStream(path, {autoClose: true});
 		const request = get(URL, response => {
 			if (response.statusCode !== 200) {
