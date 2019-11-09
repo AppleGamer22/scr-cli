@@ -6,8 +6,8 @@ import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
 
-export const chromeUserDataDirectory = `${homedir()}/.scr/`;
-export const environmentVariablesFile = `${homedir()}/.scr/env.env`;
+const chromeUserDataDirectory = `${homedir()}/.scr/`;
+const environmentVariablesFile = `${homedir()}/.scr/env.env`;
 
 export function userAgent(): string {
 	switch (process.platform) {
