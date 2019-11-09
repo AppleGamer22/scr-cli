@@ -6,7 +6,7 @@ import { basename } from "path";
 import cli from "cli-ux";
 import { config } from "dotenv";
 import { environmentVariablesFile, alert, beginScrape } from "../shared";
-import chalk from "chalk";
+import { underline } from "chalk";
 
 export default class Vsco extends Command {
 	static description = "Command for scraping VSCO post file.";
@@ -49,14 +49,14 @@ export default class Vsco extends Command {
 			const request = get(redirectURL, response1 => {
 				if (redirectURL.includes(".jpg")) {
 					const realURL = response1.headers.location!;
-					alert(chalk.underline(`.jpg`), "log");
-					cli.url(chalk.underline(realURL), realURL);
+					alert(underline(`.jpg`), "log");
+					cli.url(underline(realURL), realURL);
 					get(realURL, response2 => {
 						if (response2.statusCode !== 200) throw alert("Download failed.", "danger");
 						response2.on("end", () => cli.action.stop()).pipe(file);
 					});
 				} else if (redirectURL.includes(".mp4")) {
-					alert(chalk.underline(`.mp4\n${redirectURL}`), "log");
+					alert(underline(`.mp4\n${redirectURL}`), "log");
 					response1.on("end", () => cli.action.stop()).pipe(file);
 				} else reject("Invalid download URL.");
 			});
