@@ -7,8 +7,8 @@ import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
 import { interfaces } from "mocha";
 
-const chromeUserDataDirectory = `${homedir()}/.scr/`;
-const environmentVariablesFile = `${homedir()}/.scr/env.env`;
+export const chromeUserDataDirectory = `${homedir()}/.scr/`;
+export const environmentVariablesFile = `${homedir()}/.scr/env.env`;
 
 export function userAgent(): string {
 	switch (process.platform) {
