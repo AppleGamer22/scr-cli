@@ -4,42 +4,35 @@ import { get } from "https";
 import { createWriteStream, unlinkSync } from "fs";
 import { basename } from "path";
 import cli from "cli-ux";
-import { config } from "dotenv";
-import { environmentVariablesFile, alert, beginScrape } from "../shared";
+import { alert, beginScrape } from "../shared";
 import { underline } from "chalk";
 
-export default class Vsco extends Command {
+export default class VSCO extends Command {
 	static description = "Command for scraping VSCO post file.";
 	static args = [{name: "post", required: true}];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
-		config({path: environmentVariablesFile});
-		const {VSCO} = process.env;
-		if (VSCO! !== "true") {
-			alert("You are not authenticated.", "danger");
-		} else if (JSON.parse(VSCO!)) {
-			try {
-				const { args, flags } = this.parse(Vsco);
-				const post: string  = args.post;
-				if (post !== undefined && post !== null) {
-					if (!post.includes("/media/")) return alert("Please provide a valid post ID.", "danger");
-					const now = Date.now();
-					cli.action.start("Opening browser");
-					const { browser, page } = (await beginScrape(flags.headless))!;
-					cli.action.stop();
-					cli.action.start("Searching for files");
-					const url = await detectFile(browser, page, post);
-					const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
-					cli.action.stop();
-					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
-					cli.action.start("Downloading");
-					await this.downloadFile(url!, userName, post.split("/")[2]);
-					cli.action.stop();
-					await browser.close();
-				} else return alert("Please provide a POST argument!", "danger");
-			} catch (error) { alert(error.message, "danger"); }
-		}
+		try {
+			const { args, flags } = this.parse(VSCO);
+			const post: string  = args.post;
+			if (post !== undefined && post !== null) {
+				if (!post.includes("/media/")) return alert("Please provide a valid post ID.", "danger");
+				const now = Date.now();
+				cli.action.start("Opening browser");
+				const { browser, page } = (await beginScrape(flags.headless))!;
+				cli.action.stop();
+				cli.action.start("Searching for files");
+				const url = await detectFile(browser, page, post);
+				const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
+				cli.action.stop();
+				alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
+				cli.action.start("Downloading");
+				await this.downloadFile(url!, userName, post.split("/")[2]);
+				cli.action.stop();
+				await browser.close();
+			} else return alert("Please provide a POST argument!", "danger");
+		} catch (error) { alert(error.message, "danger"); }
 	}
 
 	async downloadFile(redirectURL: string, userName: string, id: string) {

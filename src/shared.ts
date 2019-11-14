@@ -5,6 +5,7 @@ import { createWriteStream, writeFile, unlink } from "fs";
 import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
+import { interfaces } from "mocha";
 
 const chromeUserDataDirectory = `${homedir()}/.scr/`;
 const environmentVariablesFile = `${homedir()}/.scr/env.env`;
@@ -93,4 +94,9 @@ export function downloadInstagramFile(URL: string, userName: string, fileType: "
 			reject(error.message);
 		});
 	});
+}
+
+export interface ScrapePayload {
+	username: string,
+	urls: string[]
 }

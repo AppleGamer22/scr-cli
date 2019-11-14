@@ -13,10 +13,11 @@ describe("Instagram", () => {
 		} catch (error) { console.error(error.message); }
 	});
 	afterEach(async () => await browser.close());
-	test.timeout(6000).it("scrapes Bz2MPhPhOQu & gets 1 public JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes  ella_1830's Bz2MPhPhOQu & gets 1 public JPEG", async (_, done) => {
 		try {
-			const urls = (await detectFiles(browser, page, "Bz2MPhPhOQu"))!;
+			const { urls, username } = (await detectFiles(browser, page, "Bz2MPhPhOQu"))!;
 			done();
+			expect(username).to.equal("ella_1830");
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
@@ -24,10 +25,11 @@ describe("Instagram", () => {
 			expect(urls[0]).to.include("cdninstagram.com");
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes B2VA_gNg2EQ & gets 1 public MP4", async (_, done) => {
+	test.timeout(6000).it("scrapes iamkatyaa's B2VA_gNg2EQ & gets 1 public MP4", async (_, done) => {
 		try {
-			const urls = (await detectFiles(browser, page, "B2VA_gNg2EQ"))!;
+			const { urls, username } = (await detectFiles(browser, page, "B2VA_gNg2EQ"))!;
 			done();
+			expect(username).to.equal("iamkatyaa");
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
@@ -35,10 +37,11 @@ describe("Instagram", () => {
 			expect(urls[0]).to.include("cdninstagram.com");
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes BqWkJemlFJb & gets a public MP4 & a public JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes zoekinivan's BqWkJemlFJb & gets a public MP4 & a public JPEG", async (_, done) => {
 		try {
-			const urls = (await detectFiles(browser, page, "BqWkJemlFJb"))!;
+			const { urls, username } = (await detectFiles(browser, page, "BqWkJemlFJb"))!;
 			done();
+			expect(username).to.equal("zoekinivan");
 			expect(urls.length).to.equal(2);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
