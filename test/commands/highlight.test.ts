@@ -12,33 +12,37 @@ describe("Highlight", () => {
 			page = puppeteerSuite.page;
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes 1st 17941742392256135 and gets a JPEG & an MP4", async (_, done) => {
+	test.timeout(6000).it("scrapes kathrynnorriss's 1st 17941742392256135 and gets a JPEG & an MP4", async (_, done) => {
 		try {
-			const url = await detectFiles(browser, page, "17941742392256135", 1);
+			const payload = await detectFiles(browser, page, "17941742392256135", 1);
 			await browser.close();
 			done();
-			if (url) {
-				console.log(url[0]);
-				expect(url[0]).to.include("https://");
-				expect(url[0]).to.include(".jpg");
-				expect(url[0]).to.include("cdninstagram.com");
-				console.log(url[1]);
-				expect(url[1]).to.include("https://");
-				expect(url[1]).to.include(".mp4");
-				expect(url[1]).to.include("cdninstagram.com");
+			if (payload) {
+				const { urls, username } = payload;
+				expect(username).to.equal("kathrynnorriss");
+				console.log(urls[0]);
+				expect(urls[0]).to.include("https://");
+				expect(urls[0]).to.include(".jpg");
+				expect(urls[0]).to.include("cdninstagram.com");
+				console.log(urls[1]);
+				expect(urls[1]).to.include("https://");
+				expect(urls[1]).to.include(".mp4");
+				expect(urls[1]).to.include("cdninstagram.com");
 			}
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes 4th 17912059153309881 and gets a JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes emilykomboukos's 4th 17912059153309881 and gets a JPEG", async (_, done) => {
 		try {
-			const url = await detectFiles(browser, page, "17912059153309881", 4);
+			const payload = await detectFiles(browser, page, "17912059153309881", 4);
 			await browser.close();
 			done();
-			if (url) {
-				console.log(url[0]);
-				expect(url[0]).to.include("https://");
-				expect(url[0]).to.include(".jpg");
-				expect(url[0]).to.include("cdninstagram.com");
+			if (payload) {
+				const { urls, username } = payload;
+				expect(username).to.equal("emilykomboukos");
+				console.log(urls[0]);
+				expect(urls[0]).to.include("https://");
+				expect(urls[0]).to.include(".jpg");
+				expect(urls[0]).to.include("cdninstagram.com");
 			}
 		} catch (error) { console.error(error.message); }
 	});

@@ -4,7 +4,7 @@ import { get } from "https";
 import { createWriteStream, unlinkSync } from "fs";
 import { basename } from "path";
 import cli from "cli-ux";
-import { alert, beginScrape } from "../shared";
+import { alert, beginScrape, ScrapePayload } from "../shared";
 import { underline } from "chalk";
 
 export default class VSCO extends Command {
@@ -23,13 +23,15 @@ export default class VSCO extends Command {
 				const { browser, page } = (await beginScrape(flags.headless))!;
 				cli.action.stop();
 				cli.action.start("Searching for files");
-				const url = await detectFile(browser, page, post);
-				const userName = await page.evaluate(() => document.querySelector("a.DetailViewUserInfo-username")!.innerHTML);
+				const payload = await detectFile(browser, page, post);
 				cli.action.stop();
-				alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
-				cli.action.start("Downloading");
-				await this.downloadFile(url!, userName, post.split("/")[2]);
-				cli.action.stop();
+				if (payload) {
+					const { username, urls } = payload;
+					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
+					cli.action.start("Downloading");
+					await this.downloadFile(urls[0], username, post.split("/")[2]);
+					cli.action.stop();
+				}
 				await browser.close();
 			} else return alert("Please provide a POST argument!", "danger");
 		} catch (error) { alert(error.message, "danger"); }
@@ -67,20 +69,25 @@ export default class VSCO extends Command {
 	}
 }
 
-export async function detectFile(browser: Browser, page: Page, id: string): Promise<string | undefined> {
+export async function detectFile(browser: Browser, page: Page, id: string): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
 		if ((await page.$("p.NotFound-heading")) !== null) {
 			alert(`Failed to find post ${id}`, "danger");
 			await browser.close();
 		}
+		await page.waitForSelector("a.DetailViewUserInfo-username", {visible: true});
+		const username = await page.evaluate(() => {
+			const a = document.querySelector("a.DetailViewUserInfo-username") as HTMLAnchorElement;
+			return a.innerText;
+		});
 		const imageURLs = await page.$$eval(`meta[property="og:image"]`, metas => {
 			return  metas.map(meta => meta.getAttribute("content"));
 		});
 		const videoURLs = await page.$$eval(`meta[property="og:video"]`, metas => {
 			return metas.map(meta => meta.getAttribute("content"));
 		});
-		if (videoURLs[0]) return videoURLs[0];
-		if (imageURLs[0]) return imageURLs[0].split("?")[0];
+		if (videoURLs[0]) return {urls: [videoURLs[0]], username};
+		if (imageURLs[0]) return {urls: [imageURLs[0].split("?")[0]], username};
 	} catch (error) { alert(error.message, "danger"); }
 }

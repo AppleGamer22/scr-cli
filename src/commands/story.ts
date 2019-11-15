@@ -1,6 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import { Page, Browser } from "puppeteer-core";
-import { environmentVariablesFile, alert, downloadInstagramFile, beginScrape } from "../shared";
+import { environmentVariablesFile, alert, downloadInstagramFile, beginScrape, ScrapePayload } from "../shared";
 import { config } from "dotenv";
 import cli from "cli-ux";
 
@@ -23,16 +23,17 @@ export default class Story extends Command {
 					const { browser, page } = (await beginScrape(flags.headless))!;
 					cli.action.stop();
 					cli.action.start("Searching for files");
-					const URLs = await detectFiles(browser, page, args.user, Number(args.item));
-					await page.waitForSelector("div.yn6BW > a", {visible: true});
-					const userName = await page.evaluate(() => document.querySelector("div.yn6BW > a")!.innerHTML);
-					cli.action.stop();
-					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
-					cli.action.start("Downloading");
-					if (URLs && URLs.length === 2 && URLs[1].includes(".mp4")) {
-						await downloadInstagramFile(URLs[1], userName, ".mp4", 1);
-					} else if (URLs && URLs.length === 1 && URLs[0].includes(".jpg")) {
-						await downloadInstagramFile(URLs[0], userName, ".jpg", 1);
+					const payload = await detectFiles(browser, page, args.user, Number(args.item));
+					if (payload) {
+						const { urls, username } = payload;
+						cli.action.stop();
+						alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
+						cli.action.start("Downloading");
+						if (urls && urls.length === 2 && urls[1].includes(".mp4")) {
+							await downloadInstagramFile(username[1], username, ".mp4", 1);
+						} else if (urls && urls.length === 1 && urls[0].includes(".jpg")) {
+							await downloadInstagramFile(urls[0], username, ".jpg", 1);
+						}
 					}
 					await browser.close();
 				} else return alert("Please provide a POST argument!", "danger");
@@ -40,7 +41,7 @@ export default class Story extends Command {
 		}
 	}
 }
-export async function detectFiles(browser: Browser, page: Page, user: string, item: number): Promise<string[] | undefined> {
+export async function detectFiles(browser: Browser, page: Page, user: string, item: number): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://www.instagram.com/${user}`);
 		await page.goto(`https://www.instagram.com/stories/${user}`, {waitUntil: "domcontentloaded"});
@@ -48,6 +49,11 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 			alert(`Failed to find ${user}'s story feed.`, "danger");
 			await browser.close();
 		}
+		await page.waitForSelector("div.yn6BW > a", {visible: true});
+		const username = await page.evaluate(() => {
+			const a = document.querySelector("div.yn6BW > a") as HTMLAnchorElement;
+			return a.innerText;
+		});
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
@@ -56,11 +62,10 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 		await page.click("div.uL8Hv");
 		var urls: string[] = [];
 		await page.waitForSelector("div.qbCDp", {visible: true});
-		// console.log(await page.content());
 		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("srcset"))))[0];
 		if (imageURL) urls.push(imageURL.split(",")[0].split(" ")[0]);
 		const videoURL = (await page.$$eval("video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
 		if (videoURL) urls.push(videoURL);
-		return urls;
+		return { username, urls };
 	} catch (error) { alert(error.message, "danger"); }
 }
