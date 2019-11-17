@@ -30,7 +30,7 @@ export default class Story extends Command {
 						alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
 						cli.action.start("Downloading");
 						if (urls && urls.length === 2 && urls[1].includes(".mp4")) {
-							await downloadInstagramFile(username[1], username, ".mp4", 1);
+							await downloadInstagramFile(urls[1], username, ".mp4", 1);
 						} else if (urls && urls.length === 1 && urls[0].includes(".jpg")) {
 							await downloadInstagramFile(urls[0], username, ".jpg", 1);
 						}
