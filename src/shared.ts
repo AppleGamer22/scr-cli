@@ -5,7 +5,6 @@ import { createWriteStream, writeFile, unlink } from "fs";
 import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
-import { interfaces } from "mocha";
 
 export const chromeUserDataDirectory = `${homedir()}/.scr-cli/`;
 export const environmentVariablesFile = `${homedir()}/.scr-cli/env.env`;
