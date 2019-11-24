@@ -61,7 +61,8 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 			userDataDir: chromeUserDataDirectory,
 			executablePath: chromeExecutable(),
 			devtools: !background,
-			defaultViewport: null
+			defaultViewport: null,
+			args: ["--mute-audio"]
 		});
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent());
