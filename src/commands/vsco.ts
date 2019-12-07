@@ -1,11 +1,12 @@
 import { Command, flags } from "@oclif/command";
 import { Page, Browser } from "puppeteer-core";
 import { get } from "https";
-import { createWriteStream, unlinkSync } from "fs";
+import { createWriteStream, unlinkSync, readFileSync, writeFileSync } from "fs";
 import { basename } from "path";
 import cli from "cli-ux";
 import { alert, beginScrape, ScrapePayload } from "../shared";
 import { underline } from "chalk";
+import { IExifElement, TagValues, insert, dump } from "piexif-ts";
 
 export default class VSCO extends Command {
 	static description = "Command for scraping VSCO post file.";
@@ -57,6 +58,15 @@ export default class VSCO extends Command {
 			});
 			file.on("finish", () => {
 				file.close();
+				const exifFile = readFileSync(path).toString("binary");
+				var exif: IExifElement = {};
+				const date = new Date()
+				const [month, day, year] = date.toLocaleDateString().split("/");
+				const exifDate = `${year}:${month}:${day} ${date.toLocaleTimeString()}`;
+				exif[TagValues.ExifIFD.DateTimeOriginal] = exifDate;
+				const cleanEXIFBytes = dump({Exif: exif});
+				const cleanFile = insert(cleanEXIFBytes, exifFile);
+				writeFileSync(path, cleanFile, {encoding: "binary"});
 				alert(`File saved at ${path}`, "success");
 				resolve();
 			});
