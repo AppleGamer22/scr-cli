@@ -1,7 +1,8 @@
 import { Command, flags } from "@oclif/command";
 import { Page, Browser } from "puppeteer-core";
-import { get } from "https";
-import { createWriteStream, unlinkSync, readFileSync, writeFileSync } from "fs";
+import { get } from "request";
+import { promisify } from "util";
+import { writeFileSync } from "fs";
 import { basename } from "path";
 import cli from "cli-ux";
 import { alert, beginScrape, ScrapePayload } from "../shared";
@@ -38,44 +39,33 @@ export default class VSCO extends Command {
 		} catch (error) { alert(error.message, "danger"); }
 	}
 
-	async downloadFile(redirectURL: string, userName: string, id: string) {
-		const path = `${process.cwd()}/${userName}_${id}${basename(redirectURL)}`;
-		return new Promise((resolve, reject) => {
-			var file = createWriteStream(path, {autoClose: true});
-			const request = get(redirectURL, response1 => {
-				if (redirectURL.includes(".jpg")) {
-					const realURL = response1.headers.location!;
-					alert(underline(`.jpg`), "log");
-					cli.url(underline(realURL), realURL);
-					get(realURL, response2 => {
-						if (response2.statusCode !== 200) throw alert("Download failed.", "danger");
-						response2.on("end", () => cli.action.stop()).pipe(file);
-					});
-				} else if (redirectURL.includes(".mp4")) {
-					alert(underline(`.mp4\n${redirectURL}`), "log");
-					response1.on("end", () => cli.action.stop()).pipe(file);
-				} else reject("Invalid download URL.");
-			});
-			file.on("finish", () => {
-				file.close();
-				const exifFile = readFileSync(path).toString("binary");
-				var exif: IExifElement = {};
-				const date = new Date()
-				const [month, day, year] = date.toLocaleDateString().split("/");
-				const exifDate = `${year}:${month}:${day} ${date.toLocaleTimeString()}`;
-				exif[TagValues.ExifIFD.DateTimeOriginal] = exifDate;
-				const cleanEXIFBytes = dump({Exif: exif});
-				const cleanFile = insert(cleanEXIFBytes, exifFile);
-				writeFileSync(path, cleanFile, {encoding: "binary"});
-				alert(`File saved at ${path}`, "success");
-				resolve();
-			});
-			request.on("error", error => {
-				unlinkSync(path);
-				alert(error.message, "danger");
-				reject(error.message);
-			});
-		});
+	async downloadFile(url: string, userName: string, id: string) {
+		try {
+			const path = `${process.cwd()}/${userName}_${id}${basename(url)}`;
+			const { body, statusCode } = await promisify(get)({url, followRedirect: true, encoding: "binary"});
+			if (statusCode === 200) {
+				if (url.includes(".jpg")) {
+					alert(underline(".jpg"), "log");
+					cli.url(underline(url), url);
+					var exif: IExifElement = {};
+					const date = new Date();
+					const [month, day, year] = date.toLocaleDateString().split("/");
+					const exifDate = `${year}:${month}:${day} ${date.toLocaleTimeString()}`;
+					exif[TagValues.ExifIFD.DateTimeOriginal] = exifDate;
+					const cleanEXIFBytes = dump({Exif: exif});
+					const cleanFile = insert(cleanEXIFBytes, body);
+					writeFileSync(path, cleanFile, {encoding: "binary"});
+					alert(`File saved at ${path}`, "success");
+				} else if (url.includes(".mp4")) {
+					alert(underline(".mp4"), "log");
+					cli.url(underline(url), url);
+					writeFileSync(path, body, {encoding: "binary"});
+					alert(`File saved at ${path}`, "success");
+				}
+			}
+		} catch (error) {
+			alert(error.message, "danger");
+		}
 	}
 }
 
