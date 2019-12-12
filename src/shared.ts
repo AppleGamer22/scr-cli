@@ -1,10 +1,11 @@
 import { homedir } from "os";
-import { get } from "https";
+import { promisify } from "util";
 import { basename } from "path";
-import { createWriteStream, writeFile, unlink } from "fs";
+import { get } from "request";
 import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
+import { writeFileSync, writeFile } from "fs";
 
 export const chromeUserDataDirectory = `${homedir()}/.scr-cli/`;
 export const environmentVariablesFile = `${homedir()}/.scr-cli/env.env`;
@@ -61,7 +62,8 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 			userDataDir: chromeUserDataDirectory,
 			executablePath: chromeExecutable(),
 			devtools: !background,
-			defaultViewport: null
+			defaultViewport: null,
+			args: ["--mute-audio"]
 		});
 		const page = (await browser.pages())[0];
 		await page.setUserAgent(userAgent());
@@ -69,30 +71,19 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 	} catch (error) { alert(error.message, "danger"); }
 }
 
-export function downloadInstagramFile(URL: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
-	const path = `${process.cwd()}/${userName}_${basename(URL).split("?")[0]}`
-	return new Promise((resolve, reject) => {
-		alert(underline(`File #${fileNumber} (${fileType})`), "log");
-		cli.url(underline(URL), URL);
-		var file = createWriteStream(path, {autoClose: true});
-		const request = get(URL, response => {
-			if (response.statusCode !== 200) {
-				alert("Download failed.", "danger");
-				reject("Download failed.");
-			}
-			response.on("end", () => cli.action.stop()).pipe(file);
-		});
-		file.on("finish", () => {
-			file.close();
+export async function downloadInstagramFile(url: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
+	try {
+		const path = `${process.cwd()}/${userName}_${basename(url).split("?")[0]}`;
+		const { body, statusCode } = await promisify(get)({url, encoding: "binary"});
+		if (statusCode === 200) {
+			alert(underline(`File #${fileNumber} (${fileType})`), "log");
+			cli.url(underline(url), url);
+			writeFileSync(path, body, {encoding: "binary"});
 			alert(`File saved at ${path}`, "success");
-			resolve();
-		});
-		request.on("error", error => {
-			unlink(path, null!);
-			alert(error.message, "danger");
-			reject(error.message);
-		});
-	});
+		}
+	} catch (error) {
+		alert(error.message, "danger");
+	}
 }
 
 export interface ScrapePayload {

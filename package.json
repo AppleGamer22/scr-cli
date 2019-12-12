@@ -1,7 +1,7 @@
 {
 	"name": "@applegamer22/scr-cli",
 	"description": "Social media web scraper for post file downloads.",
-	"version": "1.0.0-alpha.22.1",
+	"version": "1.0.0-alpha.22.2",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
@@ -40,9 +40,11 @@
 		"@oclif/plugin-warn-if-update-available": "^1.7.0",
 		"@oclif/plugin-which": "^1.0.3",
 		"chalk": "^3.0.0",
-		"cli-ux": "^5.3.3",
+		"cli-ux": "^5.4.0",
 		"dotenv": "^8.2.0",
+		"piexif-ts": "^2.0.16",
 		"puppeteer-core": "^1.20.0",
+		"request": "^2.88.0",
 		"tslib": "^1.10.0"
 	},
 	"devDependencies": {
@@ -54,6 +56,7 @@
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^12.12.6",
 		"@types/puppeteer-core": "npm:@types/puppeteer@^1.20.2",
+		"@types/request": "^2.48.3",
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",
 		"globby": "^10.0.1",
