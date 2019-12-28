@@ -12,14 +12,14 @@ describe("Highlight", () => {
 			page = puppeteerSuite.page;
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes kathrynnorriss's 1st 17941742392256135 and gets a JPEG & an MP4", async (_, done) => {
+	test.timeout(6000).it("scrapes brookemillard's 6th 17854701943592281 and gets a JPEG & an MP4", async (_, done) => {
 		try {
-			const payload = await detectFiles(browser, page, "17941742392256135", 1);
+			const payload = await detectFiles(browser, page, "17854701943592281", 6);
 			await browser.close();
 			done();
 			if (payload) {
 				const { urls, username } = payload;
-				expect(username).to.equal("kathrynnorriss");
+				expect(username).to.equal("brookemillard");
 				console.log(urls[0]);
 				expect(urls[0]).to.include("https://");
 				expect(urls[0]).to.include(".jpg");
