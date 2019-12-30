@@ -2,24 +2,27 @@ import { Browser } from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import { config } from "dotenv";
 import cli from "cli-ux";
+import { green, red } from "chalk";
 import { writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent, alert } from "../shared";
 
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
 	static flags = {
 		// vsco: flags.boolean({char: "v", description: "Toggle for VSCO log-in."}),
-		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-in."})
+		instagram: flags.boolean({char: "i", description: "Toggle for Instagram log-in."}),
+		status: flags.boolean({description: "Toggle for Instagram log-in status."})
 	};
 
 	async run() {
 		config({path: environmentVariablesFile});
 		try {
+			const {flags} = this.parse(LogIn);
+			if (flags.status) return this.checkLoginStatus();
 			const username: string = await cli.prompt("username");
 			const password: string = await cli.prompt("password", {type: "hide"});
 			cli.action.start("Opening browser");
 			const {browser, page} = (await beginScrape(true))!;
 			cli.action.stop();
-			const {flags} = this.parse(LogIn);
 			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
 			// if (flags.vsco) return await this.vscoSignIn(browser, username, password);
 		} catch (error) { alert(error.message, "danger"); }
@@ -91,5 +94,29 @@ export default class LogIn extends Command {
 			await page.type("input#password", password);
 			await page.click("button#loginButton");
 		} catch (error) { alert(error.message, "danger"); }
+	}
+
+	checkLoginStatus() {
+		const { INSTAGRAM, VSCO } = process.env;
+		cli.table([
+			{
+				network: "Instagram",
+				status: INSTAGRAM
+			},{
+				network: "VSCO",
+				status: VSCO
+			}
+		],{
+			Network: {
+				minWidth: 14,
+				get: row => row.network
+			},
+			Status: {
+				minWidth: 14,
+				get: row => row.status === "true" ? green("Signed-in") : red("Signed-out")
+			}
+		}, {
+			printLine: this.log
+		});
 	}
 }

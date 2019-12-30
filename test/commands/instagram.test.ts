@@ -22,35 +22,35 @@ describe("Instagram", () => {
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
 			expect(urls[0]).to.include(".jpg");
-			expect(urls[0]).to.include("cdninstagram.com");
+			expect(urls[0].includes("cdninstagram.com") || urls[0].includes("fbcdn.net")).to.equal(true);
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes iamkatyaa's B2VA_gNg2EQ & gets 1 public MP4", async (_, done) => {
+	test.timeout(6000).it("scrapes mikaylademaiter's B6ZImCEFsr2 & gets 1 public JPEG", async (_, done) => {
 		try {
-			const { urls, username } = (await detectFiles(browser, page, "B2VA_gNg2EQ"))!;
+			const { urls, username } = (await detectFiles(browser, page, "B6ZImCEFsr2"))!;
 			done();
-			expect(username).to.equal("iamkatyaa");
+			expect(username).to.equal("mikaylademaiter");
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
 			expect(urls[0]).to.include(".mp4");
-			expect(urls[0]).to.include("cdninstagram.com");
+			expect(urls[0].includes("cdninstagram.com") || urls[0].includes("fbcdn.net")).to.equal(true);
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes zoekinivan's BqWkJemlFJb & gets a public MP4 & a public JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes zoekinivan's BqWkJemlFJbRthDCljKnEkV70ZmaHPu3G0jJUk0 & gets a private MP4 & a private JPEG", async (_, done) => {
 		try {
-			const { urls, username } = (await detectFiles(browser, page, "BqWkJemlFJb"))!;
+			const { urls, username } = (await detectFiles(browser, page, "BqWkJemlFJbRthDCljKnEkV70ZmaHPu3G0jJUk0"))!;
 			done();
 			expect(username).to.equal("zoekinivan");
 			expect(urls.length).to.equal(2);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
 			expect(urls[0]).to.include(".mp4");
-			expect(urls[0]).to.include("cdninstagram.com");
+			expect(urls[0].includes("cdninstagram.com") || urls[0].includes("fbcdn.net")).to.equal(true);
 			console.log(urls[1]);
 			expect(urls[1]).to.include("https://");
 			expect(urls[1]).to.include(".jpg");
-			expect(urls[1]).to.include("cdninstagram.com");
+			expect(urls[1].includes("cdninstagram.com") || urls[1].includes("fbcdn.net")).to.equal(true);
 		} catch (error) { console.error(error.message); }
 	});
 });
