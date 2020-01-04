@@ -38,12 +38,12 @@ export default class LogOut extends Command {
 			await page.waitForSelector(profileButton);
 			await page.click(profileButton);
 			const settingsButton = "#react-root > section > main > div > header > section > div.nZSzR > div > button";
-			await page.waitForSelector(settingsButton);
+			await page.waitForSelector(settingsButton, {visible: true});
 			await page.click(settingsButton);
-			const logOutButton = "body > div.RnEpo.Yx5HN > div > div > div > button:nth-child(8)";
-			await page.waitForSelector(logOutButton);
+			const logOutButton = "body > div.RnEpo.Yx5HN > div > div > div > button:nth-child(9)";
+			await page.waitForSelector(logOutButton, {visible: true});
 			await page.click(logOutButton);
-			await page.waitForResponse("https://www.instagram.com/");
+			await page.waitForNavigation();
 			var environmentFileData: string;
 			const {VSCO} = process.env;
 			if (VSCO !== undefined) {
