@@ -1,4 +1,14 @@
 # @applegamer22/scr-cli
+|Network|Github|NPM|
+|-|-|-|
+|license|![GitHub license](https://img.shields.io/github/license/AppleGamer22/scr-cli?logo=github)|![NPM license](https://img.shields.io/npm/l/@applegamer22/scr-cli?logo=npm)|
+|relase|![GitHub release](https://img.shields.io/github/v/release/AppleGamer22/scr-cli?logo=Github)|![NPM relase](https://img.shields.io/npm/v/@applegamer22/scr-cli?label=release&logo=npm)|
+|downloads|![GitHub downloads](https://img.shields.io/github/downloads/AppleGamer22/scr-cli/total?&logo=github)|![NPM downloads](https://img.shields.io/npm/dt/@applegamer22/scr-cli?&logo=npm)|
+|people|![GitHub contributors](https://img.shields.io/github/contributors/AppleGamer22/scr-cli?logo=github)|![NPM collaborators](https://img.shields.io/npm/collaborators/@applegamer22/scr-cli?label=collaborators&logo=npm)|
+|code size|![GitHub code size](https://img.shields.io/github/languages/code-size/AppleGamer22/scr-cli?logo=GitHub)|
+|forks|![GitHub forks](https://img.shields.io/github/forks/AppleGamer22/scr-cli?logo=github)|
+|stars|![GitHub stars](https://img.shields.io/github/stars/AppleGamer22/scr-cli?logo=github)|
+|watchers|![GitHub watchers](https://img.shields.io/github/watchers/AppleGamer22/scr-cli?logo=github)|
 ## Description
 Instagram web scraper for social post file(s) downloads.
 ## Installation
