@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="28d85549-db7b-4704-9698-bfd0ed673089" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,7 @@
       <option name="presentableId" value="Default" />
       <updated>1567244922883</updated>
       <workItem from="1567244925990" duration="778000" />
-      <workItem from="1580288107590" duration="137000" />
+      <workItem from="1580288107590" duration="274000" />
     </task>
     <task id="LOCAL-00001" summary="Intellij configuration for mocha testing">
       <created>1567245256602</created>
@@ -78,7 +77,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567245256602</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="npm update">
+      <created>1580288269372</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1580288269372</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -99,12 +105,21 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Intellij configuration for mocha testing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Intellij configuration for mocha testing" />
+    <MESSAGE value="npm update" />
+    <option name="LAST_COMMIT_MESSAGE" value="npm update" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="303" y="54" key="CommitChangelistDialog2" timestamp="1580288269056">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="303" y="54" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580288269056" />
     <state x="221" y="89" key="SettingsEditor" timestamp="1580288244621">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580288244621" />
+    <state x="320" y="178" key="Vcs.Push.Dialog.v2" timestamp="1580288273102">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="178" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580288273102" />
   </component>
 </project>
