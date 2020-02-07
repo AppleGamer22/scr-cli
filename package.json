@@ -1,7 +1,7 @@
 {
 	"name": "@applegamer22/scr-cli",
 	"description": "Social media web scraper for post file downloads.",
-	"version": "1.0.0-alpha.24",
+	"version": "1.0.0-alpha.24.1",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
 	"license": "MIT",
@@ -33,7 +33,7 @@
 	"types": "lib/index.d.ts",
 	"dependencies": {
 		"@oclif/command": "^1.5.19",
-		"@oclif/config": "^1.13.3",
+		"@oclif/config": "^1.14.0",
 		"@oclif/plugin-commands": "^1.2.3",
 		"@oclif/plugin-help": "^2.2.3",
 		"@oclif/plugin-not-found": "^1.2.3",
