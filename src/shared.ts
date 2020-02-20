@@ -71,9 +71,9 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 	} catch (error) { alert(error.message, "danger"); }
 }
 
-export async function downloadInstagramFile(url: string, userName: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
+export async function downloadInstagramFile(url: string, username: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 	try {
-		const path = `${process.cwd()}/${userName}_${basename(url).split("?")[0]}`;
+		const path = `${process.cwd()}/${username}_${basename(url).split("?")[0]}`;
 		const { body, statusCode } = await promisify(get)({url, encoding: "binary"});
 		if (statusCode === 200) {
 			alert(underline(`File #${fileNumber} (${fileType})`), "log");

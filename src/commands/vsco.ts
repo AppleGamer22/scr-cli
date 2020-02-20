@@ -39,9 +39,9 @@ export default class VSCO extends Command {
 		} catch (error) { alert(error.message, "danger"); }
 	}
 
-	async downloadFile(url: string, userName: string, id: string) {
+	async downloadFile(url: string, username: string, id: string) {
 		try {
-			const path = `${process.cwd()}/${userName}_${id}${basename(url)}`;
+			const path = `${process.cwd()}/${username}_${id}${basename(url)}`;
 			const { body, statusCode } = await promisify(get)({url, followRedirect: true, encoding: "binary"});
 			if (statusCode === 200) {
 				if (url.includes(".jpg")) {
