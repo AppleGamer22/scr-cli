@@ -56,10 +56,10 @@ export default class TikTok extends Command {
 export async function detectFile(browser: Browser, page: Page, id: string): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://tiktok.com/@${id}`, {waitUntil: "domcontentloaded"});
-		// if ((await page.$("p.NotFound-heading")) !== null) {
-		// 	alert(`Failed to find post ${id}`, "danger");
-		// 	await browser.close();
-		// }
+		if ((await page.$("div.error-page")) !== null) {
+			alert(`Failed to find post ${id}`, "danger");
+			await browser.close();
+		}
 		await page.waitForSelector("h2.user-username", {visible: true});
 		const username = await page.evaluate(() => {
 			const a = document.querySelector("h2.user-username") as HTMLHeadingElement;
