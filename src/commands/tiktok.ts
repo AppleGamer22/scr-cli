@@ -2,7 +2,7 @@ import { Command, flags } from "@oclif/command";
 import { cli } from "cli-ux";
 import { Browser, Page } from "puppeteer-core";
 import { promisify } from "util";
-import { get } from "request";
+import { get } from "superagent";
 import { underline } from "chalk";
 import { writeFileSync } from "fs";
 import { alert, beginScrape, ScrapePayload } from "../shared";
@@ -40,8 +40,8 @@ export default class TikTok extends Command {
 	async downloadFile(url: string, username: string, id: string) {
 		try {
 			const path = `${process.cwd()}/${username}_${id}.mp4`;
-			const { body, statusCode } = await promisify(get)({url, followRedirect: true, encoding: "binary"});
-			if (statusCode === 200) {
+			const { body, status } = await get(url).responseType("blob");
+			if (status	 === 200) {
 				alert(underline(".mp4"), "log");
 				cli.url(underline(url), url);
 				writeFileSync(path, body, {encoding: "binary"});

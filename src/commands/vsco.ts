@@ -1,6 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import { Page, Browser } from "puppeteer-core";
-import { get } from "request";
+import { get } from "superagent";
 import { promisify } from "util";
 import { writeFileSync } from "fs";
 import { basename } from "path";
@@ -42,8 +42,8 @@ export default class VSCO extends Command {
 	async downloadFile(url: string, username: string, id: string) {
 		try {
 			const path = `${process.cwd()}/${username}_${id}${basename(url)}`;
-			const { body, statusCode } = await promisify(get)({url, followRedirect: true, encoding: "binary"});
-			if (statusCode === 200) {
+			const { body, status } = await get(url).responseType("blob");
+			if (status === 200) {
 				if (url.includes(".jpg")) {
 					alert(underline(".jpg"), "log");
 					cli.url(underline(url), url);

@@ -1,7 +1,7 @@
 import { homedir } from "os";
 import { promisify } from "util";
 import { basename } from "path";
-import { get } from "request";
+import { get } from "superagent";
 import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
@@ -74,8 +74,8 @@ export async function beginScrape(background: boolean): Promise<{browser: Browse
 export async function downloadInstagramFile(url: string, username: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 	try {
 		const path = `${process.cwd()}/${username}_${basename(url).split("?")[0]}`;
-		const { body, statusCode } = await promisify(get)({url, encoding: "binary"});
-		if (statusCode === 200) {
+		const { body, status } = await get(url).responseType("blob");
+		if (status === 200) {
 			alert(underline(`File #${fileNumber} (${fileType})`), "log");
 			cli.url(underline(url), url);
 			writeFileSync(path, body, {encoding: "binary"});

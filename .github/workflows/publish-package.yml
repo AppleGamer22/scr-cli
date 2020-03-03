@@ -2,8 +2,6 @@ name: publish-package
 on:
   release:
     types: [published]
-    branches:
-      - master
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
