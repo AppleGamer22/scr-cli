@@ -17,12 +17,15 @@ Instagram web scraper for social post file(s) downloads.
 $ sudo npm i -g @applegamer22/scr-cli
 ```
 ## Contributing Requirements
-1. Separate Git branch to the master branch
-2. Separate fork to this repository
+* Separate Git branch to the master branch
+* Separate fork to this repository
 ## Usage Responsibilities
 * You should use this software with responsibility and with accordance to [Instagram's terms of use](https://help.instagram.com/581066165581870):
 > * **You can't attempt to create accounts or access or collect information in unauthorized ways.**
 > This includes creating accounts or collecting information in an automated way without our express permission.
+* You should use this software with responsibility and with accordance to [TikTok's terms of use](https://www.tiktok.com/legal/terms-of-use):
+> You may not:
+> * use automated scripts to collect information from or otherwise interact with the Services;
 * You should use this software with responsibility and with accordance to [VSCO's terms of use](https://vsco.co/about/terms_of_use):
 > **C Service Rules**
 > You agree not to engage in any of the following prohibited activities:
@@ -39,18 +42,11 @@ $ sudo npm i -g @applegamer22/scr-cli
 ### Development
 1. Clone this repository by running `$ git clone https://github.com/AppleGamer22/Social-Scraper.git` in your command-line.
 2. Run `$ npm install` in the root directory of the downloaded copy.
-### General Usage
-1. Run `$ scr auth --<instagram or vsco>`.
-2. A Chromium broswer will be opened at [https://www.instagram.com/accounts/login/](https://www.instagram.com/accounts/login/).
-3. Sign-in to your Instagram account.
-4. Your Instagram credentials will be securely saved in the CLI's private Chromium instance.
-5. After a successful Instagram authentication, Chromium will be closed.
 ## Using The CLI:
-1. Run `$ scr <instagram or vsco> post_id` in you command line.
-2. Wait until the program says:
+1. Run `$ scr auth --instagram` before using `instagram`, `highlight` or `story`.
+2. Run `$ scr <command> --<flags> post_id` in you command line.
+3. Wait until the program says:
 > Downloading...Done.
-## Please Make Sure That:
-* The correct Instagram credentials are entered when using the auth command.
 ## How Does It Work?
 1. The user puts Instagram/VSCO credentials ahead of post scraping.
 2. The Chromium bot will remember the credentials entered the login form of the selected social network.
