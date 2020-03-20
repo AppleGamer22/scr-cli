@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="28d85549-db7b-4704-9698-bfd0ed673089" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +42,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Console Font" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RunManager">
@@ -76,6 +75,8 @@
       <workItem from="1582521269236" duration="29000" />
       <workItem from="1582521307284" duration="39000" />
       <workItem from="1582521377293" duration="170000" />
+      <workItem from="1583666736107" duration="135000" />
+      <workItem from="1584687926818" duration="6000" />
     </task>
     <task id="LOCAL-00001" summary="Intellij configuration for mocha testing">
       <created>1567245256602</created>
@@ -120,10 +121,15 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="303" y="54" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580288269056" />
-    <state x="221" y="89" key="SettingsEditor" timestamp="1580288244621">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="696" y="283" key="MultipleFileMergeDialog" timestamp="1583666866573">
+      <screen x="36" y="27" width="1884" height="1053" />
+    </state>
+    <state x="696" y="283" key="MultipleFileMergeDialog/36.27.1884.1053@36.27.1884.1053" timestamp="1583666866573" />
+    <state x="325" y="131" key="SettingsEditor" timestamp="1583666834451">
+      <screen x="36" y="27" width="1884" height="1053" />
     </state>
     <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580288244621" />
+    <state x="325" y="131" key="SettingsEditor/36.27.1884.1053@36.27.1884.1053" timestamp="1583666834451" />
     <state x="320" y="178" key="Vcs.Push.Dialog.v2" timestamp="1580288273102">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
