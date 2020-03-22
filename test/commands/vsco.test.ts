@@ -15,7 +15,7 @@ describe("VSCO", () => {
 	afterEach(async () => await browser.close());
 	test.timeout(6000).it("scrapes darianvoisard/media/5a988983ec256c540d17960a & gets 1 MP4", async (_, done) => {
 		try {
-			const payload = await detectFile(browser, page, "darianvoisard/media/5a988983ec256c540d17960a");
+			const payload = await detectFile(browser, page, "darianvoisard", "5a988983ec256c540d17960a");
 			done();
 			if (payload) {
 				const { username, urls } = payload;
@@ -30,7 +30,7 @@ describe("VSCO", () => {
 	});
 	test.timeout(6000).it("scrapes sarahm36/media/5d727b9dc7fe090749a25cad & gets 1 JPEG", async (_, done) => {
 		try {
-			const payload = await detectFile(browser, page, "sarahm36/media/5d727b9dc7fe090749a25cad");
+			const payload = await detectFile(browser, page, "sarahm36", "5d727b9dc7fe090749a25cad");
 			done();
 			if (payload) {
 				const { username, urls } = payload;

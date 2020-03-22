@@ -86,5 +86,12 @@
 			"@oclif/plugin-warn-if-update-available",
 			"@oclif/plugin-which"
 		]
+	},
+	"mocha": {
+		"require": "ts-node/register",
+		"watch-files": ["src/**/.ts"],
+		"recursive": true,
+		"reporter": "spec",
+		"timeout": 5000
 	}
 }

@@ -16,7 +16,7 @@ describe("tiktok", () => {
 
 	test.timeout(6000).it("scrapes  yaababyk's 6768910148997090566 & gets 1 public MP4", async (_, done) => {
 		try {
-			const { urls, username } = (await detectFile(browser, page, "yaababyk/video/6768910148997090566"))!;
+			const { urls, username } = (await detectFile(browser, page, "yaababyk", "6768910148997090566"))!;
 			done();
 			expect(username).to.equal("yaababyk");
 			expect(urls.length).to.equal(1);
