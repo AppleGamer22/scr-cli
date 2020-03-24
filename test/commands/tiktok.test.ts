@@ -21,7 +21,8 @@ describe("tiktok", () => {
 			expect(username).to.equal("yaababyk");
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
-			expect(urls[0]).to.include("https://v16.muscdn.com/");
+			expect(urls[0]).to.include("https://");
+			expect(urls[0]).to.include("muscdn.com");
 		} catch (error) { console.error(error.message); }
 	});
 });
