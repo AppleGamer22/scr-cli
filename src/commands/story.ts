@@ -6,7 +6,15 @@ import cli from "cli-ux";
 
 export default class Story extends Command {
 	static description = "Command for scraping Instagram story files.";
-	static args = [{name: "user", required: true}, {name: "item", required: true}];
+	static args = [
+		{
+			name: "user",
+			required: true
+		},{
+			name: "item",
+			required: true
+		}
+	];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {

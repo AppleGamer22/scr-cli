@@ -1,7 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import { Page, Browser } from "puppeteer-core";
 import { get } from "superagent";
-import { promisify } from "util";
 import { writeFileSync } from "fs";
 import { basename } from "path";
 import cli from "cli-ux";
@@ -11,27 +10,34 @@ import { IExifElement, TagValues, insert, dump } from "piexif-ts";
 
 export default class VSCO extends Command {
 	static description = "Command for scraping VSCO post file.";
-	static args = [{name: "post", required: true}];
+	static args = [
+		{
+			name: "user",
+			required: true
+		},{
+			name: "post",
+			required: true
+		}
+	];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
 		try {
 			const { args, flags } = this.parse(VSCO);
-			const post: string  = args.post;
-			if (post !== undefined && post !== null) {
-				if (!post.includes("/media/")) return alert("Please provide a valid post ID.", "danger");
+			if (args.user && args.post) {
 				const now = Date.now();
 				cli.action.start("Opening browser");
 				const { browser, page } = (await beginScrape(flags.headless))!;
 				cli.action.stop();
 				cli.action.start("Searching for files");
-				const payload = await detectFile(browser, page, post);
+				const payload = await detectFile(browser, page, args.user, args.post);
 				cli.action.stop();
 				if (payload) {
 					const { username, urls } = payload;
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
 					cli.action.start("Downloading");
-					await this.downloadFile(urls[0], username, post.split("/")[2]);
+					if (urls[0].includes(".jpg")) await this.downloadFile(urls[0], ".jpg", username, args.post);
+					if (urls[0].includes(".mp4")) await this.downloadFile(urls[0], ".mp4", username, args.post);
 					cli.action.stop();
 				}
 				await browser.close();
@@ -39,29 +45,15 @@ export default class VSCO extends Command {
 		} catch (error) { alert(error.message, "danger"); }
 	}
 
-	async downloadFile(url: string, username: string, id: string) {
+	async downloadFile(url: string, type: ".jpg" | ".mp4", username: string, post: string) {
 		try {
-			const path = `${process.cwd()}/${username}_${id}${basename(url)}`;
+			const path = `${process.cwd()}/${username}_${post}${basename(url)}`;
 			const { body, status } = await get(url).responseType("blob");
 			if (status === 200) {
-				if (url.includes(".jpg")) {
-					alert(underline(".jpg"), "log");
-					cli.url(underline(url), url);
-					var exif: IExifElement = {};
-					const date = new Date();
-					const [month, day, year] = date.toLocaleDateString().split("/");
-					const exifDate = `${year}:${month}:${day} ${date.toLocaleTimeString()}`;
-					exif[TagValues.ExifIFD.DateTimeOriginal] = exifDate;
-					const cleanEXIFBytes = dump({Exif: exif});
-					const cleanFile = insert(cleanEXIFBytes, body);
-					writeFileSync(path, cleanFile, {encoding: "binary"});
-					alert(`File saved at ${path}`, "success");
-				} else if (url.includes(".mp4")) {
-					alert(underline(".mp4"), "log");
-					cli.url(underline(url), url);
-					writeFileSync(path, body, {encoding: "binary"});
-					alert(`File saved at ${path}`, "success");
-				}
+				writeFileSync(path, body, {encoding: "binary"});
+				alert(underline(type), "log");
+				cli.url(underline(url), url);
+				alert(`File saved at ${path}`, "success");
 			}
 		} catch (error) {
 			alert(error.message, "danger");
@@ -69,11 +61,11 @@ export default class VSCO extends Command {
 	}
 }
 
-export async function detectFile(browser: Browser, page: Page, id: string): Promise<ScrapePayload | undefined> {
+export async function detectFile(browser: Browser, page: Page, user: string, post: string): Promise<ScrapePayload | undefined> {
 	try {
-		await page.goto(`https://vsco.co/${id}`, {waitUntil: "domcontentloaded"});
+		await page.goto(`https://vsco.co/${user}/media/${post}`, {waitUntil: "domcontentloaded"});
 		if ((await page.$("p.NotFound-heading")) !== null) {
-			alert(`Failed to find post ${id}`, "danger");
+			alert(`Failed to find ${user}'s post ${post}`, "danger");
 			await browser.close();
 		}
 		await page.waitForSelector("a.DetailViewUserInfo-username", {visible: true});

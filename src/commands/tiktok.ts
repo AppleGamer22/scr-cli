@@ -1,35 +1,40 @@
 import { Command, flags } from "@oclif/command";
 import { cli } from "cli-ux";
 import { Browser, Page } from "puppeteer-core";
-import { promisify } from "util";
 import { get } from "superagent";
 import { underline } from "chalk";
 import { writeFileSync } from "fs";
-import { alert, beginScrape, ScrapePayload } from "../shared";
+import { alert, beginScrape, ScrapePayload, userAgent } from "../shared";
 
 export default class TikTok extends Command {
 	static description = "Command for scraping TikTok post file.";
-	static args = [{name: "post", required: true}];
+	static args = [
+		{
+			name: "user",
+			required: true
+		},{
+			name: "post",
+			required: true
+		}
+	];
 	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
 
 	async run() {
 		try {
 			const { args, flags } = this.parse(TikTok);
-			const post: string  = args.post;
-			if (post !== undefined && post !== null) {
-				if (!post.includes("/video/")) return alert("Please provide a valid post ID.", "danger");
+			if (args.user && args.post) {
 				const now = Date.now();
 				cli.action.start("Opening browser");
 				const { browser, page } = (await beginScrape(flags.headless))!;
 				cli.action.stop();
 				cli.action.start("Searching for files");
-				const payload = await detectFile(browser, page, post);
+				const payload = await detectFile(browser, page, args.user, args.post);
 				cli.action.stop();
 				if (payload) {
 					const { username, urls } = payload;
 					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
 					cli.action.start("Downloading");
-					await this.downloadFile(urls[0], username, post.split("/")[2]);
+					await this.downloadFile(urls[0], username, args.post);
 					cli.action.stop();
 				}
 				await browser.close();
@@ -53,11 +58,11 @@ export default class TikTok extends Command {
 	}
 }
 
-export async function detectFile(browser: Browser, page: Page, id: string): Promise<ScrapePayload | undefined> {
+export async function detectFile(browser: Browser, page: Page, user: string, post: string): Promise<ScrapePayload | undefined> {
 	try {
-		await page.goto(`https://tiktok.com/@${id}`, {waitUntil: "domcontentloaded"});
+		await page.goto(`https://tiktok.com/@${user}/video/${post}`, {waitUntil: "domcontentloaded"});
 		if ((await page.$("div.error-page")) !== null) {
-			alert(`Failed to find post ${id}`, "danger");
+			alert(`Failed to find ${user}'s post ${post}`, "danger");
 			await browser.close();
 		}
 		await page.waitForSelector("h2.user-username", {visible: true});
