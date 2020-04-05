@@ -22,8 +22,12 @@ describe("Highlight", () => {
 				expect(username).to.equal("brookemillard");
 				console.log(urls[0]);
 				expect(urls[0]).to.include("https://");
-				expect(urls[0]).to.include(".mp4");
-				expect(urls[0].includes("cdninstagram.com") || urls[1].includes("fbcdn.net")).to.equal(true);
+				expect(urls[0]).to.include(".jpg");
+				expect(urls[0].includes("cdninstagram.com") || urls[0].includes("fbcdn.net")).to.equal(true);
+				console.log(urls[1]);
+				expect(urls[1]).to.include("https://");
+				expect(urls[1]).to.include(".mp4");
+				expect(urls[1].includes("cdninstagram.com") || urls[1].includes("fbcdn.net")).to.equal(true);
 			}
 		} catch (error) { console.error(error.message); }
 	});

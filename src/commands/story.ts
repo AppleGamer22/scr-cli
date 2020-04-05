@@ -62,19 +62,17 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 			const a = document.querySelector("div.yn6BW > a") as HTMLAnchorElement;
 			return a.innerText;
 		});
-		await page.waitForSelector("div._7UhW9", {visible: true});
-		await page.click("div._7UhW9");
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
 		}
-		await page.waitForSelector("div.uL8Hv", {visible: true});
-		await page.click("div.uL8Hv");
+		if ((await page.$("div._7UhW9")) !== null) await page.click("div._7UhW9");
+		await page.keyboard.press("Space");
 		var urls: string[] = [];
 		await page.waitForSelector("div.qbCDp", {visible: true});
 		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("srcset"))))[0];
 		if (imageURL) urls.push(imageURL.split(",")[0].split(" ")[0]);
-		const videoURL = (await page.$$eval("video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
+		const videoURL = (await page.$$eval("div.qbCDp > video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
 		if (videoURL) urls.push(videoURL);
 		return { username, urls };
 	} catch (error) { alert(error.message, "danger"); }
