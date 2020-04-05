@@ -6,7 +6,6 @@ import { basename } from "path";
 import cli from "cli-ux";
 import { alert, beginScrape, ScrapePayload } from "../shared";
 import { underline } from "chalk";
-import { IExifElement, TagValues, insert, dump } from "piexif-ts";
 
 export default class VSCO extends Command {
 	static description = "Command for scraping VSCO post file.";
