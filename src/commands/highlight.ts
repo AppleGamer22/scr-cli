@@ -63,7 +63,7 @@ export async function detectFiles(browser: Browser, page: Page, highlight: strin
 			const a = document.querySelector("div.yn6BW > a") as HTMLAnchorElement;
 			return a.innerText;
 		});
-		await page.waitFor("div._7UhW9", {visible: true});
+		await page.waitForSelector("div._7UhW9", {visible: true});
 		await page.click("div._7UhW9");
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
