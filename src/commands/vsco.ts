@@ -67,9 +67,9 @@ export async function detectFile(browser: Browser, page: Page, user: string, pos
 			alert(`Failed to find ${user}'s post ${post}`, "danger");
 			await browser.close();
 		}
-		await page.waitForSelector("a.css-9zfgas-UsernameLink", {visible: true});
+		await page.waitForSelector("a.css-jz58cc.ejb7ykf1", {visible: true});
 		const username = await page.evaluate(() => {
-			const a = document.querySelector("a.css-9zfgas-UsernameLink") as HTMLAnchorElement;
+			const a = document.querySelector("a.css-jz58cc.ejb7ykf1") as HTMLAnchorElement;
 			return a.innerText;
 		});
 		const imageURLs = await page.$$eval(`meta[property="og:image"]`, metas => {
