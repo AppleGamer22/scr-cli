@@ -3,7 +3,7 @@ import { Command, flags } from "@oclif/command";
 import { config } from "dotenv";
 import cli from "cli-ux";
 import { green, red } from "chalk";
-import { writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent, alert } from "../shared";
+import { writeEnviornmentVariables, beginScrape, environmentVariablesFile, alert } from "../shared";
 
 export default class LogIn extends Command {
 	static description = "Command for supported social network log-in.";
@@ -36,7 +36,6 @@ export default class LogIn extends Command {
 			}
 			cli.action.start("Signing in to your Instagram account");
 			const page = (await browser.pages())[0];
-			await page.setUserAgent(userAgent());
 			await page.goto("https://www.instagram.com/accounts/login/");
 			await page.waitForSelector(`input[name="username"]`);
 			await page.type(`input[name="username"]`, username);
@@ -87,7 +86,6 @@ export default class LogIn extends Command {
 					}
 				}
 			});
-			await page.setUserAgent(userAgent());
 			await page.goto("https://vsco.co/user/login");
 			await page.waitForSelector("input#login");
 			await page.type("input#login", username);

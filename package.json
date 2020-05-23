@@ -42,7 +42,7 @@
 		"chalk": "^4.0.0",
 		"cli-ux": "^5.4.6",
 		"dotenv": "^8.2.0",
-		"puppeteer-core": "^2.0.0",
+		"puppeteer-core": "^3.1.0",
 		"superagent": "^5.2.2",
 		"tslib": "^2.0.0"
 	},
@@ -54,7 +54,7 @@
 		"@types/dotenv": "^8.2.0",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^14.0.1",
-		"@types/puppeteer-core": "^2.0.0",
+		"@types/puppeteer-core": "npm:@types/puppeteer@^3.0.0",
 		"@types/superagent": "^4.1.7",
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",

@@ -3,7 +3,7 @@ import { Browser } from "puppeteer-core";
 import { config } from "dotenv";
 import cli from "cli-ux";
 import { randomBytes } from "crypto";
-import { writeEnviornmentVariables, beginScrape, environmentVariablesFile, userAgent } from "../shared";
+import { writeEnviornmentVariables, beginScrape, environmentVariablesFile } from "../shared";
 
 export default class LogOut extends Command {
 	static description = "Command for supported social network log-out.";
@@ -32,7 +32,6 @@ export default class LogOut extends Command {
 			}
 			cli.action.start("Signing out from your Instagram account");
 			const page = (await browser.pages())[0];
-			await page.setUserAgent(userAgent());
 			await page.goto(`https://www.instagram.com/${randomBytes(5).toString("hex")}/`);
 			const profileButton = "#link_profile > a";
 			await page.waitForSelector(profileButton);
@@ -84,7 +83,6 @@ export default class LogOut extends Command {
 					}
 				}
 			});
-			await page.setUserAgent(userAgent());
 			await page.goto("https://vsco.co/user/account");
 			await page.waitForSelector("#signout > button");
 			await page.click("#signout > button");
