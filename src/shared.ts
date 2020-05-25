@@ -10,17 +10,6 @@ import { writeFileSync, writeFile } from "fs";
 export const chromeUserDataDirectory = `${homedir()}/.scr-cli/`;
 export const environmentVariablesFile = `${homedir()}/.scr-cli/env.env`;
 
-export function userAgent(): string {
-	switch (process.platform) {
-		case "darwin":
-			return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36";
-		case "win32":
-			return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36";
-		default:
-			return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/71.0.3559.6 Chrome/71.0.3559.6 Safari/537.36";
-	}
-}
-
 export function chromeExecutable(): string {
 	switch (process.platform) {
 		case "darwin":
@@ -55,18 +44,24 @@ export function alert(message: string, type: ("info" | "log" | "success" | "warn
 	}
 }
 
-export async function beginScrape(background: boolean): Promise<{browser: Browser, page: Page} | undefined> {
+export async function beginScrape(background: boolean, incognito: boolean = false): Promise<{browser: Browser, page: Page} | undefined> {
 	try {
+		const args = ["--mute-audio"];
+		if (incognito) args.push("--incognito");
 		const browser = await launch({
 			headless: background,
 			userDataDir: chromeUserDataDirectory,
 			executablePath: chromeExecutable(),
 			devtools: !background,
 			defaultViewport: null,
-			args: ["--mute-audio"]
+			ignoreDefaultArgs: ["--enable-automation"],
+			args
 		});
 		const page = (await browser.pages())[0];
-		await page.setUserAgent(userAgent());
+		await page.evaluateOnNewDocument(() => {
+			// @ts-ignore
+			delete navigator.__proto__.webdriver;
+		});
 		return {browser, page};
 	} catch (error) { alert(error.message, "danger"); }
 }

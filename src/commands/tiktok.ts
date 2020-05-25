@@ -1,10 +1,10 @@
 import { Command, flags } from "@oclif/command";
 import { cli } from "cli-ux";
-import { Browser, Page } from "puppeteer-core";
+import { Browser, Page, launch } from "puppeteer-core";
 import { get } from "superagent";
 import { underline } from "chalk";
 import { writeFileSync } from "fs";
-import { alert, beginScrape, ScrapePayload, userAgent } from "../shared";
+import { alert, beginScrape, ScrapePayload } from "../shared";
 
 export default class TikTok extends Command {
 	static description = "Command for scraping TikTok post file.";
@@ -25,7 +25,7 @@ export default class TikTok extends Command {
 			if (args.user && args.post) {
 				const now = Date.now();
 				cli.action.start("Opening browser");
-				const { browser, page } = (await beginScrape(flags.headless))!;
+				const { browser, page } = (await beginScrape(flags.headless, false))!;
 				cli.action.stop();
 				cli.action.start("Searching for files");
 				const payload = await detectFile(browser, page, args.user, args.post);
@@ -60,7 +60,7 @@ export default class TikTok extends Command {
 
 export async function detectFile(browser: Browser, page: Page, user: string, post: string): Promise<ScrapePayload | undefined> {
 	try {
-		await page.goto(`https://tiktok.com/@${user}/video/${post}`, {waitUntil: "domcontentloaded"});
+		await page.goto(`https://www.tiktok.com/@${user}/video/${post}`, {waitUntil: "domcontentloaded"});
 		if ((await page.$("div.error-page")) !== null) {
 			alert(`Failed to find ${user}'s post ${post}`, "danger");
 			await browser.close();

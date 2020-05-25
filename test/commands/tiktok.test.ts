@@ -24,7 +24,7 @@ describe("tiktok", () => {
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
-			expect(urls[0]).to.include("muscdn.com");
+			expect(urls[0]).to.include("tiktokcdn.com");
 		} catch (error) { console.error(error.message); }
 	});
 });
