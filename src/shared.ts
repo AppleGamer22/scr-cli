@@ -54,9 +54,14 @@ export async function beginScrape(background: boolean, incognito: boolean = fals
 			executablePath: chromeExecutable(),
 			devtools: !background,
 			defaultViewport: null,
+			ignoreDefaultArgs: ["--enable-automation"],
 			args
 		});
 		const page = (await browser.pages())[0];
+		await page.evaluateOnNewDocument(() => {
+			// @ts-ignore
+			delete navigator.__proto__.webdriver;
+		});
 		return {browser, page};
 	} catch (error) { alert(error.message, "danger"); }
 }
