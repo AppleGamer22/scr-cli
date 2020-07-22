@@ -57,7 +57,14 @@ export default class TikTok extends Command {
 		}
 	}
 }
-
+/**
+ * Scrapes TikTok post files
+ * @param browser Puppeteer browser
+ * @param page Puppeteer page
+ * @param user post owner
+ * @param post post ID
+ * @returns URL string array
+ */
 export async function detectFile(browser: Browser, page: Page, user: string, post: string): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://www.tiktok.com/@${user}/video/${post}`, {waitUntil: "domcontentloaded"});

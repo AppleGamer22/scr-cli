@@ -49,7 +49,13 @@ export default class Instagram extends Command {
 		}
 	}
 }
-
+/**
+ * Scrapes Instagram post files
+ * @param browser Puppeteer browser
+ * @param page Puppeteer page
+ * @param id post ID
+ * @returns URL string array
+ */
 export async function detectFiles(browser: Browser, page: Page, id: string): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://www.instagram.com/p/${id}`, {waitUntil: "domcontentloaded"});

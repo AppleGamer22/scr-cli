@@ -9,7 +9,9 @@ import { writeFileSync, writeFile } from "fs";
 
 export const chromeUserDataDirectory = `${homedir()}/.scr-cli/`;
 export const environmentVariablesFile = `${homedir()}/.scr-cli/env.env`;
-
+/**
+ * Finds Chrome binary path
+ */
 export function chromeExecutable(): string {
 	switch (process.platform) {
 		case "darwin":
@@ -21,14 +23,21 @@ export function chromeExecutable(): string {
 			// or /usr/bin/google-chrome | /usr/lib/google-chrome
 	}
 }
-
+/**
+ * writes contents to the CLI's enviornment file
+ * @param content enviornment content
+ */
 export function writeEnviornmentVariables(content: string) {
 	writeFile(environmentVariablesFile, content, error => {
 		if (error) throw new Error(error.message);
 		return;
 	});
 }
-
+/**
+ * Logs an error message to the console
+ * @param message message text
+ * @param type message type
+ */
 export function alert(message: string, type: ("info" | "log" | "success" | "warning" | "danger")) {
 	switch (type) {
 		case "info":
@@ -43,7 +52,12 @@ export function alert(message: string, type: ("info" | "log" | "success" | "warn
 			return console.error(red(message));
 	}
 }
-
+/**
+ * Initiates Chrome for scraping
+ * @param background background mode boolean
+ * @param incognito private mode boolean
+ * @returns Puppeteer browser & page
+ */
 export async function beginScrape(background: boolean, incognito: boolean = false): Promise<{browser: Browser, page: Page} | undefined> {
 	try {
 		const args = ["--mute-audio"];
@@ -65,7 +79,13 @@ export async function beginScrape(background: boolean, incognito: boolean = fals
 		return {browser, page};
 	} catch (error) { alert(error.message, "danger"); }
 }
-
+/**
+ * Downloads a file from the provided URL
+ * @param url file URL
+ * @param username file owner
+ * @param fileType type of file
+ * @param fileNumber file number in the sequence
+ */
 export async function downloadInstagramFile(url: string, username: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 	try {
 		const path = `${process.cwd()}/${username}_${basename(url).split("?")[0]}`;
