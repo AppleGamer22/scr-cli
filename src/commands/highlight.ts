@@ -49,6 +49,14 @@ export default class Highlight extends Command {
 		}
 	}
 }
+/**
+ * Scrapes Instagram highlight files
+ * @param browser Puppeteer browser
+ * @param page Puppeteer page
+ * @param highlight highlight ID
+ * @param item highlight number
+ * @returns URL string array
+ */
 export async function detectFiles(browser: Browser, page: Page, highlight: string, item: number): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://www.instagram.com/stories/highlights/${highlight}`, {waitUntil: "domcontentloaded"});

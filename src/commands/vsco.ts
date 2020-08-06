@@ -59,7 +59,14 @@ export default class VSCO extends Command {
 		}
 	}
 }
-
+/**
+ * Scrapes VSCO post files
+ * @param browser Puppeteer browser
+ * @param page Puppeteer page
+ * @param user post owner
+ * @param post post ID
+ * @returns URL string array
+ */
 export async function detectFile(browser: Browser, page: Page, user: string, post: string): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://vsco.co/${user}/media/${post}`, {waitUntil: "domcontentloaded"});

@@ -49,6 +49,14 @@ export default class Story extends Command {
 		}
 	}
 }
+/**
+ * Scrapes Instagram story files
+ * @param browser Puppeteer browser
+ * @param page Puppeteer page
+ * @param user story owner
+ * @param item story number
+ * @returns URL string array
+ */
 export async function detectFiles(browser: Browser, page: Page, user: string, item: number): Promise<ScrapePayload | undefined> {
 	try {
 		await page.goto(`https://www.instagram.com/${user}`);
