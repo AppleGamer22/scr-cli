@@ -74,12 +74,16 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
 		}
-		if ((await page.$("div._7UhW9")) !== null) await page.click("div._7UhW9");
-		await page.keyboard.press("Space");
+		await page.waitFor(50);
+		if ((await page.$(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe")) !== null) {
+			await page.click(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe");
+		}
+		await page.waitFor(50);
+		// await page.keyboard.press("Space");
 		var urls: string[] = [];
 		await page.waitForSelector("div.qbCDp", {visible: true});
-		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("srcset"))))[0];
-		if (imageURL) urls.push(imageURL.split(",")[0].split(" ")[0]);
+		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("src"))))[0];
+		if (imageURL) urls.push(imageURL);
 		const videoURL = (await page.$$eval("div.qbCDp > video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
 		if (videoURL) urls.push(videoURL);
 		return { username, urls };
