@@ -33,19 +33,25 @@ describe("Highlight", () => {
 			console.error(error.message);
 		}
 	});
-	test.timeout(6000).it("scrapes emilyyymichele's 4th 17912059153309881 and gets a JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes ella_1830's 16th 17887560724381853 and gets a JPEG", async (_, done) => {
 		try {
-			const payload = await detectFiles(browser, page, "17912059153309881", 4);
+			const payload = await detectFiles(browser, page, "17887560724381853", 16);
 			await browser.close();
 			done();
 			if (payload) {
 				const { urls, username } = payload;
-				expect(username).to.equal("emilyyymichele");
+				expect(username).to.equal("ella_1830");
 				console.log(urls[0]);
 				expect(urls[0]).to.include("https://");
 				expect(urls[0]).to.include(".jpg");
 				expect(urls[0].includes("cdninstagram.com") || urls[0].includes("fbcdn.net")).to.equal(true);
+				console.log(urls[1]);
+				expect(urls[1]).to.include("https://");
+				expect(urls[1]).to.include(".mp4");
+				expect(urls[1].includes("cdninstagram.com") || urls[1].includes("fbcdn.net")).to.equal(true);
 			}
-		} catch (error) { console.error(error.message); }
+		} catch (error) {
+			console.error(error.message);
+		}
 	});
 });
