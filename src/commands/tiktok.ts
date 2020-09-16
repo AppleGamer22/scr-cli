@@ -25,7 +25,7 @@ export default class TikTok extends Command {
 			if (args.user && args.post) {
 				const now = Date.now();
 				cli.action.start("Opening browser");
-				const { browser, page } = (await beginScrape(flags.headless, false))!;
+				const { browser, page } = (await beginScrape(flags.headless, true))!;
 				cli.action.stop();
 				cli.action.start("Searching for files");
 				const payload = await detectFile(browser, page, args.user, args.post);
@@ -72,13 +72,15 @@ export async function detectFile(browser: Browser, page: Page, user: string, pos
 			alert(`Failed to find ${user}'s post ${post}`, "danger");
 			await browser.close();
 		}
-		await page.waitForSelector("h2.user-username", {visible: true});
+		await page.waitForSelector("h3.author-uniqueId", {visible: true});
 		const username = await page.evaluate(() => {
-			const a = document.querySelector("h2.user-username") as HTMLHeadingElement;
-			return a.innerText.replace("@", "");
+			const a = document.querySelectorAll("h3.author-uniqueId")[0] as HTMLHeadingElement;
+			return a.innerText;
 		});
 		await page.waitForSelector("video", {visible: true});
 		const videoURL = await page.$eval("video", video => video.getAttribute("src"));
 		if (videoURL) return {urls: [videoURL], username};
-	} catch (error) { alert(error.message, "danger"); }
+	} catch (error) {
+		alert(error.message, "danger");
+	}
 }

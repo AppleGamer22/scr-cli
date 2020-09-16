@@ -6,6 +6,7 @@ import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
 import { writeFileSync, writeFile } from "fs";
+import { url } from "inspector";
 
 export const chromeUserDataDirectory = `${homedir()}/.scr-cli/`;
 export const environmentVariablesFile = `${homedir()}/.scr-cli/env.env`;
@@ -73,8 +74,11 @@ export async function beginScrape(background: boolean, incognito: boolean = fals
 		});
 		const page = (await browser.pages())[0];
 		await page.evaluateOnNewDocument(() => delete Object.getPrototypeOf(navigator).webdriver);
-		return {browser, page};
-	} catch (error) { alert(error.message, "danger"); }
+		await page.setBypassCSP(true);
+		return { browser, page };
+	} catch (error) {
+		alert(error.message, "danger");
+	}
 }
 /**
  * Downloads a file from the provided URL
