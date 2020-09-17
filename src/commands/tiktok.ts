@@ -79,7 +79,7 @@ export async function detectFile(browser: Browser, page: Page, user: string, pos
 		});
 		await page.waitForSelector("video", {visible: true});
 		const videoURL = await page.$eval("video", video => video.getAttribute("src"));
-		if (videoURL) return {urls: [videoURL], username};
+		if (videoURL) return {urls: [videoURL.replace("-web", "")], username};
 	} catch (error) {
 		alert(error.message, "danger");
 	}
