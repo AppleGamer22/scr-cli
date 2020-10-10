@@ -1,12 +1,10 @@
 import { homedir } from "os";
-import { promisify } from "util";
 import { basename } from "path";
-import { get } from "superagent";
+import axios from "axios";
 import { red, green, blue, yellow, underline } from "chalk";
 import cli from "cli-ux";
 import { Browser, Page, launch } from "puppeteer-core";
 import { writeFileSync, writeFile } from "fs";
-import { url } from "inspector";
 
 export const chromeUserDataDirectory = `${homedir()}/.scr-cli/`;
 export const environmentVariablesFile = `${homedir()}/.scr-cli/env.env`;
@@ -90,11 +88,11 @@ export async function beginScrape(background: boolean, incognito: boolean = fals
 export async function downloadInstagramFile(url: string, username: string, fileType: ".jpg" | ".mp4", fileNumber: number) {
 	try {
 		const path = `${process.cwd()}/${username}_${basename(url).split("?")[0]}`;
-		const { body, status } = await get(url).responseType("blob");
+		const { data, status } = await axios.get(url, {responseType: "arraybuffer"});
 		if (status === 200) {
 			alert(underline(`File #${fileNumber} (${fileType})`), "log");
 			cli.url(underline(url), url);
-			writeFileSync(path, body, {encoding: "binary"});
+			writeFileSync(path, data, {encoding: "binary"});
 			alert(`File saved at ${path}`, "success");
 		}
 	} catch (error) {

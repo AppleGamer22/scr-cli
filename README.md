@@ -16,8 +16,9 @@ Instagram web scraper for social post file(s) downloads.
 ```bash
 $ sudo npm i -g @applegamer22/scr-cli
 ```
-## Contributing Requirements
+## Contributing
 * Separate Git branch to the master branch
+  * After reviewing the changes, this branch will be merged to the main branch.
 * Separate fork to this repository
 ## Usage Responsibilities
 * You should use this software with responsibility and with accordance to [Instagram's terms of use](https://help.instagram.com/581066165581870):

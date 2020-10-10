@@ -1,6 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import { Page, Browser } from "puppeteer-core";
-import { get } from "superagent";
+import axios from "axios";
 import { writeFileSync } from "fs";
 import { basename } from "path";
 import cli from "cli-ux";
@@ -47,9 +47,9 @@ export default class VSCO extends Command {
 	async downloadFile(url: string, type: ".jpg" | ".mp4", username: string, post: string) {
 		try {
 			const path = `${process.cwd()}/${username}_${post}${basename(url)}`;
-			const { body, status } = await get(url).responseType("blob");
+			const { data, status } = await axios.get(url, {responseType: "arraybuffer"});
 			if (status === 200) {
-				writeFileSync(path, body, {encoding: "binary"});
+				writeFileSync(path, data, {encoding: "binary"});
 				alert(underline(type), "log");
 				cli.url(underline(url), url);
 				alert(`File saved at ${path}`, "success");
