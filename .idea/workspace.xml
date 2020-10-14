@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="28d85549-db7b-4704-9698-bfd0ed673089" name="Default Changelist" comment="npm update" />
+    <list default="true" id="28d85549-db7b-4704-9698-bfd0ed673089" name="Default Changelist" comment="npm update">
+      <change afterPath="$PROJECT_DIR$/LICENSE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CODE_OF_CONDUCT.md" beforeDir="false" afterPath="$PROJECT_DIR$/CODE_OF_CONDUCT.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,9 +47,11 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettier.import.notification.dismissed" value="true" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
     <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
     <configuration name="test" type="mocha-javascript-test-runner">
@@ -80,6 +90,8 @@
       <workItem from="1585012769770" duration="886000" />
       <workItem from="1585013689017" duration="505000" />
       <workItem from="1596778354693" duration="27000" />
+      <workItem from="1602643240542" duration="18000" />
+      <workItem from="1602643280136" duration="850000" />
     </task>
     <task id="LOCAL-00001" summary="Intellij configuration for mocha testing">
       <created>1567245256602</created>
@@ -119,43 +131,9 @@
     <option name="LAST_COMMIT_MESSAGE" value="npm update" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="432" y="90" key="CommitChangelistDialog2" timestamp="1585012552857">
+    <state x="573" y="238" width="800" height="629" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602643257298">
       <screen x="36" y="27" width="1884" height="1053" />
     </state>
-    <state x="303" y="54" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1580288269056" />
-    <state x="432" y="90" key="CommitChangelistDialog2/36.27.1884.1053@36.27.1884.1053" timestamp="1585012552857" />
-    <state width="1861" height="285" key="GridCell.Tab.0.bottom" timestamp="1585013649869">
-      <screen x="36" y="27" width="1884" height="1053" />
-    </state>
-    <state width="1861" height="285" key="GridCell.Tab.0.bottom/36.27.1884.1053@36.27.1884.1053" timestamp="1585013649869" />
-    <state width="1861" height="285" key="GridCell.Tab.0.center" timestamp="1585013649868">
-      <screen x="36" y="27" width="1884" height="1053" />
-    </state>
-    <state width="1861" height="285" key="GridCell.Tab.0.center/36.27.1884.1053@36.27.1884.1053" timestamp="1585013649868" />
-    <state width="1861" height="285" key="GridCell.Tab.0.left" timestamp="1585013649868">
-      <screen x="36" y="27" width="1884" height="1053" />
-    </state>
-    <state width="1861" height="285" key="GridCell.Tab.0.left/36.27.1884.1053@36.27.1884.1053" timestamp="1585013649868" />
-    <state width="1861" height="285" key="GridCell.Tab.0.right" timestamp="1585013649868">
-      <screen x="36" y="27" width="1884" height="1053" />
-    </state>
-    <state width="1861" height="285" key="GridCell.Tab.0.right/36.27.1884.1053@36.27.1884.1053" timestamp="1585013649868" />
-    <state x="696" y="283" key="MultipleFileMergeDialog" timestamp="1583666866573">
-      <screen x="36" y="27" width="1884" height="1053" />
-    </state>
-    <state x="696" y="283" key="MultipleFileMergeDialog/36.27.1884.1053@36.27.1884.1053" timestamp="1583666866573" />
-    <state x="332" y="221" key="SettingsEditor" timestamp="1585013247659">
-      <screen x="36" y="27" width="1884" height="1053" />
-    </state>
-    <state x="221" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1580288244621" />
-    <state x="332" y="221" key="SettingsEditor/36.27.1884.1053@36.27.1884.1053" timestamp="1585013247659" />
-    <state x="320" y="178" key="Vcs.Push.Dialog.v2" timestamp="1580288273102">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="320" y="178" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1580288273102" />
-    <state x="688" y="383" key="com.intellij.ide.util.TipDialog" timestamp="1582521280817">
-      <screen x="70" y="23" width="1850" height="1057" />
-    </state>
-    <state x="688" y="383" key="com.intellij.ide.util.TipDialog/1920.23.1440.877/70.23.1850.1057@70.23.1850.1057" timestamp="1582521280817" />
+    <state x="573" y="238" width="800" height="629" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/36.27.1884.1053@36.27.1884.1053" timestamp="1602643257298" />
   </component>
 </project>

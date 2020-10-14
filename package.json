@@ -1,10 +1,10 @@
 {
 	"name": "@applegamer22/scr-cli",
 	"description": "Social media web scraper for post file downloads.",
-	"version": "1.0.0-alpha.28.5",
+	"version": "1.0.0-alpha.29",
 	"author": "Omri Bornstein",
 	"publisher": "AppleGamer22",
-	"license": "MIT",
+	"license": "GPL-3.0-only",
 	"private": false,
 	"repository": {
 		"url": "https://github.com/AppleGamer22/scr-cli",
