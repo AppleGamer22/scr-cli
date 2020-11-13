@@ -41,7 +41,7 @@
 		"@oclif/plugin-which": "^1.0.3",
 		"axios": "^0.21.0",
 		"chalk": "^4.1.0",
-		"cli-ux": "^5.5.0",
+		"cli-ux": "^5.5.1",
 		"dotenv": "^8.2.0",
 		"puppeteer-core": "^3.1.0",
 		"tslib": "^2.0.1"
