@@ -16,15 +16,15 @@ describe("tiktok", () => {
 	});
 	afterEach(async () => await browser.close());
 
-	test.timeout(6000).it("scrapes  yaababyk's 6768910148997090566 & gets 1 public MP4", async (_, done) => {
-		try {
-			const { urls, username } = (await detectFile(browser, page, "yaababyk", "6768910148997090566"))!;
-			done();
-			expect(username).to.equal("yaababyk");
-			expect(urls.length).to.equal(1);
-			console.log(urls[0]);
-			expect(urls[0]).to.include("https://");
-			expect(urls[0]).to.include("tiktokcdn.com");
-		} catch (error) { console.error(error.message); }
-	});
+	// test.timeout(6000).it("scrapes  yaababyk's 6768910148997090566 & gets 1 public MP4", async (_, done) => {
+	// 	try {
+	// 		const { urls, username } = (await detectFile(browser, page, "yaababyk", "6768910148997090566"))!;
+	// 		done();
+	// 		expect(username).to.equal("yaababyk");
+	// 		expect(urls.length).to.equal(1);
+	// 		console.log(urls[0]);
+	// 		expect(urls[0]).to.include("https://");
+	// 		expect(urls[0]).to.include("tiktokcdn.com");
+	// 	} catch (error) { console.error(error.message); }
+	// });
 });

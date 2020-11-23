@@ -13,11 +13,11 @@ describe("Instagram", () => {
 		} catch (error) { console.error(error.message); }
 	});
 	afterEach(async () => await browser.close());
-	test.timeout(6000).it("scrapes  ella_1830's Bz2MPhPhOQu & gets 1 public JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes alysonloane's B30gDXJnl3k & gets 1 public JPEG", async (_, done) => {
 		try {
-			const { urls, username } = (await detectFiles(browser, page, "Bz2MPhPhOQu"))!;
+			const { urls, username } = (await detectFiles(browser, page, "B30gDXJnl3k"))!;
 			done();
-			expect(username).to.equal("ella_1830");
+			expect(username).to.equal("alysonloane");
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
@@ -25,11 +25,11 @@ describe("Instagram", () => {
 			expect(urls[0].includes("cdninstagram.com") || urls[0].includes("fbcdn.net")).to.equal(true);
 		} catch (error) { console.error(error.message); }
 	});
-	test.timeout(6000).it("scrapes mikaylademaiter's B6ZImCEFsr2 & gets 1 public JPEG", async (_, done) => {
+	test.timeout(6000).it("scrapes jana.jamess's CH3Axp5nkGj & gets 1 public MP4", async (_, done) => {
 		try {
-			const { urls, username } = (await detectFiles(browser, page, "B6ZImCEFsr2"))!;
+			const { urls, username } = (await detectFiles(browser, page, "CH3Axp5nkGj"))!;
 			done();
-			expect(username).to.equal("mikaylademaiter");
+			expect(username).to.equal("jana.jamess");
 			expect(urls.length).to.equal(1);
 			console.log(urls[0]);
 			expect(urls[0]).to.include("https://");
