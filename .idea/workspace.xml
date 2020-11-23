@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="28d85549-db7b-4704-9698-bfd0ed673089" name="Default Changelist" comment="npm update">
-      <change beforePath="$PROJECT_DIR$/LICENSE.md" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.md" afterDir="false" />
-    </list>
+    <list default="true" id="28d85549-db7b-4704-9698-bfd0ed673089" name="Default Changelist" comment="npm update" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,6 +86,7 @@
       <workItem from="1602643240542" duration="18000" />
       <workItem from="1602643280136" duration="850000" />
       <workItem from="1602650092449" duration="360000" />
+      <workItem from="1605962626467" duration="20000" />
     </task>
     <task id="LOCAL-00001" summary="Intellij configuration for mocha testing">
       <created>1567245256602</created>

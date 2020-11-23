@@ -1,4 +1,4 @@
-import { Browser } from "puppeteer-core";
+import { Browser, Page } from "puppeteer-core";
 import { Command, flags } from "@oclif/command";
 import { config } from "dotenv";
 import cli from "cli-ux";
@@ -16,34 +16,36 @@ export default class LogIn extends Command {
 	async run() {
 		config({path: environmentVariablesFile});
 		try {
-			const {flags} = this.parse(LogIn);
+			const { flags } = this.parse(LogIn);
 			if (flags.status) return this.checkLoginStatus();
 			const username: string = await cli.prompt("username");
 			const password: string = await cli.prompt("password", {type: "hide"});
 			cli.action.start("Opening browser");
-			const {browser, page} = (await beginScrape(true))!;
+			const { browser, page } = (await beginScrape(false))!;
 			cli.action.stop();
-			if (flags.instagram) return await this.instagramSignIn(browser, username, password);
+			if (flags.instagram) return await this.instagramSignIn(browser, page, username, password);
 			// if (flags.vsco) return await this.vscoSignIn(browser, username, password);
 		} catch (error) { alert(error.message, "danger"); }
 	}
 
-	async instagramSignIn(browser: Browser, username: string, password: string) {
+	async instagramSignIn(browser: Browser, page: Page, username: string, password: string) {
 		try {
 			if (process.env.INSTAGRAM! === "true") {
 				await browser.close();
 				return alert("You are already logged-in.", "success");
 			}
 			cli.action.start("Signing in to your Instagram account");
-			const page = (await browser.pages())[0];
 			await page.goto("https://www.instagram.com/accounts/login/");
 			await page.waitForSelector(`input[name="username"]`);
 			await page.type(`input[name="username"]`, username);
 			await page.type(`input[name="password"]`, password);
 			await page.click(`button[type="submit"]`);
+			await page.waitForResponse("https://www.instagram.com/accounts/onetap/?next=%2F");
+			await page.waitForSelector("button.sqdOP")
+			await page.click("button.sqdOP");
 			await page.waitForResponse("https://www.instagram.com/");
 			var environmentFileData: string;
-			const {VSCO} = process.env;
+			const { VSCO } = process.env;
 			if (VSCO !== undefined) {
 				environmentFileData = `INSTAGRAM=${true}\nVSCO=${VSCO}`;
 				writeEnviornmentVariables(environmentFileData);
