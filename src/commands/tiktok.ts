@@ -5,6 +5,7 @@ import axios from "axios";
 import { underline } from "chalk";
 import { writeFileSync } from "fs";
 import { alert, beginScrape, ScrapePayload } from "../shared";
+import { url } from "inspector";
 
 export default class TikTok extends Command {
 	static description = "Command for scraping TikTok post file.";
@@ -17,7 +18,12 @@ export default class TikTok extends Command {
 			required: true
 		}
 	];
-	static flags = {headless: flags.boolean({char: "h", description: "Toggle for background scraping."})};
+	static flags = {
+		headless: flags.boolean({
+			char: "h",
+			description: "Toggle for background scraping."
+		})
+	};
 
 	async run() {
 		try {
@@ -30,11 +36,11 @@ export default class TikTok extends Command {
 				cli.action.start("Searching for files");
 				const payload = await detectFile(browser, page, args.user, args.post);
 				cli.action.stop();
+				alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
 				if (payload) {
-					const { username, urls } = payload;
-					alert(`Scrape time: ${(Date.now() - now)/1000}s`, "info");
+					const { username, data } = payload;
 					cli.action.start("Downloading");
-					await this.downloadFile(urls[0], username, args.post);
+					await this.downloadFile(data!, username, args.post);
 					cli.action.stop();
 				}
 				await browser.close();
@@ -42,16 +48,12 @@ export default class TikTok extends Command {
 		} catch (error) { alert(error.message, "danger"); }
 	}
 
-	async downloadFile(url: string, username: string, id: string) {
+	async downloadFile(data: Buffer, username: string, id: string) {
 		try {
 			const path = `${process.cwd()}/${username}_${id}.mp4`;
-			const { data, status } = await axios.get(url, {responseType: "arraybuffer"});
-			if (status	 === 200) {
-				alert(underline(".mp4"), "log");
-				cli.url(underline(url), url);
-				writeFileSync(path, data, {encoding: "binary"});
-				alert(`File saved at ${path}`, "success");
-			}
+			writeFileSync(path, data, {encoding: "binary"});
+			alert(underline(".mp4"), "log");
+			alert(`File saved at ${path}`, "success");
 		} catch (error) {
 			alert(error.message, "danger");
 		}
@@ -65,8 +67,14 @@ export default class TikTok extends Command {
  * @param post post ID
  * @returns URL string array
  */
-export async function detectFile(browser: Browser, page: Page, user: string, post: string): Promise<ScrapePayload | undefined> {
+export async function detectFile(browser: Browser, page: Page, user: string, post: string) {
 	try {
+		var data: Buffer | undefined;
+		page.on("response", async response => {
+			if (response.url().includes("mp4") && response.ok()) {
+				data = await response.buffer();
+			}
+		});
 		await page.goto(`https://www.tiktok.com/@${user}/video/${post}`, {waitUntil: "domcontentloaded"});
 		if ((await page.$("div.error-page")) !== null) {
 			alert(`Failed to find ${user}'s post ${post}`, "danger");
@@ -78,8 +86,9 @@ export async function detectFile(browser: Browser, page: Page, user: string, pos
 			return a.innerText;
 		});
 		await page.waitForSelector("video", {visible: true});
-		const videoURL = await page.$eval("video", video => video.getAttribute("src"));
-		if (videoURL) return {urls: [videoURL.replace("-web", "")], username};
+		await page.waitForResponse(response => response.url().includes("mp4") && response.ok());
+		await page.waitForTimeout(10000);
+		return { data, username };
 	} catch (error) {
 		alert(error.message, "danger");
 	}

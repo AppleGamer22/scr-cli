@@ -73,6 +73,7 @@ export async function beginScrape(background: boolean, incognito: boolean = fals
 		const page = (await browser.pages())[0];
 		await page.evaluateOnNewDocument(() => delete Object.getPrototypeOf(navigator).webdriver);
 		await page.setBypassCSP(true);
+		// await page.setRequestInterception(true);
 		return { browser, page };
 	} catch (error) {
 		alert(error.message, "danger");

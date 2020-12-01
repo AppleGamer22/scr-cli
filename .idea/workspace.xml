@@ -87,6 +87,7 @@
       <workItem from="1602643280136" duration="850000" />
       <workItem from="1602650092449" duration="360000" />
       <workItem from="1605962626467" duration="20000" />
+      <workItem from="1606110435162" duration="20000" />
     </task>
     <task id="LOCAL-00001" summary="Intellij configuration for mocha testing">
       <created>1567245256602</created>
@@ -130,5 +131,9 @@
       <screen x="36" y="27" width="1884" height="1053" />
     </state>
     <state x="573" y="238" width="800" height="629" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/36.27.1884.1053@36.27.1884.1053" timestamp="1602643257298" />
+    <state x="758" y="452" width="430" height="198" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1606110448034">
+      <screen x="36" y="24" width="1884" height="1056" />
+    </state>
+    <state x="758" y="452" width="430" height="198" key="git4idea.remote.GitConfigureRemotesDialog/36.24.1884.1056@36.24.1884.1056" timestamp="1606110448034" />
   </component>
 </project>

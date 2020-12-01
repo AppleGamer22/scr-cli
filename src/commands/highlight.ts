@@ -79,11 +79,11 @@ export async function detectFiles(browser: Browser, page: Page, highlight: strin
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
 		}
-		await page.waitFor(50);
+		await page.waitForTimeout(50);
 		if ((await page.$(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe")) !== null) {
 			await page.click(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe");
 		}
-		await page.waitFor(50);
+		await page.waitForTimeout(50);
 		// await page.keyboard.press("Space");
 		var urls: string[] = [];
 		await page.waitForSelector("div.qbCDp", {visible: true});
