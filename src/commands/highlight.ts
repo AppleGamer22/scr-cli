@@ -58,6 +58,10 @@ export default class Highlight extends Command {
  * @returns URL string array
  */
 export async function detectFiles(browser: Browser, page: Page, highlight: string, item: number): Promise<ScrapePayload | undefined> {
+	if (isNaN(item)) {
+		await browser.close();
+		alert(`item provided is not a number: ${item}`, "danger");
+	}
 	try {
 		await page.goto(`https://www.instagram.com/stories/highlights/${highlight}`, {waitUntil: "domcontentloaded"});
 		await page.waitForSelector("body", {visible: true});

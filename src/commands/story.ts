@@ -45,7 +45,9 @@ export default class Story extends Command {
 					}
 					await browser.close();
 				} else return alert("Please provide a POST argument!", "danger");
-			} catch (error) { alert(error.message, "danger"); }
+			} catch (error) {
+				alert(error.message, "danger");
+			}
 		}
 	}
 }
@@ -58,6 +60,10 @@ export default class Story extends Command {
  * @returns URL string array
  */
 export async function detectFiles(browser: Browser, page: Page, user: string, item: number): Promise<ScrapePayload | undefined> {
+	if (isNaN(item)) {
+		await browser.close();
+		alert(`item provided is not a number: ${item}`, "danger");
+	}
 	try {
 		await page.goto(`https://www.instagram.com/${user}`);
 		await page.goto(`https://www.instagram.com/stories/${user}`, {waitUntil: "domcontentloaded"});
@@ -87,5 +93,7 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 		const videoURL = (await page.$$eval("div.qbCDp > video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
 		if (videoURL) urls.push(videoURL);
 		return { username, urls };
-	} catch (error) { alert(error.message, "danger"); }
+	} catch (error) {
+		alert(error.message, "danger");
+	}
 }
