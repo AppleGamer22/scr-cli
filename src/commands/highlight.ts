@@ -45,7 +45,9 @@ export default class Highlight extends Command {
 					}
 					await browser.close();
 				} else return alert("Please provide a POST argument!", "danger");
-			} catch (error) { alert(error.message, "danger"); }
+			} catch (error) {
+				alert(error.message, "danger");
+			}
 		}
 	}
 }
@@ -70,9 +72,12 @@ export async function detectFiles(browser: Browser, page: Page, highlight: strin
 			alert(`Failed to find highlight ${highlight}.`, "danger");
 			await browser.close();
 		}
-		await page.waitForSelector("div.yn6BW > a", {visible: true});
+		if (await page.waitForSelector("button._42FBe")) {
+			await page.click("button._42FBe")
+		}
+		await page.waitForSelector("a.FPmhX", {visible: true});
 		const username = await page.evaluate(() => {
-			const a = document.querySelector("div.yn6BW > a") as HTMLAnchorElement;
+			const a = document.querySelector("a.FPmhX") as HTMLAnchorElement;
 			return a.innerText;
 		});
 		for (var i = 0; i < item - 1; i += 1) {
@@ -80,11 +85,12 @@ export async function detectFiles(browser: Browser, page: Page, highlight: strin
 			await page.click("div.coreSpriteRightChevron");
 		}
 		await page.waitForTimeout(50);
-		if ((await page.$(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe")) !== null) {
-			await page.click(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe");
+		if ((await page.$("button._42FBe")) !== null) {
+			await page.click("button._42FBe");
 		}
+		await page.waitForSelector("svg[aria-label='Pause']", {visible: true});
 		await page.waitForTimeout(50);
-		// await page.keyboard.press("Space");
+		await page.click("svg[aria-label='Pause']");
 		var urls: string[] = [];
 		await page.waitForSelector("div.qbCDp", {visible: true});
 		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("src"))))[0];
@@ -92,5 +98,7 @@ export async function detectFiles(browser: Browser, page: Page, highlight: strin
 		const videoURL = (await page.$$eval("div.qbCDp > video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
 		if (videoURL) urls.push(videoURL);
 		return { urls, username };
-	} catch (error) { alert(error.message, "danger"); }
+	} catch (error) {
+		alert(error.message, "danger");
+	}
 }

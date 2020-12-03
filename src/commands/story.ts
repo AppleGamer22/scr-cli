@@ -71,28 +71,23 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 			alert(`Failed to find ${user}'s story feed.`, "danger");
 			await browser.close();
 		}
-		await page.waitForSelector("div.yn6BW > a", {visible: true});
-		const username = await page.evaluate(() => {
-			const a = document.querySelector("div.yn6BW > a") as HTMLAnchorElement;
-			return a.innerText;
-		});
+		if (await page.waitForSelector("button._42FBe", {visible: true})) {
+			await page.click("button._42FBe")
+		}
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
 		}
+		await page.waitForSelector("svg[aria-label='Pause']", {visible: true});
 		await page.waitForTimeout(50);
-		if ((await page.$(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe")) !== null) {
-			await page.click(/*"div._7UhW9.xLCgt.MMzan.h_zdq.uL8Hv"*/"button._42FBe");
-		}
-		await page.waitForTimeout(50);
-		// await page.keyboard.press("Space");
+		await page.click("svg[aria-label='Pause']");
 		var urls: string[] = [];
 		await page.waitForSelector("div.qbCDp", {visible: true});
 		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("src"))))[0];
 		if (imageURL) urls.push(imageURL);
 		const videoURL = (await page.$$eval("div.qbCDp > video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
 		if (videoURL) urls.push(videoURL);
-		return { username, urls };
+		return { username: user, urls };
 	} catch (error) {
 		alert(error.message, "danger");
 	}
