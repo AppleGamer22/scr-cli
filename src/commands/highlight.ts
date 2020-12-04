@@ -84,10 +84,6 @@ export async function detectFiles(browser: Browser, page: Page, highlight: strin
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
 			await page.click("div.coreSpriteRightChevron");
 		}
-		await page.waitForTimeout(50);
-		if ((await page.$("button._42FBe")) !== null) {
-			await page.click("button._42FBe");
-		}
 		await page.waitForSelector("svg[aria-label='Pause']", {visible: true});
 		await page.waitForTimeout(50);
 		await page.click("svg[aria-label='Pause']");

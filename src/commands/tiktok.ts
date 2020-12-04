@@ -85,9 +85,14 @@ export async function detectFile(browser: Browser, page: Page, user: string, pos
 			const a = document.querySelectorAll("h3.author-uniqueId")[0] as HTMLHeadingElement;
 			return a.innerText;
 		});
-		await page.waitForSelector("video", {visible: true});
 		await page.waitForResponse(response => response.url().includes("mp4") && response.ok());
-		await page.waitForTimeout(10000);
+		await page.waitForSelector("video", {visible: true});
+		await page.waitForTimeout(100);
+		const duration = await page.evaluate(() => {
+			const htmlVideo = document.querySelector("video") as HTMLVideoElement;
+			return htmlVideo.duration * 1000;
+		});
+		await page.waitForTimeout(duration);
 		return { data, username };
 	} catch (error) {
 		alert(error.message, "danger");
