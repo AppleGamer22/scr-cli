@@ -45,7 +45,9 @@ export default class TikTok extends Command {
 				}
 				await browser.close();
 			} else return alert("Please provide a POST argument!", "danger");
-		} catch (error) { alert(error.message, "danger"); }
+		} catch (error) {
+			alert(error.message, "danger");
+		}
 	}
 
 	async downloadFile(data: Buffer, username: string, id: string) {
@@ -71,8 +73,13 @@ export async function detectFile(browser: Browser, page: Page, user: string, pos
 	try {
 		var data: Buffer | undefined;
 		page.on("response", async response => {
-			if (response.url().includes("mp4") && response.ok()) {
-				data = await response.buffer();
+			try {
+				if (response.url().includes("mp4") && response.ok()) {
+					data = await response.buffer();
+					alert("Retrieved MP4", "success");
+				}
+			} catch (error) {
+				alert(error.message, "danger");
 			}
 		});
 		await page.goto(`https://www.tiktok.com/@${user}/video/${post}`, {waitUntil: "domcontentloaded"});
@@ -92,6 +99,7 @@ export async function detectFile(browser: Browser, page: Page, user: string, pos
 			const htmlVideo = document.querySelector("video") as HTMLVideoElement;
 			return htmlVideo.duration * 1000;
 		});
+		console.log(`Video time: ${duration / 1000}s`);
 		await page.waitForTimeout(duration);
 		return { data, username };
 	} catch (error) {
