@@ -83,9 +83,9 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 		await page.click("svg[aria-label='Pause']");
 		var urls: string[] = [];
 		await page.waitForSelector("div.qbCDp", {visible: true});
-		const imageURL = (await page.$$eval("div.qbCDp > img", images => images.map(image => image.getAttribute("src"))))[0];
+		const imageURL = (await page.$$eval("img.y-yJ5", images => images.map(image => image.getAttribute("src"))))[0];
 		if (imageURL) urls.push(imageURL);
-		const videoURL = (await page.$$eval("div.qbCDp > video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
+		const videoURL = (await page.$$eval("video > source", sources => sources.map(source => source.getAttribute("src"))))[0];
 		if (videoURL) urls.push(videoURL);
 		return { username: user, urls };
 	} catch (error) {
