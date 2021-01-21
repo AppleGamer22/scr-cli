@@ -59,7 +59,7 @@ export function alert(message: string, type: ("info" | "log" | "success" | "warn
  */
 export async function beginScrape(background: boolean, incognito: boolean = false): Promise<{browser: Browser, page: Page} | undefined> {
 	try {
-		const args = ["--mute-audio"];
+		const args = ["--mute-audio", "--disable-blink-features=AutomationControlled"];
 		if (incognito) args.push("--incognito");
 		const browser = await launch({
 			headless: background,
