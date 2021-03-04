@@ -43,7 +43,7 @@
 		"chalk": "^4.1.0",
 		"cli-ux": "^5.5.1",
 		"dotenv": "^8.2.0",
-		"puppeteer-core": "^7.0.4",
+		"puppeteer-core": "^8.0.0",
 		"tslib": "^2.0.1"
 	},
 	"devDependencies": {
