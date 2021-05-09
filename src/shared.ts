@@ -23,8 +23,8 @@ export function chromeExecutable(): string {
 	}
 }
 /**
- * writes contents to the CLI's enviornment file
- * @param content enviornment content
+ * writes contents to the CLI's environment file
+ * @param content environment content
  */
 export function writeEnviornmentVariables(content: string) {
 	writeFile(environmentVariablesFile, content, error => {
@@ -73,7 +73,11 @@ export async function beginScrape(background: boolean, incognito: boolean = fals
 		const page = (await browser.pages())[0];
 		await page.evaluateOnNewDocument(() => delete Object.getPrototypeOf(navigator).webdriver);
 		await page.setBypassCSP(true);
-		// await page.setRequestInterception(true);
+		// @ts-ignore
+		await page._client.send("Network.enable", {
+			maxResourceBufferSize: 1024 * 1204 * 100,
+			maxTotalBufferSize: 1024 * 1204 * 200,
+		});
 		return { browser, page };
 	} catch (error) {
 		alert(error.message, "danger");

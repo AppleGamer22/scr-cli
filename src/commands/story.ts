@@ -71,8 +71,9 @@ export async function detectFiles(browser: Browser, page: Page, user: string, it
 			alert(`Failed to find ${user}'s story feed.`, "danger");
 			await browser.close();
 		}
-		if (await page.waitForSelector("button._42FBe", {visible: true})) {
-			await page.click("button._42FBe")
+		await page.waitForSelector("header")
+		if ((await page.$("button.sqdOP.L3NKy.y1rQx.cB_4K")) !== null) {
+			await page.click("button.sqdOP.L3NKy.y1rQx.cB_4K");
 		}
 		for (var i = 0; i < item - 1; i += 1) {
 			await page.waitForSelector("div.coreSpriteRightChevron", {visible: true});
