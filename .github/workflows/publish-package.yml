@@ -9,13 +9,13 @@ jobs:
       - name: Pull Source Code
         uses: actions/checkout@v2.3.3
       - name: Set-up Latest Node.js LTS
-        uses: actions/setup-node@v2.1.4
+        uses: actions/setup-node@v2.1.5
         with:
           node-version: "14"
           check-latest: true
           registry-url: https://registry.npmjs.org/
       - name: Install NPM Dependency Packages
-        run: npm ci
+        run: npm install
       - name: Publish NPM Package
         run: npm publish
         env:
