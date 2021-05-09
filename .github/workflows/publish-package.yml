@@ -15,7 +15,7 @@ jobs:
           check-latest: true
           registry-url: https://registry.npmjs.org/
       - name: Install NPM Dependency Packages
-        run: npm install
+        run: npm install --legacy-peer-deps
       - name: Publish NPM Package
         run: npm publish
         env:
